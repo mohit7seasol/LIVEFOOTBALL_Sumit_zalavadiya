@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LinesUpsViewXIB" customModule="Football2" customModuleProvider="target">
+            <connections>
+                <outlet property="lblNAme" destination="mAM-ws-5Hd" id="WiH-GW-UkW"/>
+                <outlet property="lblShirtNum" destination="TDI-P4-zU8" id="wQt-8o-tT6"/>
+                <outlet property="mainView" destination="iN0-l3-epB" id="cjC-e0-Bvz"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="181" height="76"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wY4-p2-Igo">
+                    <rect key="frame" x="5" y="5" width="171" height="66"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leonel Galeano" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mAM-ws-5Hd">
+                            <rect key="frame" x="1" y="30" width="169" height="26"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="26" id="2wQ-rg-7AO"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="10"/>
+                            <color key="textColor" name="PrimaryTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b7s-2L-vYu" customClass="CustomView" customModule="Football2" customModuleProvider="target">
+                            <rect key="frame" x="70.666666666666671" y="0.0" width="30" height="30"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TDI-P4-zU8">
+                                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <color key="textColor" name="PrimaryTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.15686274509803921" green="0.25882352941176467" blue="0.28627450980392155" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="TDI-P4-zU8" firstAttribute="top" secondItem="b7s-2L-vYu" secondAttribute="top" id="03v-b5-1zL"/>
+                                <constraint firstAttribute="trailing" secondItem="TDI-P4-zU8" secondAttribute="trailing" id="7vj-h6-uj6"/>
+                                <constraint firstAttribute="height" constant="30" id="7xS-hM-NK4"/>
+                                <constraint firstItem="TDI-P4-zU8" firstAttribute="leading" secondItem="b7s-2L-vYu" secondAttribute="leading" id="DlY-ME-ejb"/>
+                                <constraint firstAttribute="bottom" secondItem="TDI-P4-zU8" secondAttribute="bottom" id="GOt-8v-zka"/>
+                                <constraint firstAttribute="width" constant="30" id="Zat-cz-gnE"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="15"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                    <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                    <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="mAM-ws-5Hd" secondAttribute="bottom" constant="2" id="1ay-Km-je2"/>
+                        <constraint firstItem="mAM-ws-5Hd" firstAttribute="leading" secondItem="wY4-p2-Igo" secondAttribute="leading" constant="1" id="UwG-4Q-S4o"/>
+                        <constraint firstItem="b7s-2L-vYu" firstAttribute="centerX" secondItem="wY4-p2-Igo" secondAttribute="centerX" id="aOq-c3-7PN"/>
+                        <constraint firstAttribute="trailing" secondItem="mAM-ws-5Hd" secondAttribute="trailing" constant="1" id="dfB-Jb-nrg"/>
+                        <constraint firstItem="b7s-2L-vYu" firstAttribute="top" secondItem="wY4-p2-Igo" secondAttribute="top" id="f2W-x9-CRV"/>
+                        <constraint firstItem="mAM-ws-5Hd" firstAttribute="top" secondItem="b7s-2L-vYu" secondAttribute="bottom" id="gcx-c5-CRC"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="wY4-p2-Igo" secondAttribute="trailing" constant="5" id="1Cv-G9-cIe"/>
+                <constraint firstItem="wY4-p2-Igo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="3hp-Z2-Z4V"/>
+                <constraint firstItem="wY4-p2-Igo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="5" id="Z0M-wf-9gk"/>
+                <constraint firstAttribute="bottom" secondItem="wY4-p2-Igo" secondAttribute="bottom" constant="5" id="e0Q-Ig-cea"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="25.190839694656489" y="-350"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="PrimaryTextColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

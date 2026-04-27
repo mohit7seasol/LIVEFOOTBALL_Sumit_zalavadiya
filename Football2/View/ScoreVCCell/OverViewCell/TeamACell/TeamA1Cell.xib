@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TeamA1Cell" rowHeight="58" id="KGk-i7-Jjw" customClass="TeamA1Cell" customModule="Football2" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Line" translatesAutoresizingMaskIntoConstraints="NO" id="car-he-QVx">
+                        <rect key="frame" x="159" y="0.0" width="2" height="60"/>
+                    </imageView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PkA-BQ-e0c" customClass="CustomView" customModule="Football2" customModuleProvider="target">
+                        <rect key="frame" x="140" y="18" width="40" height="22"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0dI-Ra-yGe">
+                                <rect key="frame" x="0.0" y="0.0" width="40" height="22"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.12941176469999999" green="0.21176470589999999" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="0dI-Ra-yGe" secondAttribute="bottom" id="0i3-Za-pcb"/>
+                            <constraint firstAttribute="height" constant="22" id="3sB-rg-JlB"/>
+                            <constraint firstAttribute="trailing" secondItem="0dI-Ra-yGe" secondAttribute="trailing" id="9kQ-te-rWN"/>
+                            <constraint firstItem="0dI-Ra-yGe" firstAttribute="leading" secondItem="PkA-BQ-e0c" secondAttribute="leading" id="GeD-II-MA2"/>
+                            <constraint firstItem="0dI-Ra-yGe" firstAttribute="top" secondItem="PkA-BQ-e0c" secondAttribute="top" id="Zv0-LG-Wko"/>
+                            <constraint firstAttribute="width" constant="40" id="ylz-hm-9fA"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.19215686269999999" green="0.30196078430000001" blue="0.35686274509999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RedCard1" translatesAutoresizingMaskIntoConstraints="NO" id="nhm-X0-mLn">
+                        <rect key="frame" x="190" y="23" width="9" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="9" id="1w9-jQ-IKL"/>
+                            <constraint firstAttribute="height" constant="12" id="fEj-a9-PEE"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ap7-Ve-I9h">
+                        <rect key="frame" x="209" y="23" width="101" height="12"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="10"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ap7-Ve-I9h" firstAttribute="centerY" secondItem="0dI-Ra-yGe" secondAttribute="centerY" id="6AH-nn-LhT"/>
+                    <constraint firstItem="car-he-QVx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="BNJ-8r-hsX"/>
+                    <constraint firstAttribute="trailing" secondItem="ap7-Ve-I9h" secondAttribute="trailing" constant="10" id="Bby-Yl-aqN"/>
+                    <constraint firstItem="PkA-BQ-e0c" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="Vyd-5l-p8u"/>
+                    <constraint firstItem="car-he-QVx" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="WeI-ow-JI6"/>
+                    <constraint firstItem="ap7-Ve-I9h" firstAttribute="leading" secondItem="nhm-X0-mLn" secondAttribute="trailing" constant="10" id="eyV-jd-oHP"/>
+                    <constraint firstItem="nhm-X0-mLn" firstAttribute="leading" secondItem="PkA-BQ-e0c" secondAttribute="trailing" constant="10" id="h4p-Wd-ru7"/>
+                    <constraint firstItem="nhm-X0-mLn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="pAi-hq-9el"/>
+                    <constraint firstItem="PkA-BQ-e0c" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="qqa-JC-EeC"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="img" destination="nhm-X0-mLn" id="Amv-Ec-UNC"/>
+                <outlet property="lblText" destination="ap7-Ve-I9h" id="Q1J-lj-XVR"/>
+                <outlet property="lblTime" destination="0dI-Ra-yGe" id="fcY-QV-Pag"/>
+            </connections>
+            <point key="canvasLocation" x="-9.1603053435114496" y="-26.056338028169016"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Line" width="2" height="60"/>
+        <image name="RedCard1" width="9" height="12"/>
+    </resources>
+</document>

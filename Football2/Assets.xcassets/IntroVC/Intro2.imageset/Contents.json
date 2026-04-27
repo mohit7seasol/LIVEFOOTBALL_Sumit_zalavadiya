@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "soccer-player-dressed-uniform-skillfully-controls-ball-field-with-focused-expression-stadium-li.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "soccer-player-dressed-uniform-skillfully-controls-ball-field-with-focused-expression-stadium-li@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "soccer-player-dressed-uniform-skillfully-controls-ball-field-with-focused-expression-stadium-li@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

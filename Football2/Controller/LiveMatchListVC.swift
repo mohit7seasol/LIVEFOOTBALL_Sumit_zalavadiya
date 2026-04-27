@@ -1,0 +1,690 @@
+//
+//  LiveMatchListVC.swift
+//  Football2
+//
+//  Created by Parthiv Akbari on 29/04/25.
+//
+
+import UIKit
+import Alamofire
+import SwiftyJSON
+import SDWebImage
+
+struct MatchLive{
+    let m_name: String
+    let t1_sname: String
+    let t2_sname: String
+    let t1_flag: String
+    let t2_flag: String
+    let game_status: String
+    let strt_time_ts: Int
+    let m_id: String
+    let l_id: String
+}
+
+extension MatchLive: Comparable {
+    
+    static func < (lhs: MatchLive, rhs: MatchLive) -> Bool {
+        return lhs.strt_time_ts < rhs.strt_time_ts
+    }
+}
+
+class LiveMatchListVC: UIViewController {
+    
+    @IBOutlet weak var titleLbl: UILabel!
+    @IBOutlet weak var domesticView: CustomView!
+    @IBOutlet weak var internationView: CustomView!
+    @IBOutlet weak var matchCollecionView: UICollectionView! {
+        didSet {
+            matchCollecionView.register(UINib(nibName: "LiveCell2", bundle: nil), forCellWithReuseIdentifier: "LiveCell2")
+            matchCollecionView.register(UINib(nibName: "UpcomingCell", bundle: nil), forCellWithReuseIdentifier: "UpcomingCell")
+            matchCollecionView.register(UINib(nibName: "ShowNativeHome", bundle: nil), forCellWithReuseIdentifier: "ShowNativeHome")
+            matchCollecionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView")
+        }
+    }
+    @IBOutlet weak var emptyImg: UIImageView!
+    
+    var viewForNative = UIView()
+    var nativeRealod:Bool = false
+    var googleNativeAds = GoogleNativeAds()
+    var isShowNativeAds = false
+    
+    var matcheslive: [MatchLive] = []
+    var isAscending: Bool = true
+    var currentCategory = ""
+    var currentSelection = true
+    var matchesUpcoming: [MatchUpcoming] = []
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        viewForNative = UIView()
+        viewForNative.backgroundColor = .clear
+        
+        self.domesticView.backgroundColor = #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1)
+        self.domesticView.applyBorder(0, borderColor: .clear)
+        
+        self.internationView.backgroundColor = .clear
+        self.internationView.applyBorder(1, borderColor: #colorLiteral(red: 0.1921568627, green: 0.3019607843, blue: 0.3568627451, alpha: 1))
+        
+        self.currentCategory = "Domestic"
+        self.ProgressViewShow(uiView: self.view)
+        if self.currentSelection == false {
+            self.titleLbl.text = "Upcoming Matches"
+            fetchUpcomingMatches()
+        } else {
+            logAnalyticAction(title: "", status: .LiveMatches)
+            self.titleLbl.text = "Live Matches"
+            fetchLiveMatches()
+        }
+        subscribe()
+    }
+    
+    func subscribe() {
+        showSkeletonView()
+        if Subscribe.get() == false {
+            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
+                print(" Home...Load Native ....")
+                self.viewForNative.isHidden = false
+                
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                    self.hideSkeletonView()
+                    self.googleNativeAds.showAdsView8(nativeAd: nativeAdsTemp, view: self.viewForNative)
+                }
+            }
+            
+            self.googleNativeAds.failAds(self) { fail in
+                print(" Home...Native fail....")
+                self.viewForNative.isHidden = true
+            }
+            
+        } else {
+            self.hideSkeletonView()
+            viewForNative.isHidden = true
+        }
+    }
+    
+    func showSkeletonView() {
+        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView4", owner: self, options: nil)?.first as? SkeletonCustomView4 {
+            // Add the custom UIView to the adContainerView
+            self.viewForNative.addSubview(adView)
+            
+            // Set constraints to make sure the adView fills the adContainerView
+            adView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
+                adView.leadingAnchor.constraint(equalTo: self.viewForNative.leadingAnchor),
+                adView.trailingAnchor.constraint(equalTo: self.viewForNative.trailingAnchor),
+                adView.bottomAnchor.constraint(equalTo: self.viewForNative.bottomAnchor)
+            ])
+            adView.view1.showAnimatedGradientSkeleton()
+            adView.view2.showAnimatedGradientSkeleton()
+            adView.view3.showAnimatedGradientSkeleton()
+            adView.view4.showAnimatedGradientSkeleton()
+            adView.view5.showAnimatedGradientSkeleton()
+            adView.view6.showAnimatedGradientSkeleton()
+            
+        }
+    }
+    
+    func hideSkeletonView() {
+        for subview in self.viewForNative.subviews {
+            if let adView = subview as? SkeletonCustomView4 {
+                adView.removeFromSuperview()
+            }
+        }
+    }
+    
+    @IBAction func domesticTapped(_ sender: UIButton) {
+        self.domesticView.backgroundColor = #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1)
+        self.domesticView.applyBorder(0, borderColor: .clear)
+        
+        self.internationView.backgroundColor = .clear
+        self.internationView.applyBorder(1, borderColor: #colorLiteral(red: 0.1921568627, green: 0.3019607843, blue: 0.3568627451, alpha: 1))
+        
+        self.currentCategory = "Domestic"
+        self.ProgressViewShow(uiView: self.view)
+        if self.currentSelection == false {
+            self.titleLbl.text = "Upcoming Matches"
+            fetchUpcomingMatches()
+        } else {
+            self.titleLbl.text = "Live Matches"
+            fetchLiveMatches()
+        }
+    }
+    
+    @IBAction func internationalTapped(_ sender: UIButton) {
+        self.internationView.backgroundColor = #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1)
+        self.internationView.applyBorder(0, borderColor: .clear)
+        
+        self.domesticView.backgroundColor = .clear
+        self.domesticView.applyBorder(1, borderColor: #colorLiteral(red: 0.1921568627, green: 0.3019607843, blue: 0.3568627451, alpha: 1))
+        
+        self.currentCategory = "International"
+        self.ProgressViewShow(uiView: self.view)
+        if self.currentSelection == false {
+            self.titleLbl.text = "Upcoming Matches"
+            fetchUpcomingMatches()
+        } else {
+            self.titleLbl.text = "Live Matches"
+            fetchLiveMatches()
+        }
+    }
+    
+    @IBAction func backTapped(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+}
+
+extension LiveMatchListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if self.currentSelection == false {
+            if matchesUpcoming.isEmpty == true {
+                matchCollecionView.isHidden = true
+                emptyImg.isHidden = false
+            } else {
+                matchCollecionView.isHidden = false
+                emptyImg.isHidden = true
+            }
+            return matchesUpcoming.count
+        } else {
+            if matcheslive.isEmpty == true {
+                matchCollecionView.isHidden = true
+                emptyImg.isHidden = false
+            } else {
+                matchCollecionView.isHidden = false
+                emptyImg.isHidden = true
+            }
+            return matcheslive.count
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if self.currentSelection == false {
+            let match = matchesUpcoming[indexPath.row]
+            
+            if match.l_id == "NativeAD" {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowNativeHome", for: indexPath) as! ShowNativeHome
+                
+                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                
+                if let adView = Bundle.main.loadNibNamed("SkeletonCustomView5", owner: self, options: nil)?.first as? SkeletonCustomView5 {
+                    // Add the custom UIView to the adContainerView
+                    cell.viewForNative.addSubview(adView)
+                    
+                    // Set constraints to make sure the adView fills the adContainerView
+                    adView.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        adView.topAnchor.constraint(equalTo: cell.viewForNative.topAnchor),
+                        adView.leadingAnchor.constraint(equalTo: cell.viewForNative.leadingAnchor),
+                        adView.trailingAnchor.constraint(equalTo: cell.viewForNative.trailingAnchor),
+                        adView.bottomAnchor.constraint(equalTo: cell.viewForNative.bottomAnchor)
+                    ])
+                    adView.view1.showAnimatedGradientSkeleton()
+                    adView.view2.showAnimatedGradientSkeleton()
+                    adView.view3.showAnimatedGradientSkeleton()
+                    adView.view4.showAnimatedGradientSkeleton()
+                    adView.view5.showAnimatedGradientSkeleton()
+                    
+                }
+                DispatchQueue.main.async {
+                    if Subscribe.get() == false {
+                        self.googleNativeAds.loadAds(self) { nativeAdsTemp in
+                            print(" Home...Load Native ....")
+                            NativeFailedToLoad = false
+                            cell.viewForNative.isHidden = false
+                            //                            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            for subview in cell.viewForNative.subviews {
+                                if let adView = subview as? SkeletonCustomView5 {
+                                    self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                                    adView.removeFromSuperview()
+                                    
+                                }
+                            }
+                            DispatchQueue.main.async {
+                                self.googleNativeAds.showAdsView5(nativeAd: nativeAdsTemp, view: cell.viewForNative)
+                                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = false
+                            }
+                        }
+                        
+                        self.googleNativeAds.failAds(self) { fail in
+                            print(" Home...Native fail....")
+                            NativeFailedToLoad = true
+                            cell.viewForNative.isHidden = true
+                        }
+                        
+                    } else {
+                        for subview in cell.viewForNative.subviews {
+                            if let adView = subview as? SkeletonCustomView5 {
+                                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                                adView.removeFromSuperview()
+                            }
+                        }
+                        NativeFailedToLoad = true
+                        cell.viewForNative.isHidden = true
+                    }
+                }
+                return cell
+            }else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UpcomingCell", for: indexPath) as! UpcomingCell
+                
+                cell.lblTitle?.text = match.m_name
+                
+                cell.lblTeam1.text = match.t1_sname
+                cell.lblTeam2.text = match.t2_sname
+                
+                if match.t1_flag == "" {
+                    cell.img1.image = UIImage(named: "DefaultFlag")!
+                } else {
+                    let urlA = URL(string: match.t1_flag)
+                    cell.img1.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
+                }
+                
+                if match.t2_flag == "" {
+                    cell.img2.image = UIImage(named: "DefaultFlag")!
+                } else {
+                    let urlB = URL(string: match.t2_flag)
+                    cell.img2.sd_setImage(with: urlB, placeholderImage: UIImage(named: "DefaultFlag"))
+                }
+                
+                let result = convertTimestamp(match.strt_time_ts)
+                cell.lblDate.text = "\(result.formattedDate) at \(result.formattedTime)"
+                
+                return cell
+            }
+        } else {
+            let match = matcheslive[indexPath.row]
+            
+            if match.l_id == "NativeAD" {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowNativeHome", for: indexPath) as! ShowNativeHome
+                
+                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                
+                if let adView = Bundle.main.loadNibNamed("SkeletonCustomView5", owner: self, options: nil)?.first as? SkeletonCustomView5 {
+                    // Add the custom UIView to the adContainerView
+                    cell.viewForNative.addSubview(adView)
+                    
+                    // Set constraints to make sure the adView fills the adContainerView
+                    adView.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        adView.topAnchor.constraint(equalTo: cell.viewForNative.topAnchor),
+                        adView.leadingAnchor.constraint(equalTo: cell.viewForNative.leadingAnchor),
+                        adView.trailingAnchor.constraint(equalTo: cell.viewForNative.trailingAnchor),
+                        adView.bottomAnchor.constraint(equalTo: cell.viewForNative.bottomAnchor)
+                    ])
+                    adView.view1.showAnimatedGradientSkeleton()
+                    adView.view2.showAnimatedGradientSkeleton()
+                    adView.view3.showAnimatedGradientSkeleton()
+                    adView.view4.showAnimatedGradientSkeleton()
+                    adView.view5.showAnimatedGradientSkeleton()
+                    
+                }
+                DispatchQueue.main.async {
+                    if Subscribe.get() == false {
+                        self.googleNativeAds.loadAds(self) { nativeAdsTemp in
+                            print(" Home...Load Native ....")
+                            NativeFailedToLoad = false
+                            cell.viewForNative.isHidden = false
+                            //                            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                            for subview in cell.viewForNative.subviews {
+                                if let adView = subview as? SkeletonCustomView5 {
+                                    self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                                    adView.removeFromSuperview()
+                                    
+                                }
+                            }
+                            DispatchQueue.main.async {
+                                self.googleNativeAds.showAdsView5(nativeAd: nativeAdsTemp, view: cell.viewForNative)
+                                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = false
+                            }
+                        }
+                        
+                        self.googleNativeAds.failAds(self) { fail in
+                            print(" Home...Native fail....")
+                            NativeFailedToLoad = true
+                            cell.viewForNative.isHidden = true
+                        }
+                        
+                    } else {
+                        for subview in cell.viewForNative.subviews {
+                            if let adView = subview as? SkeletonCustomView5 {
+                                self.googleNativeAds.googleNativeAdsCustomeView5.isHidden = true
+                                adView.removeFromSuperview()
+                            }
+                        }
+                        NativeFailedToLoad = true
+                        cell.viewForNative.isHidden = true
+                    }
+                }
+                return cell
+            }else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "LiveCell2", for: indexPath) as! LiveCell2
+                
+                cell.lblTitle?.text = match.m_name
+                
+                cell.lblTeam1.text = match.t1_sname
+                cell.lblTeam2.text = match.t2_sname
+                cell.statusLbl.text = match.game_status
+                
+                if match.t1_flag == "" {
+                    cell.img1.image = UIImage(named: "DefaultFlag")!
+                } else {
+                    let urlA = URL(string: match.t1_flag)
+                    cell.img1.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
+                }
+                
+                if match.t2_flag == "" {
+                    cell.img2.image = UIImage(named: "DefaultFlag")!
+                } else {
+                    let urlB = URL(string: match.t2_flag)
+                    cell.img2.sd_setImage(with: urlB, placeholderImage: UIImage(named: "DefaultFlag"))
+                }
+                
+                let result = convertTimestamp(match.strt_time_ts)
+                cell.lblDate.text = "\(result.formattedDate) at \(result.formattedTime)"
+                
+                return cell
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if self.currentSelection == false {
+            let match = matchesUpcoming[indexPath.row]
+            if match.l_id == "NativeAD" {
+            } else {
+                AdsManager.shared.ShowInterstitialAD {}
+                UpComing = true
+                let match = matchesUpcoming[indexPath.row]
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC
+                vc.l_idMain = match.l_id
+                vc.m_idMain = match.m_id
+                vc.m_name = match.m_name
+                vc.Aimg = match.t1_flag
+                vc.Bimg = match.t2_flag
+                vc.Aname = match.t1_sname
+                vc.Bname = match.t2_sname
+                vc.isMatchLive = false
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        } else {
+            let match = matcheslive[indexPath.row]
+            if match.l_id == "NativeAD" {
+            } else {
+                AdsManager.shared.ShowInterstitialAD {}
+                UpComing = false
+                let match = matcheslive[indexPath.row]
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC
+                vc.l_idMain = match.l_id
+                vc.m_idMain = match.m_id
+                vc.m_name = match.m_name
+                vc.Aimg = match.t1_flag
+                vc.Bimg = match.t2_flag
+                vc.Aname = match.t1_sname
+                vc.Bname = match.t2_sname
+                vc.isMatchLive = true
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if self.currentSelection == false {
+            let match = matchesUpcoming[indexPath.row]
+            if match.l_id == "NativeAD" {
+                if Subscribe.get() == true || nativeId == "" || nativeId == "ca" || NativeFailedToLoad {
+                    return CGSize(width: collectionView.frame.width - 24, height: 0)
+                }else {
+                    return CGSize(width: collectionView.frame.size.width - 24, height: 164)
+                }
+            }
+            return CGSize(width: collectionView.frame.size.width - 24, height: 164)
+        } else {
+            let match = matcheslive[indexPath.row]
+            if match.l_id == "NativeAD" {
+                if Subscribe.get() == true || nativeId == "" || nativeId == "ca" || NativeFailedToLoad {
+                    return CGSize(width: collectionView.frame.width - 24, height: 0)
+                }else {
+                    return CGSize(width: collectionView.frame.size.width - 24, height: 205)
+                }
+            }
+            return CGSize(width: collectionView.frame.size.width - 24, height: 205)
+        }
+    }
+    
+    // Add the header view for the section
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderView", for: indexPath)
+            
+            // Add `viewForNative` to the header
+            headerView.subviews.forEach { $0.removeFromSuperview() } // Clear any old subviews
+            //            if traitCollection.userInterfaceStyle == .dark {
+            //                headerView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.40)
+            //            } else {
+            headerView.backgroundColor = #colorLiteral(red: 0.5960784314, green: 0.6823529412, blue: 0.7019607843, alpha: 1)
+            //            }
+            viewForNative.frame = headerView.bounds
+            headerView.addSubview(viewForNative)
+            
+            // Set constraints for `viewForNative` to fit the header view
+            viewForNative.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                viewForNative.topAnchor.constraint(equalTo: headerView.topAnchor),
+                viewForNative.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+                viewForNative.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+                viewForNative.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+            ])
+            
+            return headerView
+        }
+        return UICollectionReusableView()
+    }
+    
+    // Define the size for the header
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        if Subscribe.get() == true || nativeId == "" || nativeId == "ca" {
+            return CGSize(width: collectionView.frame.width, height: 0)
+        }
+        return CGSize(width: collectionView.frame.width, height: 200)
+    }
+}
+
+//MARK: - Live API Call
+extension LiveMatchListVC {
+    
+    func fetchLiveMatches() {
+        self.matcheslive.removeAll()
+        let url = URL(string: liveMatchAPI)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = ["spt_typ": 2]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error: \(String(describing: error))")
+                return
+            }
+            self.parseJSONLive(data: data)
+        }
+        task.resume()
+    }
+    
+    func parseJSONLive(data: Data) {
+        
+        do {
+            
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                guard let status = json["status"] as? Bool, status else {
+                    
+                    print("Status is not true")
+                    DispatchQueue.main.async {
+                        self.ProgressViewHide(uiView: self.view)
+                    }
+                    return
+                }
+                
+                if let result = json["result"] as? [[String: Any]] {
+                    for categoryData in result {
+                        if let category = categoryData["category"] as? String, category == self.currentCategory {
+                            if let leaguesData = categoryData["data"] as? [[String: Any]] {
+                                for leagueData in leaguesData {
+                                    let l_id = leagueData["l_id"] as? String ?? ""
+                                    if let matchesData = leagueData["matches"] as? [[String: Any]] {
+                                        for matchData in matchesData {
+                                            if let m_name = matchData["m_name"] as? String,
+                                               let t1_sname = matchData["t1_sname"] as? String,
+                                               let t2_sname = matchData["t2_sname"] as? String,
+                                               let t1_flag = matchData["t1_flag"] as? String,
+                                               let t2_flag = matchData["t2_flag"] as? String,
+                                               let game_status = matchData["gameState"] as? String,
+                                               let strt_time_ts = matchData["strt_time_ts"] as? Int,
+                                               let m_id = matchData["m_id"] as? String{
+                                                let match = MatchLive(m_name: m_name, t1_sname: t1_sname, t2_sname: t2_sname, t1_flag: t1_flag, t2_flag: t2_flag, game_status: game_status, strt_time_ts: strt_time_ts, m_id: m_id, l_id: l_id)
+                                                self.matcheslive.append(match)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.sortMatchesLive()
+                    }
+                    
+                }
+            }
+            
+        } catch let parsingError {
+            print("Parsing Error: \(parsingError)")
+        }
+        
+    }
+    
+    
+    func sortMatchesLive() {
+        matcheslive.sort(by: isAscending ? (<) : (>))
+        matcheslive = self.createLiveArrayWithAds()
+        self.matchCollecionView.reloadData()
+        self.ProgressViewHide(uiView: self.view)
+    }
+    
+    func createLiveArrayWithAds() -> [MatchLive] {
+        var modifiedArray: [MatchLive] = []
+        var adCount = 0
+        
+        for match in matcheslive {
+            if adCount == 4 {
+                let adModel = MatchLive(m_name: "", t1_sname: "", t2_sname: "", t1_flag: "", t2_flag: "", game_status: "", strt_time_ts: 0, m_id: "", l_id: "NativeAD")
+                modifiedArray.append(adModel)
+                adCount = 0
+            }
+            modifiedArray.append(match)
+            adCount += 1
+        }
+        
+        return modifiedArray
+    }
+}
+
+//MARK: - Upcoming API Call
+extension LiveMatchListVC {
+    
+    func fetchUpcomingMatches() {
+        self.matchesUpcoming.removeAll()
+        let url = URL(string: upcomingMatchAPI)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = ["spt_typ": 2]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error: \(String(describing: error))")
+                return
+            }
+            self.parseJSONUpcomimg(data: data)
+        }
+        task.resume()
+    }
+    
+    func parseJSONUpcomimg(data: Data) {
+        
+        do {
+            
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                guard let status = json["status"] as? Bool, status else {
+                    print("Status is not true")
+                    self.ProgressViewHide(uiView: self.view)
+                    return
+                }
+                
+                if let result = json["result"] as? [[String: Any]] {
+                    for categoryData in result {
+                        if let category = categoryData["category"] as? String, category == self.currentCategory {
+                            if let leaguesData = categoryData["data"] as? [[String: Any]] {
+                                for leagueData in leaguesData {
+                                    let l_id = leagueData["l_id"] as? String ?? ""
+                                    if let matchesData = leagueData["matches"] as? [[String: Any]] {
+                                        for matchData in matchesData {
+                                            if let m_name = matchData["m_name"] as? String,
+                                               let t1_sname = matchData["t1_sname"] as? String,
+                                               let t2_sname = matchData["t2_sname"] as? String,
+                                               let t1_flag = matchData["t1_flag"] as? String,
+                                               let t2_flag = matchData["t2_flag"] as? String,
+                                               let strt_time_ts = matchData["strt_time_ts"] as? Int,
+                                               let m_id = matchData["m_id"] as? String{
+                                                let match = MatchUpcoming(m_name: m_name, t1_sname: t1_sname, t2_sname: t2_sname, t1_flag: t1_flag, t2_flag: t2_flag, strt_time_ts: strt_time_ts, m_id: m_id, l_id: l_id)
+                                                self.matchesUpcoming.append(match)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.sortMatchesUpcoming()
+                    }
+                    
+                }
+            }
+            
+        } catch let parsingError {
+            print("Parsing Error: \(parsingError)")
+        }
+        
+    }
+    
+    func sortMatchesUpcoming() {
+        matchesUpcoming.sort(by: isAscending ? (<) : (>))
+        matchesUpcoming = self.createLiveArrayWithAds()
+        self.matchCollecionView.reloadData()
+        self.ProgressViewHide(uiView: self.view)
+    }
+    
+    func createLiveArrayWithAds() -> [MatchUpcoming] {
+        var modifiedArray: [MatchUpcoming] = []
+        var adCount = 0
+        
+        for match in matchesUpcoming {
+            if adCount == 4 {
+                let adModel = MatchUpcoming(m_name: "", t1_sname: "", t2_sname: "", t1_flag: "", t2_flag: "", strt_time_ts: 0, m_id: "", l_id: "NativeAD")
+                modifiedArray.append(adModel)
+                adCount = 0
+            }
+            modifiedArray.append(match)
+            adCount += 1
+        }
+        
+        return modifiedArray
+    }
+}
+

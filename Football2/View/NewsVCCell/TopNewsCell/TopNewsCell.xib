@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TopNewsCell" id="gTV-IL-0wX" customClass="TopNewsCell" customModule="Football2" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="343" height="286"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="343" height="286"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6D2-5c-8fz">
+                        <rect key="frame" x="0.0" y="0.0" width="343" height="286"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultNews2" translatesAutoresizingMaskIntoConstraints="NO" id="kp3-fX-LbZ" customClass="ImageView" customModule="Football2" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="nEu-qE-6vq"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                        <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDn-LS-Gh4">
+                                <rect key="frame" x="0.0" y="210" width="343" height="14.333333333333343"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="14.33" id="QKI-gU-CmT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.81960784313725488" green="0.87450980392156863" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20w-7P-dzK">
+                                <rect key="frame" x="0.0" y="234.33333333333334" width="343" height="19.333333333333343"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" name="PrimaryTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="20w-7P-dzK" secondAttribute="trailing" id="1XF-fZ-KHQ"/>
+                            <constraint firstAttribute="trailing" secondItem="kp3-fX-LbZ" secondAttribute="trailing" id="GMF-ys-eN3"/>
+                            <constraint firstAttribute="trailing" secondItem="kDn-LS-Gh4" secondAttribute="trailing" id="Siy-RH-m5Z"/>
+                            <constraint firstItem="kp3-fX-LbZ" firstAttribute="leading" secondItem="6D2-5c-8fz" secondAttribute="leading" id="WDC-6F-6uf"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="20w-7P-dzK" secondAttribute="bottom" constant="5" id="WKu-yO-6J9"/>
+                            <constraint firstItem="kp3-fX-LbZ" firstAttribute="top" secondItem="6D2-5c-8fz" secondAttribute="top" id="ZWH-8e-IA5"/>
+                            <constraint firstItem="kDn-LS-Gh4" firstAttribute="leading" secondItem="6D2-5c-8fz" secondAttribute="leading" id="acS-Zg-pmn"/>
+                            <constraint firstItem="20w-7P-dzK" firstAttribute="leading" secondItem="6D2-5c-8fz" secondAttribute="leading" id="f0z-6W-Jzc"/>
+                            <constraint firstItem="20w-7P-dzK" firstAttribute="top" secondItem="kDn-LS-Gh4" secondAttribute="bottom" constant="10" id="lNl-S3-Sx8"/>
+                            <constraint firstItem="kDn-LS-Gh4" firstAttribute="top" secondItem="kp3-fX-LbZ" secondAttribute="bottom" constant="10" id="xLC-bd-qfj"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="6D2-5c-8fz" secondAttribute="bottom" id="ArK-tz-qYE"/>
+                <constraint firstItem="6D2-5c-8fz" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="IeF-Ko-h5D"/>
+                <constraint firstAttribute="trailing" secondItem="6D2-5c-8fz" secondAttribute="trailing" id="bhW-s0-568"/>
+                <constraint firstItem="6D2-5c-8fz" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="mFp-dH-kwB"/>
+            </constraints>
+            <connections>
+                <outlet property="dateLbl" destination="kDn-LS-Gh4" id="jVr-s7-CP2"/>
+                <outlet property="iconImg" destination="kp3-fX-LbZ" id="4d1-xs-8e3"/>
+                <outlet property="titleLbl" destination="20w-7P-dzK" id="Sme-qZ-x5e"/>
+            </connections>
+            <point key="canvasLocation" x="131" y="-32"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="DefaultNews2" width="343" height="200"/>
+        <namedColor name="PrimaryTextColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
