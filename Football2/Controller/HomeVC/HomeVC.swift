@@ -10,25 +10,6 @@ import Alamofire
 import SwiftyJSON
 import SDWebImage
 
-struct MatchLiveAll{
-    let m_name: String
-    let t1_sname: String
-    let t2_sname: String
-    let t1_flag: String
-    let t2_flag: String
-    let game_status: String
-    let strt_time_ts: Int
-    let m_id: String
-    let l_id: String
-}
-
-extension MatchLiveAll: Comparable {
-    
-    static func < (lhs: MatchLiveAll, rhs: MatchLiveAll) -> Bool {
-        return lhs.strt_time_ts < rhs.strt_time_ts
-    }
-}
-
 class HomeVC: UIViewController {
     @IBOutlet weak var viewForNative: UIView!
     @IBOutlet weak var matchListCollection: UICollectionView!
@@ -39,8 +20,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var currentMonthLabel: UILabel! // Text formate : 'December 2025'
     
     
-    var index = -1
-    var matcheslive: [MatchLiveAll] = []
+    var index = -1 // Do not removed 
+    
     var isAscending: Bool = true
     var isLiveAvailable: Bool = true
     var matchesUpcoming: [MatchUpcoming] = []
