@@ -9,6 +9,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import SDWebImage
+import SVProgressHUD
 
 class HomeVC: UIViewController {
     @IBOutlet weak var viewForNative: UIView!
@@ -20,7 +21,7 @@ class HomeVC: UIViewController {
     @IBOutlet weak var currentMonthLabel: UILabel! // Text formate : 'December 2025'
     @IBOutlet weak var datepickerCollection: UICollectionView!
     
-    var index = -1 // Do not removed 
+    var index = -1 // Do not removed
     
     var isAscending: Bool = true
     var isLiveAvailable: Bool = true
@@ -34,16 +35,209 @@ class HomeVC: UIViewController {
     var selectedPosts: [Post] = []
     var selectedCategoryIndex = 0
     
+    // MARK: - Calendar Properties
+    private var selectedDateIndex = -1
+    private var calendar = Calendar.current
+    private var currentDate = Date()
+    private var selectedDate = Date()
+    private var dates: [Date] = []
+    
+    // MARK: - Match Properties
+    var allMatches: [Match] = []
+    var currentFilter: MatchFilter = .live
+    var matchesFiltered: [Match] = []
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         logAnalyticAction(title: "", status: .Home)
+        setupUI()
+        setupCalendar()
+        setupCollectionViews()
+        setupButtons()
         subscribe()
+        setupSVProgressHUD()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchMatches(for: selectedDate)
+    }
+    
+    // MARK: - Setup Methods
+    private func setupUI() {
+        // Configure button colors
+        updateButtonStates(selected: .live)
         
-        self.ProgressViewShow(uiView: self.view)
+        // Set month label
+        updateMonthLabel()
+    }
+    
+    private func setupSVProgressHUD() {
+        // Configure SVProgressHUD appearance
+        SVProgressHUD.setDefaultStyle(.dark)
+        SVProgressHUD.setDefaultMaskType(.black)
+        SVProgressHUD.setForegroundColor(.white)
+        SVProgressHUD.setBackgroundColor(UIColor.black.withAlphaComponent(0.7))
+        SVProgressHUD.setRingThickness(4.0)
+        SVProgressHUD.setRingRadius(20.0)
+    }
+    
+    private func updateButtonStates(selected: MatchFilter) {
+        let selectedColor = #colorLiteral(red: 0.0862745098, green: 0.7882352941, blue: 0.1411764706, alpha: 1) // #16C924
+        let unselectedColor = #colorLiteral(red: 0.337254902, green: 0.4235294118, blue: 0.4549019608, alpha: 1) // #566D74
+        
+        switch selected {
+        case .live:
+            liveButton.setTitleColor(selectedColor, for: .normal)
+            upcomingButton.setTitleColor(unselectedColor, for: .normal)
+            finishedButton.setTitleColor(unselectedColor, for: .normal)
+        case .scheduled:
+            liveButton.setTitleColor(unselectedColor, for: .normal)
+            upcomingButton.setTitleColor(selectedColor, for: .normal)
+            finishedButton.setTitleColor(unselectedColor, for: .normal)
+        case .completed:
+            liveButton.setTitleColor(unselectedColor, for: .normal)
+            upcomingButton.setTitleColor(unselectedColor, for: .normal)
+            finishedButton.setTitleColor(selectedColor, for: .normal)
+        }
+    }
+    
+    private func updateMonthLabel() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM yyyy"
+        currentMonthLabel.text = formatter.string(from: currentDate)
+    }
+    
+    private func setupCalendar() {
+        generateDatesForRange()
+        updateMonthLabel()
+        if let todayIndex = dates.firstIndex(where: { calendar.isDate($0, inSameDayAs: Date()) }) {
+            selectedDateIndex = todayIndex
+            selectedDate = dates[todayIndex]
+        } else {
+            selectedDateIndex = 0
+            selectedDate = dates[0]
+        }
+        
+        DispatchQueue.main.async {
+            self.datepickerCollection.reloadData()
+            self.datepickerCollection.scrollToItem(at: IndexPath(item: self.selectedDateIndex, section: 0), at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    private func generateDatesForRange() {
+        dates.removeAll()
+        let today = Date()
+        
+        for i in -7...7 {
+            if let date = calendar.date(byAdding: .day, value: i, to: today) {
+                dates.append(date)
+            }
+        }
+    }
+    
+    private func setToday() {
+        currentDate = Date()
+        selectedDate = Date()
+        setupCalendar()
+        fetchMatches(for: selectedDate)
+    }
+    
+    private func setupCollectionViews() {
+        // Datepicker Collection View
+        datepickerCollection.register(UINib(nibName: "MatchDateCell", bundle: nil), forCellWithReuseIdentifier: "MatchDateCell")
+        datepickerCollection.delegate = self
+        datepickerCollection.dataSource = self
+        
+        if let layout = datepickerCollection.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .horizontal
+            layout.minimumLineSpacing = 8
+            layout.minimumInteritemSpacing = 0
+        }
+        datepickerCollection.showsHorizontalScrollIndicator = false
+        datepickerCollection.backgroundColor = .clear
+        
+        // Match List Collection View
+        matchListCollection.register(UINib(nibName: "MatchListCell", bundle: nil), forCellWithReuseIdentifier: "MatchListCell")
+        matchListCollection.delegate = self
+        matchListCollection.dataSource = self
+        
+        if let layout = matchListCollection.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .vertical
+            layout.minimumLineSpacing = 12
+        }
+    }
+    
+    private func setupButtons() {
+        liveButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        upcomingButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        finishedButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        todayButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        
+        todayButton.layer.cornerRadius = todayButton.frame.height / 2
+        todayButton.layer.borderWidth = 1
+        todayButton.layer.borderColor = #colorLiteral(red: 0.0862745098, green: 0.7882352941, blue: 0.1411764706, alpha: 1).cgColor
+    }
+    
+    // MARK: - Match Fetching
+    private func fetchMatches(for date: Date) {
+        SVProgressHUD.show()
+        
+        FootballAPIService.shared.fetchMatches(for: date) { [weak self] matches in
+            guard let self = self else {
+                SVProgressHUD.dismiss()
+                return
+            }
+            
+            DispatchQueue.main.async {
+                SVProgressHUD.dismiss()
+                self.allMatches = matches
+                self.applyFilter()
+            }
+        }
+    }
+    
+    private func applyFilter() {
+        if calendar.isDateInToday(selectedDate) {
+            switch currentFilter {
+            case .live:
+                matchesFiltered = allMatches.filter { $0.isInProgress }
+                    .sorted { $0.timestamp < $1.timestamp }
+            case .scheduled:
+                matchesFiltered = allMatches.filter { !$0.isStarted && !$0.isInProgress && !$0.isFinished }
+                    .sorted { $0.timestamp < $1.timestamp }
+            case .completed:
+                matchesFiltered = allMatches.filter { $0.isFinished }
+                    .sorted { $0.timestamp > $1.timestamp }
+            }
+        } else {
+            matchesFiltered = allMatches
+            if selectedDate < Date() {
+                matchesFiltered.sort { $0.timestamp > $1.timestamp }
+            } else {
+                matchesFiltered.sort { $0.timestamp < $1.timestamp }
+            }
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.matchListCollection.reloadData()
+        }
+    }
+    
+    private func handleDateSelection(at index: Int) {
+        guard selectedDateIndex != index else { return }
+        
+        self.selectedDateIndex = index
+        self.selectedDate = dates[index]
+        self.fetchMatches(for: selectedDate)
+        
+        DispatchQueue.main.async {
+            self.datepickerCollection.reloadData()
+            self.datepickerCollection.scrollToItem(at: IndexPath(item: self.selectedDateIndex, section: 0), at: .centeredHorizontally, animated: true)
+            self.matchListCollection.setContentOffset(.zero, animated: false)
+        }
     }
     
     func subscribe() {
@@ -71,10 +265,8 @@ class HomeVC: UIViewController {
     
     func showSkeletonView() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
@@ -87,7 +279,6 @@ class HomeVC: UIViewController {
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-            
         }
     }
     
@@ -103,28 +294,205 @@ class HomeVC: UIViewController {
 // MARK: - Button Actions
 extension HomeVC {
     @IBAction func todayButtonTap(_ sender: UIButton) {
+        setToday()
     }
     
     @IBAction func liveButtonTap(_ sender: UIButton) {
+        currentFilter = .live
+        updateButtonStates(selected: .live)
+        applyFilter()
     }
     
     @IBAction func upcomingButtonTap(_ sender: UIButton) {
+        currentFilter = .scheduled
+        updateButtonStates(selected: .scheduled)
+        applyFilter()
     }
     
     @IBAction func finishedButtonTap(_ sender: UIButton) {
+        currentFilter = .completed
+        updateButtonStates(selected: .completed)
+        applyFilter()
+    }
+}
+
+// MARK: - UICollectionView DataSource & Delegate
+extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == datepickerCollection {
+            return dates.count
+        } else {
+            return matchesFiltered.count
+        }
     }
     
-}
-// MARK: - Live Match API Call
-extension HomeVC {
-}
-
-//MARK: - Upcoming API Call
-extension HomeVC {
-
-}
-
-// MARK: - News API Call
-extension HomeVC {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == datepickerCollection {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchDateCell", for: indexPath) as! MatchDateCell
+            let date = dates[indexPath.item]
+            
+            let dayFormatter = DateFormatter()
+            dayFormatter.dateFormat = "EEE"
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd"
+            
+            let isSelected = (indexPath.item == selectedDateIndex)
+            
+            cell.dayNameLabel.text = dayFormatter.string(from: date).uppercased()
+            cell.dateLabel.text = dateFormatter.string(from: date)
+            
+            // Configure cell appearance
+            if isSelected {
+                cell.mainView.backgroundColor = UIColor(hex: "#16C924")
+                cell.dayNameLabel.textColor = .white
+                cell.dateLabel.textColor = .white
+            } else {
+                cell.mainView.backgroundColor = .clear
+                cell.dayNameLabel.textColor = UIColor(hex: "#566D74")
+                cell.dateLabel.textColor = UIColor(hex: "#566D74")
+            }
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
+            let match = matchesFiltered[indexPath.item]
+            
+            // Configure match name
+            cell.matchName.text = "\(match.homeName) vs \(match.awayName)"
+            
+            // Configure team flags and names
+            loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo, cell: cell)
+            cell.teamANameLabel.text = match.homeName
+            cell.teamBNameLabel.text = match.awayName
+            
+            // Configure location
+            if let venueName = match.venueName, !venueName.isEmpty {
+                cell.locationLabel.text = venueName
+                cell.locationStackView.isHidden = false
+            } else {
+                cell.locationStackView.isHidden = true
+            }
+            
+            // Configure based on match status for current filter
+            if calendar.isDateInToday(selectedDate) {
+                switch currentFilter {
+                case .live:
+                    configureLiveCell(cell: cell, match: match)
+                case .scheduled:
+                    configureUpcomingCell(cell: cell, match: match)
+                case .completed:
+                    configureFinishedCell(cell: cell, match: match)
+                }
+            } else {
+                if selectedDate < Date() {
+                    configureFinishedCell(cell: cell, match: match)
+                } else {
+                    configureUpcomingCell(cell: cell, match: match)
+                }
+            }
+            
+            return cell
+        }
+    }
     
+    private func configureLiveCell(cell: MatchListCell, match: Match) {
+        cell.statusView.backgroundColor = UIColor(hex: "#DF1F1F")
+        cell.statusLabel.text = "Live"
+        cell.locationStackView.isHidden = false
+        cell.loactionView.isHidden = false
+    }
+    
+    private func configureUpcomingCell(cell: MatchListCell, match: Match) {
+        cell.statusView.backgroundColor = UIColor(hex: "#1650BC")
+        cell.statusLabel.text = "Upcoming"
+        cell.locationStackView.isHidden = true
+        cell.loactionView.isHidden = true
+    }
+    
+    private func configureFinishedCell(cell: MatchListCell, match: Match) {
+        cell.statusView.backgroundColor = UIColor(hex: "#04C057")
+        cell.statusLabel.text = "Finished"
+        cell.locationStackView.isHidden = false
+        cell.loactionView.isHidden = false
+    }
+    
+    private func loadTeamImages(homeLogo: String, awayLogo: String, cell: MatchListCell) {
+        let placeholderImage = UIImage(named: "placeholder_flag")
+        
+        if let url = URL(string: homeLogo), !homeLogo.isEmpty {
+            cell.teamAFlagImageView.sd_setImage(with: url, placeholderImage: placeholderImage)
+        } else {
+            cell.teamAFlagImageView.image = placeholderImage
+        }
+        
+        if let url = URL(string: awayLogo), !awayLogo.isEmpty {
+            cell.teamBFlagImageView.sd_setImage(with: url, placeholderImage: placeholderImage)
+        } else {
+            cell.teamBFlagImageView.image = placeholderImage
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == datepickerCollection {
+            return CGSize(width: 76, height: 76)
+        } else {
+            let width = collectionView.frame.width - 24
+            let height: CGFloat
+            
+            if calendar.isDateInToday(selectedDate) {
+                switch currentFilter {
+                case .live:
+                    height = 210
+                case .scheduled:
+                    height = 166
+                case .completed:
+                    height = 210
+                }
+            } else {
+                if selectedDate < Date() {
+                    height = 210
+                } else {
+                    height = 166
+                }
+            }
+            
+            return CGSize(width: width, height: height)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == datepickerCollection {
+            handleDateSelection(at: indexPath.item)
+        } else {
+            // Handle match selection
+            let match = matchesFiltered[indexPath.item]
+            // Navigate to match details
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if collectionView == datepickerCollection {
+            return 8
+        } else {
+            return 12
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if collectionView == datepickerCollection {
+            let totalCellWidth = 76 * CGFloat(dates.count)
+            let totalSpacingWidth = 8 * CGFloat(dates.count - 1)
+            let totalWidth = totalCellWidth + totalSpacingWidth
+            let horizontalInset = (collectionView.frame.width - totalWidth) / 2
+            
+            if horizontalInset > 0 {
+                return UIEdgeInsets(top: 0, left: horizontalInset, bottom: 0, right: horizontalInset)
+            } else {
+                return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+            }
+        } else {
+            return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        }
+    }
 }

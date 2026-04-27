@@ -30,7 +30,7 @@ let iTunesAppId   =  ""
 let appStoreLink = "https://apps.apple.com/app/id\(APP_ID)"
 let appBundleID  =   ""
 let developerAppsLink = ""
-
+var APITOKEN = "1831bcfd61mshe49ae7779397e4fp16532cjsncaf029ae4ce0"
 var timeOffSet = ""
 //
 
