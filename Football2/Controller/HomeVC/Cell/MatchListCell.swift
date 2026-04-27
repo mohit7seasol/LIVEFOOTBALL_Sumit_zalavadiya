@@ -14,15 +14,12 @@ class MatchListCell: UICollectionViewCell {
     
     @IBOutlet weak var teamAFlagImageView: UIImageView!
     @IBOutlet weak var teamBFlagImageView: UIImageView!
-    @IBOutlet weak var teamANameLabel: UILabel!
-    @IBOutlet weak var teamBNameLabel: UILabel!
-    @IBOutlet weak var locationLabel: MarqueeLabel! // Text formate like 'Kishore Bharati Stadium, Kolkata, India'
-    @IBOutlet weak var loactionView: CustomView!
-    
+    @IBOutlet weak var teamANameLabel: MarqueeLabel!
+    @IBOutlet weak var teamBNameLabel: MarqueeLabel!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var statusView: CustomView!
-    
-    @IBOutlet weak var locationStackView: UIStackView!
+    @IBOutlet weak var scorLabel: UILabel! // Text formate like '0 - 2'
+    @IBOutlet weak var dateTimeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -18,11 +18,10 @@ class HomeVC: UIViewController {
     @IBOutlet weak var upcomingButton: UIButton!
     @IBOutlet weak var finishedButton: UIButton!
     @IBOutlet weak var todayButton: UIButton!
-    @IBOutlet weak var currentMonthLabel: UILabel! // Text formate : 'December 2025'
+    @IBOutlet weak var currentMonthLabel: UILabel!
     @IBOutlet weak var datepickerCollection: UICollectionView!
     
-    var index = -1 // Do not removed
-    
+    var index = -1
     var isAscending: Bool = true
     var isLiveAvailable: Bool = true
     var matchesUpcoming: [MatchUpcoming] = []
@@ -66,15 +65,11 @@ class HomeVC: UIViewController {
     
     // MARK: - Setup Methods
     private func setupUI() {
-        // Configure button colors
         updateButtonStates(selected: .live)
-        
-        // Set month label
         updateMonthLabel()
     }
     
     private func setupSVProgressHUD() {
-        // Configure SVProgressHUD appearance
         SVProgressHUD.setDefaultStyle(.dark)
         SVProgressHUD.setDefaultMaskType(.black)
         SVProgressHUD.setForegroundColor(.white)
@@ -84,8 +79,8 @@ class HomeVC: UIViewController {
     }
     
     private func updateButtonStates(selected: MatchFilter) {
-        let selectedColor = #colorLiteral(red: 0.0862745098, green: 0.7882352941, blue: 0.1411764706, alpha: 1) // #16C924
-        let unselectedColor = #colorLiteral(red: 0.337254902, green: 0.4235294118, blue: 0.4549019608, alpha: 1) // #566D74
+        let selectedColor = UIColor(hex: "#16C924")
+        let unselectedColor = UIColor(hex: "#566D74")
         
         switch selected {
         case .live:
@@ -149,19 +144,21 @@ class HomeVC: UIViewController {
         datepickerCollection.register(UINib(nibName: "MatchDateCell", bundle: nil), forCellWithReuseIdentifier: "MatchDateCell")
         datepickerCollection.delegate = self
         datepickerCollection.dataSource = self
+        datepickerCollection.showsHorizontalScrollIndicator = false
+        datepickerCollection.backgroundColor = .clear
         
         if let layout = datepickerCollection.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-            layout.minimumLineSpacing = 8
+            layout.minimumLineSpacing = 12 // Increased spacing between date cells
             layout.minimumInteritemSpacing = 0
         }
-        datepickerCollection.showsHorizontalScrollIndicator = false
-        datepickerCollection.backgroundColor = .clear
         
         // Match List Collection View
         matchListCollection.register(UINib(nibName: "MatchListCell", bundle: nil), forCellWithReuseIdentifier: "MatchListCell")
         matchListCollection.delegate = self
         matchListCollection.dataSource = self
+        matchListCollection.backgroundColor = .clear
+        matchListCollection.showsVerticalScrollIndicator = false
         
         if let layout = matchListCollection.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .vertical
@@ -177,7 +174,7 @@ class HomeVC: UIViewController {
         
         todayButton.layer.cornerRadius = todayButton.frame.height / 2
         todayButton.layer.borderWidth = 1
-        todayButton.layer.borderColor = #colorLiteral(red: 0.0862745098, green: 0.7882352941, blue: 0.1411764706, alpha: 1).cgColor
+        todayButton.layer.borderColor = UIColor(hex: "#16C924")?.cgColor
     }
     
     // MARK: - Match Fetching
@@ -341,6 +338,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             
             cell.dayNameLabel.text = dayFormatter.string(from: date).uppercased()
             cell.dateLabel.text = dateFormatter.string(from: date)
+            cell.mainView.layer.cornerRadius = 10
             
             // Configure cell appearance
             if isSelected {
@@ -361,18 +359,13 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             // Configure match name
             cell.matchName.text = "\(match.homeName) vs \(match.awayName)"
             
+            // Configure date and time from API
+            cell.dateTimeLabel.text = match.formattedDateTime
+            
             // Configure team flags and names
             loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo, cell: cell)
             cell.teamANameLabel.text = match.homeName
             cell.teamBNameLabel.text = match.awayName
-            
-            // Configure location
-            if let venueName = match.venueName, !venueName.isEmpty {
-                cell.locationLabel.text = venueName
-                cell.locationStackView.isHidden = false
-            } else {
-                cell.locationStackView.isHidden = true
-            }
             
             // Configure based on match status for current filter
             if calendar.isDateInToday(selectedDate) {
@@ -399,22 +392,32 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     private func configureLiveCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#DF1F1F")
         cell.statusLabel.text = "Live"
-        cell.locationStackView.isHidden = false
-        cell.loactionView.isHidden = false
+        cell.scorLabel.isHidden = false
+        // Display score for live match
+        if let homeScore = match.homeScore, let awayScore = match.awayScore {
+            cell.scorLabel.text = "\(homeScore) - \(awayScore)"
+        } else {
+            cell.scorLabel.text = "0 - 0"
+        }
     }
     
     private func configureUpcomingCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#1650BC")
         cell.statusLabel.text = "Upcoming"
-        cell.locationStackView.isHidden = true
-        cell.loactionView.isHidden = true
+        cell.scorLabel.isHidden = true
+        cell.scorLabel.text = ""
     }
     
     private func configureFinishedCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#04C057")
         cell.statusLabel.text = "Finished"
-        cell.locationStackView.isHidden = false
-        cell.loactionView.isHidden = false
+        cell.scorLabel.isHidden = false
+        // Display score for finished match
+        if let homeScore = match.homeScore, let awayScore = match.awayScore {
+            cell.scorLabel.text = "\(homeScore) - \(awayScore)"
+        } else {
+            cell.scorLabel.text = "0 - 0"
+        }
     }
     
     private func loadTeamImages(homeLogo: String, awayLogo: String, cell: MatchListCell) {
@@ -435,9 +438,10 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == datepickerCollection {
-            return CGSize(width: 76, height: 76)
+            return CGSize(width: 72, height: 64)
         } else {
-            let width = collectionView.frame.width - 24
+            // Fixed width with 10pt left and right spacing
+            let width = collectionView.frame.width - 20
             let height: CGFloat
             
             if calendar.isDateInToday(selectedDate) {
@@ -465,7 +469,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if collectionView == datepickerCollection {
             handleDateSelection(at: indexPath.item)
         } else {
-            // Handle match selection
             let match = matchesFiltered[indexPath.item]
             // Navigate to match details
         }
@@ -473,7 +476,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == datepickerCollection {
-            return 8
+            return 12
         } else {
             return 12
         }
@@ -481,8 +484,8 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == datepickerCollection {
-            let totalCellWidth = 76 * CGFloat(dates.count)
-            let totalSpacingWidth = 8 * CGFloat(dates.count - 1)
+            let totalCellWidth = 72 * CGFloat(dates.count)
+            let totalSpacingWidth = 12 * CGFloat(dates.count - 1)
             let totalWidth = totalCellWidth + totalSpacingWidth
             let horizontalInset = (collectionView.frame.width - totalWidth) / 2
             
@@ -492,7 +495,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
                 return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             }
         } else {
-            return UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+            return UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
         }
     }
 }

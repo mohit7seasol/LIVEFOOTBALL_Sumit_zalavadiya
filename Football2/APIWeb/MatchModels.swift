@@ -34,7 +34,8 @@ struct Match {
     var formattedDateTime: String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM • hh:mm a"
+        formatter.dateFormat = "dd MMM yyyy, hh:mm a"
+        formatter.locale = Locale(identifier: "en_US")
         return formatter.string(from: date)
     }
     

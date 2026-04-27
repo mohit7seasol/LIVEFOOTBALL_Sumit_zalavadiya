@@ -808,6 +808,7 @@
                                     <constraint firstAttribute="trailing" secondItem="o3g-l6-M7t" secondAttribute="trailing" id="G3F-qo-Chu"/>
                                     <constraint firstItem="o3g-l6-M7t" firstAttribute="top" secondItem="6rg-QJ-yp8" secondAttribute="top" id="Obl-eM-g3m"/>
                                     <constraint firstAttribute="bottom" secondItem="o3g-l6-M7t" secondAttribute="bottom" id="ZUl-Xz-zeM"/>
+                                    <constraint firstItem="o3g-l6-M7t" firstAttribute="height" secondItem="6rg-QJ-yp8" secondAttribute="height" id="gy3-T3-pBp"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -819,7 +820,6 @@
                             <constraint firstAttribute="bottom" secondItem="6rg-QJ-yp8" secondAttribute="bottom" id="IJR-iR-Njq"/>
                             <constraint firstItem="6rg-QJ-yp8" firstAttribute="leading" secondItem="fsy-cp-bcH" secondAttribute="leading" id="agT-sh-gOP"/>
                             <constraint firstItem="6rg-QJ-yp8" firstAttribute="trailing" secondItem="fsy-cp-bcH" secondAttribute="trailing" id="s7P-PN-hEw"/>
-                            <constraint firstItem="o3g-l6-M7t" firstAttribute="height" secondItem="5XU-PW-K4E" secondAttribute="height" multiplier="0.861502" priority="250" id="yh3-FO-ec5"/>
                         </constraints>
                     </view>
                     <connections>
