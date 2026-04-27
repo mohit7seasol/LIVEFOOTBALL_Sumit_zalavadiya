@@ -18,7 +18,7 @@ class HomeVC: UIViewController {
     @IBOutlet weak var finishedButton: UIButton!
     @IBOutlet weak var todayButton: UIButton!
     @IBOutlet weak var currentMonthLabel: UILabel! // Text formate : 'December 2025'
-    
+    @IBOutlet weak var datepickerCollection: UICollectionView!
     
     var index = -1 // Do not removed 
     

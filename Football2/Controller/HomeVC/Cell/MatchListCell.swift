@@ -22,6 +22,8 @@ class MatchListCell: UICollectionViewCell {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var statusView: CustomView!
     
+    @IBOutlet weak var locationStackView: UIStackView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

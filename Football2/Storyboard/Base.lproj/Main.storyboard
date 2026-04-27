@@ -824,6 +824,7 @@
                     </view>
                     <connections>
                         <outlet property="currentMonthLabel" destination="BCw-7d-Xpe" id="jbs-Hf-vCe"/>
+                        <outlet property="datepickerCollection" destination="bH1-Us-qGp" id="fsW-9T-3i3"/>
                         <outlet property="finishedButton" destination="IvE-eW-nO2" id="joc-y9-Dhs"/>
                         <outlet property="liveButton" destination="nAh-ki-zXZ" id="0uS-pH-CVU"/>
                         <outlet property="matchListCollection" destination="fjc-pB-D5g" id="Uyb-MI-OEA"/>
