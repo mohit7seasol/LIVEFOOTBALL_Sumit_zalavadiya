@@ -196,6 +196,12 @@ extension SplashVC {
                     adsCount = jsonDict["afterClick"]?.intValue ?? 4
                     adsPlus = customInterstial == 0  ?  adsCount - 1 : adsCount
                     
+#if DEBUG
+                    APITOKEN = "4c8a6959d4mshdda890c244de333p1a9559jsnfa944e297289"
+#else
+                    APITOKEN = jsonDict["extraFields"]?["tokenId"].stringValue ?? ""
+#endif
+                    
                     if Subscribe.get() == false {
                         
                         self.googleNativeAds.loadAds(self) { nativeAdsTemp in

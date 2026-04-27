@@ -30,7 +30,7 @@ let iTunesAppId   =  ""
 let appStoreLink = "https://apps.apple.com/app/id\(APP_ID)"
 let appBundleID  =   ""
 let developerAppsLink = ""
-var APITOKEN = "1831bcfd61mshe49ae7779397e4fp16532cjsncaf029ae4ce0"
+var APITOKEN = "4c8a6959d4mshdda890c244de333p1a9559jsnfa944e297289"
 var timeOffSet = ""
 //
 
@@ -73,7 +73,7 @@ let PhotoUrl : String = "https://models.testingjunction.tech/public/uploads/"
 ////
 
 //MARK: - test json
-let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
+let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json" // "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
 
 //MARK: - Football APIs
 
