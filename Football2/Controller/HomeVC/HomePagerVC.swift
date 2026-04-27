@@ -38,7 +38,7 @@ class HomePagerVC: UIPageViewController {
         arrVc.append(vc1)
         
         index += 1
-        let vc2 = self.storyboard?.instantiateViewController(withIdentifier: "UpcomingVC") as! UpcomingVC
+        let vc2 = self.storyboard?.instantiateViewController(withIdentifier: "NewsListVC") as! NewsListVC
         vc2.index = index
         arrVc.append(vc2)
         

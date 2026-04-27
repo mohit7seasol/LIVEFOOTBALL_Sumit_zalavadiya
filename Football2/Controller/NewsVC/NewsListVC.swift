@@ -39,6 +39,7 @@ class NewsListVC: UIViewController {
     var newsResults: [Result] = []
     var selectedPosts: [Post] = []
     var selectedCategoryIndex = 0
+    var index = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
