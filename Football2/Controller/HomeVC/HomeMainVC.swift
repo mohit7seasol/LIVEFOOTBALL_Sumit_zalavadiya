@@ -104,7 +104,7 @@ class HomeMainVC: UIViewController {
         self.topViewHeight.constant = 35
         self.centerViewTop.constant = 35
         self.seriesImg.image = UIImage(named: "SeriesSelect")
-        pagerVc?.moveToPage(index: 3, animated: false)
+        pagerVc?.moveToPage(index: 2, animated: false)
     }
     
     @IBAction func gamesTapped(_ sender: UIButton) {

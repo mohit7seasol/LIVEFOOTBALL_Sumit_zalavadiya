@@ -43,19 +43,9 @@ class HomePagerVC: UIPageViewController {
         arrVc.append(vc2)
         
         index += 1
-        let vc3 = self.storyboard?.instantiateViewController(withIdentifier: "FinishedVC") as! FinishedVC
+        let vc3 = self.storyboard?.instantiateViewController(withIdentifier: "SeriesVC") as! SeriesVC
         vc3.index = index
         arrVc.append(vc3)
-        
-        index += 1
-        let vc4 = self.storyboard?.instantiateViewController(withIdentifier: "SeriesVC") as! SeriesVC
-        vc4.index = index
-        arrVc.append(vc4)
-        
-        index += 1
-        let vc5 = self.storyboard?.instantiateViewController(withIdentifier: "GamesVC") as! GamesVC
-        vc5.index = index
-        arrVc.append(vc5)
         
     }
     

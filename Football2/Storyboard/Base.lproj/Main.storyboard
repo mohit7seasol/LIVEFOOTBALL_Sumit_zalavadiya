@@ -442,13 +442,13 @@
                                         <rect key="frame" x="12" y="0.0" width="369" height="75"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k44-S2-ooX">
-                                                <rect key="frame" x="0.0" y="0.0" width="86.333333333333329" height="75"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="75"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HomeUnSelect" translatesAutoresizingMaskIntoConstraints="NO" id="ye1-w8-jAh">
-                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="86.333333333333329" height="50"/>
+                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="117.66666666666667" height="50"/>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nF-ex-GYE">
-                                                        <rect key="frame" x="0.0" y="0.0" width="86.333333333333329" height="75"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="75"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain"/>
                                                         <connections>
@@ -468,13 +468,13 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BUh-k2-tGx">
-                                                <rect key="frame" x="94.333333333333343" y="0.0" width="86.333333333333343" height="75"/>
+                                                <rect key="frame" x="125.66666666666666" y="0.0" width="117.66666666666666" height="75"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="UpcomingSelect" translatesAutoresizingMaskIntoConstraints="NO" id="vLa-rh-p4z">
-                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="86.333333333333329" height="50"/>
+                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="117.66666666666667" height="50"/>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Icn-HW-v5i">
-                                                        <rect key="frame" x="0.0" y="0.0" width="86.333333333333329" height="75"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="75"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain"/>
                                                         <connections>
@@ -493,14 +493,14 @@
                                                     <constraint firstAttribute="trailing" secondItem="vLa-rh-p4z" secondAttribute="trailing" id="w9a-6S-USI"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oL-uf-mnZ">
-                                                <rect key="frame" x="188.66666666666666" y="0.0" width="85.999999999999972" height="75"/>
+                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0oL-uf-mnZ">
+                                                <rect key="frame" x="247.33333333333331" y="0.0" width="0.0" height="75"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FinishedUnSelect" translatesAutoresizingMaskIntoConstraints="NO" id="Dun-RL-Yn6">
-                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="86" height="50"/>
+                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="0.0" height="50"/>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4Z-j4-lj0">
-                                                        <rect key="frame" x="0.0" y="0.0" width="86" height="75"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="75"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain"/>
                                                         <connections>
@@ -520,13 +520,13 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nVC-Zx-k64">
-                                                <rect key="frame" x="282.66666666666669" y="0.0" width="86.333333333333314" height="75"/>
+                                                <rect key="frame" x="251.33333333333329" y="0.0" width="117.66666666666666" height="75"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SeriesUnSelect" translatesAutoresizingMaskIntoConstraints="NO" id="QEs-2p-ZZJ">
-                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="86.333333333333329" height="50"/>
+                                                        <rect key="frame" x="0.0" y="12.666666666666629" width="117.66666666666667" height="50"/>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E9m-fL-p9j">
-                                                        <rect key="frame" x="0.0" y="0.0" width="86.333333333333329" height="75"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="117.66666666666667" height="75"/>
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain"/>
                                                         <connections>
