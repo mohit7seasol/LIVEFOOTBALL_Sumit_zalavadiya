@@ -20,6 +20,8 @@ class HomeVC: UIViewController {
     @IBOutlet weak var todayButton: UIButton!
     @IBOutlet weak var currentMonthLabel: UILabel!
     @IBOutlet weak var datepickerCollection: UICollectionView!
+    @IBOutlet weak var stackHeightConstant: NSLayoutConstraint!
+    @IBOutlet weak var stackViewMatchTypes: UIStackView!
     
     var index = -1
     var isAscending: Bool = true
@@ -67,6 +69,25 @@ class HomeVC: UIViewController {
     private func setupUI() {
         updateButtonStates(selected: .live)
         updateMonthLabel()
+        updateStackViewHeight() // Add this line
+    }
+    
+    // MARK: - Update StackView Height Based on Selected Date
+    private func updateStackViewHeight() {
+        if calendar.isDateInToday(selectedDate) {
+            // Today date - show stack view (height 49)
+            stackHeightConstant.constant = 49
+            stackViewMatchTypes.isHidden = false
+        } else {
+            // Other dates - hide stack view (height 0)
+            stackHeightConstant.constant = 0
+            stackViewMatchTypes.isHidden = true
+        }
+        
+        // Animate the change
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func setupSVProgressHUD() {
@@ -114,6 +135,9 @@ class HomeVC: UIViewController {
             selectedDateIndex = 0
             selectedDate = dates[0]
         }
+        
+        // Update stack view height when calendar is set up
+        updateStackViewHeight()
         
         DispatchQueue.main.async {
             self.datepickerCollection.reloadData()
@@ -228,6 +252,10 @@ class HomeVC: UIViewController {
         
         self.selectedDateIndex = index
         self.selectedDate = dates[index]
+        
+        // Update stack view height when date changes
+        updateStackViewHeight()
+        
         self.fetchMatches(for: selectedDate)
         
         DispatchQueue.main.async {

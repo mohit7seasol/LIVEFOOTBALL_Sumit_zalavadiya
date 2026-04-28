@@ -754,13 +754,15 @@
                                                                 </connections>
                                                             </button>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="49" id="eAi-2I-MjI"/>
+                                                        </constraints>
                                                     </stackView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="9IM-7h-r4X" firstAttribute="top" secondItem="dNh-yn-huK" secondAttribute="top" id="19n-HF-3R4"/>
                                                     <constraint firstItem="9dP-10-6h9" firstAttribute="leading" secondItem="dNh-yn-huK" secondAttribute="leading" id="3Dw-HO-geN"/>
-                                                    <constraint firstAttribute="height" constant="50" id="9LH-ie-vMr"/>
                                                     <constraint firstItem="9IM-7h-r4X" firstAttribute="leading" secondItem="dNh-yn-huK" secondAttribute="leading" id="Fur-23-CpX"/>
                                                     <constraint firstAttribute="bottom" secondItem="9dP-10-6h9" secondAttribute="bottom" id="aaS-K6-gV3"/>
                                                     <constraint firstItem="9dP-10-6h9" firstAttribute="top" secondItem="9IM-7h-r4X" secondAttribute="bottom" id="pGl-ty-JdW"/>
@@ -828,6 +830,8 @@
                         <outlet property="finishedButton" destination="IvE-eW-nO2" id="joc-y9-Dhs"/>
                         <outlet property="liveButton" destination="nAh-ki-zXZ" id="0uS-pH-CVU"/>
                         <outlet property="matchListCollection" destination="fjc-pB-D5g" id="Uyb-MI-OEA"/>
+                        <outlet property="stackHeightConstant" destination="eAi-2I-MjI" id="Rbq-eV-ygY"/>
+                        <outlet property="stackViewMatchTypes" destination="9dP-10-6h9" id="hdR-GB-gbZ"/>
                         <outlet property="todayButton" destination="56x-CK-IaT" id="XdQ-JO-bZU"/>
                         <outlet property="upcomingButton" destination="7Qn-ff-ZvG" id="Cco-Ih-gs6"/>
                         <outlet property="viewForNative" destination="MK5-y6-Q2D" id="anS-Xy-2BW"/>
