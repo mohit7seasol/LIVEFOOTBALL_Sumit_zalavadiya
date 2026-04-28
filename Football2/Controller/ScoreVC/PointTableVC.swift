@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 struct Team: Codable {
     let tname: String
     let P: Int
@@ -30,7 +29,6 @@ struct TeamStandingsResponse: Codable {
         let team_standings: [Standings]?
     }
 }
-
 class PointTableVC: UIViewController {
     
     @IBOutlet weak var tableCustomView: CustomView!
@@ -49,8 +47,10 @@ class PointTableVC: UIViewController {
     var isShowNativeAds = false
     
     var index = -1
+    var m_id: String?
+    var l_id: String?
+    var standings: [Standing] = []
     var teams: [Team] = []
-    var l_id:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,48 +61,99 @@ class PointTableVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchTeamStandings()
+        
+        if !standings.isEmpty {
+            updateUIWithStandings()
+        } else {
+            fetchMatchStandings()
+        }
     }
     
-    func fetchTeamStandings() {
-        guard let url = URL(string: matchPointTbl) else { return }
+    func updateUIWithStandings() {
+        teams = standings.map { standing in
+            Team(
+                tname: standing.name ?? "",
+                P: standing.matches_played ?? 0,
+                W: standing.wins ?? 0,
+                L: standing.losses ?? 0,
+                D: standing.draws ?? 0,
+                PTS: standing.points ?? 0
+            )
+        }
+        teams.sort { $0.PTS > $1.PTS }
+        
+        DispatchQueue.main.async {
+            if self.teams.isEmpty {
+                self.emptyImg.isHidden = false
+                self.tableCustomView.isHidden = true
+                self.pointsTableView.isHidden = true
+            } else {
+                self.emptyImg.isHidden = true
+                self.tableCustomView.isHidden = false
+                self.pointsTableView.isHidden = false
+                self.pointsTableView.reloadData()
+            }
+        }
+    }
+    
+    // MARK: - Fixed API Call with proper error handling
+    func fetchMatchStandings() {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/standings?type=overall&match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
         
-        let parameters: [String: Any] = [
-            "spt_typ": 2,
-            "l_id": l_id!,
-            "is_latest": true
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
-                print("Error: \(error?.localizedDescription ?? "Unknown error")")
+                print("API Error:", error?.localizedDescription ?? "Unknown error")
                 return
             }
             
+            // Debug: Print raw response
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Standings API Response: \(jsonString)")
+            }
+            
             do {
-                let response = try JSONDecoder().decode(TeamStandingsResponse.self, from: data)
-                guard response.status, let result = response.result, let standings = result.team_standings, !standings.isEmpty else {
-                    print("No data available")
-                    return
-                }
+                // Try to decode as array of Standing objects
+                let decoder = JSONDecoder()
+                let result = try decoder.decode([Standing].self, from: data)
                 
-                self.teams = standings.flatMap { $0.standings }
+                print("Successfully decoded \(result.count) standings")
                 
                 DispatchQueue.main.async {
-                    self.pointsTableView.reloadData()
+                    self?.standings = result
+                    self?.updateUIWithStandings()
                 }
             } catch {
-                print("Failed to decode JSON: \(error)")
+                print("Decode error:", error)
+                
+                // If array decode fails, try to decode as dictionary with standings array
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        print("Response keys: \(json.keys)")
+                        
+                        // Check different possible response structures
+                        if let standingsArray = json["standings"] as? [[String: Any]] {
+                            print("Found standings array with \(standingsArray.count) items")
+                            // Manually parse if needed
+                        } else if let result = json["result"] as? [String: Any],
+                                  let teamStandings = result["team_standings"] as? [[String: Any]] {
+                            print("Found team_standings with \(teamStandings.count) items")
+                        }
+                    }
+                } catch {
+                    print("JSON serialization error:", error)
+                }
             }
-        }
-        
-        task.resume()
+        }.resume()
     }
     
     func subscribe() {
@@ -130,10 +181,8 @@ class PointTableVC: UIViewController {
     
     func showSkeletonView() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
@@ -146,7 +195,6 @@ class PointTableVC: UIViewController {
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-            
         }
     }
     
@@ -157,23 +205,12 @@ class PointTableVC: UIViewController {
             }
         }
     }
-    
 }
 
 extension PointTableVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if teams.isEmpty == true {
-            emptyImg.isHidden = false
-            tableCustomView.isHidden = true
-        } else {
-            emptyImg.isHidden = true
-            tableCustomView.isHidden = false
-        }
-        
         return teams.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -190,16 +227,20 @@ extension PointTableVC : UITableViewDelegate, UITableViewDataSource {
         cell.lblD.text = "\(team.D)"
         cell.lblPTS.text = "\(team.PTS)"
         
+        // Optional: Add corner radius for last cell
+        if indexPath.row == teams.count - 1 {
+            cell.customView.layer.cornerRadius = 8
+            cell.customView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
+        
         DispatchQueue.main.async {
             self.tableHeight.constant = self.pointsTableView.contentSize.height
         }
         
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 48
     }
-    
 }

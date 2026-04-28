@@ -102,6 +102,7 @@ extension String{
     static let Squad = "Squad"
     static let Info = "Info"
     static let PointTable = "Point Table"
+    static let HeadToHead = "Head2Head"
 }
 
 var appStart:Bool = false

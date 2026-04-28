@@ -7,32 +7,6 @@
 
 import UIKit
 
-struct LineupResponse: Codable {
-    let statusCode: Int
-    let status: Bool
-    let message: String
-    let result: MatchResult
-}
-
-struct MatchResult: Codable {
-    let m_id: String
-    let lineup_updates: LineupUpdates
-}
-
-struct LineupUpdates: Codable {
-    let t1_formation: String
-    let t2_formation: String
-    let t1_Squad: [Player]
-    let t2_Squad: [Player]
-}
-
-struct Player: Codable {
-    let playerName: String
-    let position: String
-    let image: String
-    let shirtnumber:Int
-}
-
 class LineUpsVC: UIViewController {
     
     @IBOutlet weak var lblTeamA: UILabel!
@@ -87,6 +61,8 @@ class LineUpsVC: UIViewController {
     var Bname:String?
     var Aimg:String?
     var Bimg:String?
+    var matchDetails: MatchDetails?
+    var lineupData: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,142 +71,187 @@ class LineUpsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.Aname?.isEmpty == false {
-            self.lblTeamA.text = self.Aname
-        } else {
-            self.lblTeamA.text = "TeamA"
-        }
+        setupTeamInfo()
         
-        if self.Bname?.isEmpty == false {
-            self.lblTeamB.text = self.Bname
+        if !lineupData.isEmpty {
+            processLineupData()
         } else {
-            self.lblTeamB.text = "TeamB"
+            fetchLineupData()
         }
-        
-        if self.Aimg?.isEmpty == false {
-            let urlA = URL(string: self.Aimg!)
-            self.imgTeamA.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
-        } else {
-            self.imgTeamA.image = UIImage(named: "DefaultFlag")!
-        }
-        
-        if self.Bimg?.isEmpty == false {
-            let urlA = URL(string: self.Bimg!)
-            self.imgTeamB.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
-        } else {
-            self.imgTeamB.image = UIImage(named: "DefaultFlag")!
-        }
-        
-        fetchLineupData()
     }
     
-    func setData(view: LinesUpsViewXIB, lbltitle:String, count:String) {
+    func setupTeamInfo() {
+        if let details = matchDetails {
+            lblTeamA.text = details.homeName
+            lblTeamB.text = details.awayName
+            if let url = URL(string: details.homeLogo), !details.homeLogo.isEmpty {
+                imgTeamA.sd_setImage(with: url, placeholderImage: UIImage(named: "DefaultFlag"))
+            }
+            if let url = URL(string: details.awayLogo), !details.awayLogo.isEmpty {
+                imgTeamB.sd_setImage(with: url, placeholderImage: UIImage(named: "DefaultFlag"))
+            }
+        } else {
+            if self.Aname?.isEmpty == false {
+                self.lblTeamA.text = self.Aname
+            } else {
+                self.lblTeamA.text = "TeamA"
+            }
+            
+            if self.Bname?.isEmpty == false {
+                self.lblTeamB.text = self.Bname
+            } else {
+                self.lblTeamB.text = "TeamB"
+            }
+            
+            if self.Aimg?.isEmpty == false {
+                let urlA = URL(string: self.Aimg!)
+                self.imgTeamA.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
+            } else {
+                self.imgTeamA.image = UIImage(named: "DefaultFlag")!
+            }
+            
+            if self.Bimg?.isEmpty == false {
+                let urlA = URL(string: self.Bimg!)
+                self.imgTeamB.sd_setImage(with: urlA, placeholderImage: UIImage(named: "DefaultFlag"))
+            } else {
+                self.imgTeamB.image = UIImage(named: "DefaultFlag")!
+            }
+        }
+    }
+    
+    func setData(view: LinesUpsViewXIB, lbltitle: String, count: String) {
         view.lblNAme.text = lbltitle
         view.lblShirtNum.text = count
     }
     
+    // MARK: - Updated API from Reference Code
     func fetchLineupData() {
-        let url = URL(string: matchLineUps)!
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/lineups?match_id=\(m_id ?? "")"
+        
+        guard let url = URL(string: urlString) else { return }
+        
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
         
-        let body: [String: Any] = ["m_id": m_id!]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
-                print("Error fetching data: \(String(describing: error))")
+                print("API Error:", error?.localizedDescription ?? "")
                 return
             }
             
             do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(LineupResponse.self, from: data)
+                let result = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+                guard let teams = result, teams.count >= 2 else { return }
+                
                 DispatchQueue.main.async {
-                    self.lblScoreA.text = response.result.lineup_updates.t1_formation
-                    self.lblScoreB.text = response.result.lineup_updates.t2_formation
-                    
-                    if response.result.lineup_updates.t1_Squad.isEmpty == false {
-                        self.viewGoalA1.isHidden = false
-                        self.stackViewA.isHidden = false
-                        self.stackViewAA.isHidden = false
-                        self.updateUI1(with: response.result.lineup_updates.t1_Squad)
-                    } else {
-                        self.viewGoalA1.isHidden = true
-                        self.stackViewA.isHidden = true
-                        self.stackViewAA.isHidden = true
-                    }
-                    
-                    if response.result.lineup_updates.t2_Squad.isEmpty == false {
-                        self.viewGoalB1.isHidden = false
-                        self.stackViewB.isHidden = false
-                        self.stackViewBB.isHidden = false
-                        self.updateUI2(with: response.result.lineup_updates.t2_Squad)
-                    } else {
-                        self.viewGoalB1.isHidden = true
-                        self.stackViewB.isHidden = true
-                        self.stackViewBB.isHidden = true
-                    }
+                    self?.lineupData = teams
+                    self?.processLineupData()
                 }
             } catch {
-                print("Error decoding data: \(error)")
+                print("JSON Error:", error)
             }
         }.resume()
     }
     
-    func updateUI1(with players: [Player]) {
-        guard players.count >= 11 else { return }
+    func processLineupData() {
+        guard lineupData.count >= 2 else { return }
         
-        if let goalkeeper = players.first(where: { $0.position == "Goalkeeper" }) {
-            setData(view: viewGoalA1, lbltitle: goalkeeper.playerName, count: "\(goalkeeper.shirtnumber)")
+        let homeTeam = lineupData[0]
+        let awayTeam = lineupData[1]
+        
+        let homeFormation = homeTeam["predictedFormation"] as? String
+        let awayFormation = awayTeam["predictedFormation"] as? String
+        
+        lblScoreA.text = homeFormation
+        lblScoreB.text = awayFormation
+        
+        var homePlayers = homeTeam["startingLineups"] as? [[String: Any]] ?? []
+        if homePlayers.isEmpty {
+            homePlayers = homeTeam["predictedLineups"] as? [[String: Any]] ?? []
         }
         
-        // Filter out the Goalkeeper and set the rest of the players in different labels
-        let otherPlayers = players.filter { $0.position != "Goalkeeper" }
+        var awayPlayers = awayTeam["startingLineups"] as? [[String: Any]] ?? []
+        if awayPlayers.isEmpty {
+            awayPlayers = awayTeam["predictedLineups"] as? [[String: Any]] ?? []
+        }
         
-        // Ensure there are enough players for all labels
-        guard otherPlayers.count >= 10 else { return }
+        if !homePlayers.isEmpty {
+            updateHomePlayers(homePlayers)
+        } else {
+            viewGoalA1.isHidden = true
+            stackViewA.isHidden = true
+            stackViewAA.isHidden = true
+        }
         
-        // Set the remaining players' data in different labels
-        setData(view: viewDiffA1, lbltitle: otherPlayers[0].playerName, count: "\(otherPlayers[0].shirtnumber)")
-        setData(view: viewDiffA2, lbltitle: otherPlayers[1].playerName, count: "\(otherPlayers[1].shirtnumber)")
-        setData(view: viewDiffA3, lbltitle: otherPlayers[2].playerName, count: "\(otherPlayers[2].shirtnumber)")
-        setData(view: viewDiffA4, lbltitle: otherPlayers[3].playerName, count: "\(otherPlayers[3].shirtnumber)")
-        setData(view: viewDiffA5, lbltitle: otherPlayers[4].playerName, count: "\(otherPlayers[4].shirtnumber)")
-        
-        setData(view: viewMidDiffA1, lbltitle: otherPlayers[5].playerName, count: "\(otherPlayers[5].shirtnumber)")
-        setData(view: viewMidDiffA2, lbltitle: otherPlayers[6].playerName, count: "\(otherPlayers[6].shirtnumber)")
-        setData(view: viewMidDiffA3, lbltitle: otherPlayers[7].playerName, count: "\(otherPlayers[7].shirtnumber)")
-        setData(view: viewMidDiffA4, lbltitle:  otherPlayers[8].playerName, count: "\(otherPlayers[8].shirtnumber)")
-        setData(view: viewMidDiffA5, lbltitle:  otherPlayers[9].playerName, count: "\(otherPlayers[9].shirtnumber)")
+        if !awayPlayers.isEmpty {
+            updateAwayPlayers(awayPlayers)
+        } else {
+            viewGoalB1.isHidden = true
+            stackViewB.isHidden = true
+            stackViewBB.isHidden = true
+        }
     }
     
-    func updateUI2(with players: [Player]) {
-        guard players.count >= 11 else { return }
-        
-        if let goalkeeper = players.first(where: { $0.position == "Goalkeeper" }) {
-            setData(view: viewGoalB1, lbltitle: goalkeeper.playerName, count: "\(goalkeeper.shirtnumber)")
+    func updateHomePlayers(_ players: [[String: Any]]) {
+        guard players.count >= 11 else {
+            viewGoalA1.isHidden = true
+            stackViewA.isHidden = true
+            stackViewAA.isHidden = true
+            return
         }
         
-        // Filter out the Goalkeeper and set the rest of the players in different labels
-        let otherPlayers = players.filter { $0.position != "Goalkeeper" }
+        let goalkeeper = players[0]
+        setData(view: viewGoalA1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: "")
         
-        // Ensure there are enough players for all labels
-        guard otherPlayers.count >= 10 else { return }
+        let others = Array(players.dropFirst())
         
-        // Set the remaining players' data in different labels
-        setData(view: viewDiffB1, lbltitle: otherPlayers[0].playerName, count: "\(otherPlayers[0].shirtnumber)")
-        setData(view: viewDiffB2, lbltitle: otherPlayers[1].playerName, count: "\(otherPlayers[1].shirtnumber)")
-        setData(view: viewDiffB3, lbltitle: otherPlayers[2].playerName, count: "\(otherPlayers[2].shirtnumber)")
-        setData(view: viewDiffB4, lbltitle: otherPlayers[3].playerName, count: "\(otherPlayers[3].shirtnumber)")
-        setData(view: viewDiffB5, lbltitle: otherPlayers[4].playerName, count: "\(otherPlayers[4].shirtnumber)")
+        setData(view: viewDiffA1, lbltitle: others[0]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffA2, lbltitle: others[1]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffA3, lbltitle: others[2]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffA4, lbltitle: others[3]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffA5, lbltitle: others[4]["fieldName"] as? String ?? "", count: "")
         
-        setData(view: viewMidDiffB1, lbltitle: otherPlayers[5].playerName, count: "\(otherPlayers[5].shirtnumber)")
-        setData(view: viewMidDiffB2, lbltitle: otherPlayers[6].playerName, count: "\(otherPlayers[6].shirtnumber)")
-        setData(view: viewMidDiffB3, lbltitle: otherPlayers[7].playerName, count: "\(otherPlayers[7].shirtnumber)")
-        setData(view: viewMidDiffB4, lbltitle:  otherPlayers[8].playerName, count: "\(otherPlayers[8].shirtnumber)")
-        setData(view: viewMidDiffB5, lbltitle:  otherPlayers[9].playerName, count: "\(otherPlayers[9].shirtnumber)")
+        setData(view: viewMidDiffA1, lbltitle: others[5]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffA2, lbltitle: others[6]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffA3, lbltitle: others[7]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffA4, lbltitle: others[8]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffA5, lbltitle: others[9]["fieldName"] as? String ?? "", count: "")
+        
+        viewGoalA1.isHidden = false
+        stackViewA.isHidden = false
+        stackViewAA.isHidden = false
+    }
+    
+    func updateAwayPlayers(_ players: [[String: Any]]) {
+        guard players.count >= 11 else {
+            viewGoalB1.isHidden = true
+            stackViewB.isHidden = true
+            stackViewBB.isHidden = true
+            return
+        }
+        
+        let goalkeeper = players[0]
+        setData(view: viewGoalB1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: "")
+        
+        let others = Array(players.dropFirst())
+        
+        setData(view: viewDiffB1, lbltitle: others[0]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffB2, lbltitle: others[1]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffB3, lbltitle: others[2]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffB4, lbltitle: others[3]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffB5, lbltitle: others[4]["fieldName"] as? String ?? "", count: "")
+        
+        setData(view: viewMidDiffB1, lbltitle: others[5]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffB2, lbltitle: others[6]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffB3, lbltitle: others[7]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffB4, lbltitle: others[8]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffB5, lbltitle: others[9]["fieldName"] as? String ?? "", count: "")
+        
+        viewGoalB1.isHidden = false
+        stackViewB.isHidden = false
+        stackViewBB.isHidden = false
     }
     
     func subscribe() {
@@ -258,10 +279,8 @@ class LineUpsVC: UIViewController {
     
     func showSkeletonView() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
@@ -274,7 +293,6 @@ class LineUpsVC: UIViewController {
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-            
         }
     }
     
@@ -285,6 +303,4 @@ class LineUpsVC: UIViewController {
             }
         }
     }
-    
-
 }

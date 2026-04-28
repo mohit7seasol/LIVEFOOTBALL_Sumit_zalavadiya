@@ -470,7 +470,34 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             handleDateSelection(at: indexPath.item)
         } else {
             let match = matchesFiltered[indexPath.item]
-            // Navigate to match details
+            
+            // Navigate to ScoreVC
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let scoreVC = storyboard.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC
+            
+            // Pass match data to ScoreVC
+            scoreVC.m_idMain = match.matchId
+            scoreVC.l_idMain = match.tournamentId
+            scoreVC.m_name = match.leagueName
+            scoreVC.Aname = match.homeName
+            scoreVC.Bname = match.awayName
+            scoreVC.Aimg = match.homeLogo
+            scoreVC.Bimg = match.awayLogo
+            
+            // Determine if match is live, upcoming, or completed
+            if match.isInProgress {
+                scoreVC.isMatchLive = true
+                UpComing = false
+            } else if match.isFinished {
+                scoreVC.isMatchLive = false
+                UpComing = false
+            } else {
+                // Upcoming match
+                UpComing = true
+                scoreVC.isMatchLive = false
+            }
+            
+            self.navigationController?.pushViewController(scoreVC, animated: true)
         }
     }
     

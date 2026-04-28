@@ -7,45 +7,6 @@
 
 import UIKit
 
-struct MatchStat: Codable {
-    let typeId: Int
-    let t1Stats: Int
-    let t2Stats: Int
-    let type: String
-    
-    enum CodingKeys: String, CodingKey {
-        case typeId
-        case t1Stats = "t1_Stats"
-        case t2Stats = "t2_Stats"
-        case type
-    }
-}
-
-struct MatchStatsResponse: Codable {
-    let statusCode: Int
-    let status: Bool
-    let message: String
-    let result: MatchStatsResult?
-}
-
-struct MatchStatsResult: Codable {
-    let mId: String
-    let t1Id: Int
-    let t1Name: String
-    let t2Id: Int
-    let t2Name: String
-    let matchStats: [MatchStat]?
-    
-    enum CodingKeys: String, CodingKey {
-        case mId = "m_id"
-        case t1Id = "t1_id"
-        case t1Name = "t1_name"
-        case t2Id = "t2_id"
-        case t2Name = "t2_name"
-        case matchStats = "match_stats"
-    }
-}
-
 class StatsVC: UIViewController {
     
     @IBOutlet weak var teamALbl: UILabel!
@@ -59,90 +20,126 @@ class StatsVC: UIViewController {
     }
     @IBOutlet weak var emptyImg: UIImageView!
     
-    var matchStats: [MatchStat] = []
+    var stats: [MatchStatModel] = []
     var index = -1
-    var m_id:String?
-    var l_id:String?
+    var m_id: String?
+    var l_id: String?
+    var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchMatchStats()
+        
+        if !stats.isEmpty {
+            updateUIWithStats()
+        } else {
+            fetchMatchStats()
+        }
+        startAutoRefresh()
     }
     
-    func fetchMatchStats() {
-        let url = URL(string: matchStatsAPI)!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let parameters: [String: Any] = ["m_id": m_id!]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Failed to fetch data")
-                return
-            }
-            
-            do {
-                let matchStatsResponse = try JSONDecoder().decode(MatchStatsResponse.self, from: data)
-                
-                if let matchStats = matchStatsResponse.result?.matchStats, !matchStats.isEmpty {
-                    self.matchStats = matchStats
-                    DispatchQueue.main.async {
-                        self.teamALbl.text = matchStatsResponse.result?.t1Name
-                        self.teamBLbl.text = matchStatsResponse.result?.t2Name
-                        self.statusTableView.reloadData()
-                    }
-                } else {
-                    print("Result is empty")
-                }
-            } catch {
-                print("Failed to decode JSON: \(error.localizedDescription)")
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+        refreshTimer = nil
+    }
+    
+    func startAutoRefresh() {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.fetchMatchStats()
+        }
+    }
+    
+    func updateUIWithStats() {
+        DispatchQueue.main.async {
+            if self.stats.isEmpty {
+                self.statusTableView.isHidden = true
+                self.tableHeaderView.isHidden = true
+                self.emptyImg.isHidden = false
+            } else {
+                self.statusTableView.isHidden = false
+                self.tableHeaderView.isHidden = false
+                self.emptyImg.isHidden = true
+                self.statusTableView.reloadData()
             }
         }
+    }
+    
+    // MARK: - Updated API from Reference Code
+    func fetchMatchStats() {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/stats?match_id=\(m_id ?? "")"
         
-        task.resume()
+        guard let url = URL(string: urlString) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else { return }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let statsArray = json["match"] as? [[String: Any]] {
+                    
+                    var temp: [MatchStatModel] = []
+                    for s in statsArray {
+                        let stat = MatchStatModel(
+                            name: s["name"] as? String ?? "",
+                            home: "\(s["home_team"] ?? "")",
+                            away: "\(s["away_team"] ?? "")"
+                        )
+                        temp.append(stat)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self?.stats = temp
+                        self?.updateUIWithStats()
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }.resume()
     }
 }
 
 extension StatsVC : UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if matchStats.isEmpty == true {
-            statusTableView.isHidden = true
-            tableHeaderView.isHidden = true
-            emptyImg.isHidden = false
-        } else {
-            statusTableView.isHidden = false
-            tableHeaderView.isHidden = false
-            emptyImg.isHidden = true
-        }
-        
-        return matchStats.count
+        return stats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "StatsCell", for: indexPath) as! StatsCell
         cell.selectionStyle = .none
-        let stat = matchStats[indexPath.row]
-        cell.lblActions?.text = stat.type
-        cell.lblTeam1.text = "\(stat.t1Stats)"
-        cell.lblTeam2.text = "\(stat.t2Stats)"
+        let stat = stats[indexPath.row]
+        cell.lblActions.text = stat.name
+        cell.lblTeam1.text = stat.home
+        cell.lblTeam2.text = stat.away
         
-       
+        let homeValue = Float(stat.home) ?? 0
+        let awayValue = Float(stat.away) ?? 0
+        let total = homeValue + awayValue
+        
+        if total > 0 {
+//            cell.progressViewTeam1.progress = homeValue / total
+//            cell.progressViewTeam2.progress = awayValue / total
+        } else {
+//            cell.progressViewTeam1.progress = 0.5
+//            cell.progressViewTeam2.progress = 0.5
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
-    
 }

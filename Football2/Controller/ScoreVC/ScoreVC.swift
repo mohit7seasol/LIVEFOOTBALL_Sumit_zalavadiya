@@ -7,28 +7,6 @@
 
 import UIKit
 
-struct MatchTabsResponse: Codable {
-    let statusCode: Int
-    let status: Bool
-    let message: String
-    let result: ResultDataLive?
-}
-
-struct ResultDataLive: Codable {
-    let t1_scr: Int?
-    let t2_scr: Int?
-    let t1_cornerKicks: Int?
-    let t1_penalties: Int?
-    let t1_redCards: Int?
-    let t1_yellowCards: Int?
-    let t2_cornerKicks: Int?
-    let t2_penalties: Int?
-    let t2_redCards: Int?
-    let t2_yellowCards: Int?
-    let result_str: String?
-    let time: String?
-}
-
 class ScoreVC: BaseVC {
     
     @IBOutlet weak var titleLbl: UILabel!
@@ -75,22 +53,33 @@ class ScoreVC: BaseVC {
     
     private var pagerVc: ScorePagerVC?
     
+    // Data from APIs
+    var matchDetails: MatchDetails?
+    var matchStats: [MatchStatModel] = []
+    var eventsUpdates: [MatchSummaryEvent] = []
+    var standings: [Standing] = []
+    var h2hMatches: [H2HMatch] = []
+    var lineupData: [[String: Any]] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         logAnalyticAction(title: "", status: .MatchDetails)
         self.titleLbl.text = "Match Details"
+        
+        // Set initial title array based on match type
         if UpComing == true {
             topArrray = [String.Squad, String.Info, String.PointTable]
             viewForUpcomingScore.isHidden = false
             viewForOtherScores.isHidden = true
         } else {
-            topArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.Squad, String.Info, String.PointTable]
+            topArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
             viewForUpcomingScore.isHidden = true
             viewForOtherScores.isHidden = false
         }
+        
         self.setData()
         DispatchQueue.main.async {
-            self.fetchMatchData()
+            self.fetchAllMatchData()
             self.topCollectionView.reloadData()
         }
         startAutoRefresh()
@@ -101,7 +90,7 @@ class ScoreVC: BaseVC {
             guard let self = self else { return }
             self.setData()
             DispatchQueue.main.async {
-                self.fetchMatchData()
+                self.fetchMatchDataOnly()
                 self.topCollectionView.reloadData()
             }
         }
@@ -117,7 +106,58 @@ class ScoreVC: BaseVC {
         self.navigationController?.popViewController(animated: true)
     }
     
-
+    // MARK: - Fetch All Match Data
+    func fetchAllMatchData() {
+        let dispatchGroup = DispatchGroup()
+        
+        // 1. Fetch Match Details (Info)
+        dispatchGroup.enter()
+        fetchMatchDetails { success in
+            dispatchGroup.leave()
+        }
+        
+        // 2. Fetch Match Stats
+        dispatchGroup.enter()
+        fetchMatchStats { success in
+            dispatchGroup.leave()
+        }
+        
+        // 3. Fetch Match Summary (Live Update & Overview)
+        dispatchGroup.enter()
+        fetchMatchSummary { success in
+            dispatchGroup.leave()
+        }
+        
+        // 4. Fetch Standings (Point Table)
+        dispatchGroup.enter()
+        fetchMatchStandings { success in
+            dispatchGroup.leave()
+        }
+        
+        // 5. Fetch Head2Head Matches
+        dispatchGroup.enter()
+        fetchHead2HeadMatches { success in
+            dispatchGroup.leave()
+        }
+        
+        // 6. Fetch Lineup Data
+        dispatchGroup.enter()
+        fetchLineupData { success in
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) { [weak self] in
+            self?.updateTitleArrBasedOnAvailableData()
+        }
+    }
+    
+    func fetchMatchDataOnly() {
+        fetchMatchDetails { _ in }
+        fetchMatchSummary { _ in }
+        if !UpComing {
+            fetchMatchStats { _ in }
+        }
+    }
 }
 
 extension ScoreVC {
@@ -156,55 +196,345 @@ extension ScoreVC {
                 self.imgB.image = UIImage(named: "DefaultFlag")!
             }
         }
-        
     }
     
-    func fetchMatchData() {
-        fetchMatchTabs { [weak self] result in
-            guard let self = self, let result = result else { return }
-            DispatchQueue.main.async {
-                self.lblT1Goal.text = "\(result.t1_cornerKicks ?? 0)"
-                self.lblT1Rflag.text = "\(result.t1_redCards ?? 0)"
-                self.lblT1Yflag.text = "\(result.t1_yellowCards ?? 0)"
-                self.lblT1Kick.text = "\(result.t1_penalties ?? 0)"
-                
-                self.lblScore.text = "\(result.t1_scr ?? 0) - \(result.t2_scr ?? 0)"
-                self.lblComplated.text = "\(result.time ?? "") Completed"
-                
-                self.lblT2Goal.text = "\(result.t2_cornerKicks ?? 0)"
-                self.lblT2Rflag.text = "\(result.t2_redCards ?? 0)"
-                self.lblT2Yflag.text = "\(result.t2_yellowCards ?? 0)"
-                self.lblT2Kick.text = "\(result.t2_penalties ?? 0)"
-                
-            }
+    // MARK: - API Methods (from ScoreDetailsVC)
+    
+    func fetchMatchDetails(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/details?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
         }
-    }
-    
-    func fetchMatchTabs(completion: @escaping (ResultDataLive?) -> Void) {
-        let url = URL(string: matchTab)!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        let parameters = ["spt_typ": 2, "l_id": l_idMain!, "m_id": m_idMain!] as [String : Any]
-        request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
-                print("Network error:", error ?? "Unknown error")
+                completion(false)
                 return
             }
             
             do {
-                let response = try JSONDecoder().decode(MatchTabsResponse.self, from: data)
-                if response.status, let result = response.result {
-                    completion(result)
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    
+                    let home = json["home_team"] as? [String: Any]
+                    let away = json["away_team"] as? [String: Any]
+                    let tournament = json["tournament"] as? [String: Any]
+                    let scores = json["scores"] as? [String: Any]
+                    let status = json["match_status"] as? [String: Any]
+                    let venue = json["venue"] as? [String: Any]
+                    
+                    let details = MatchDetails(
+                        leagueName: tournament?["name"] as? String ?? "",
+                        homeName: home?["name"] as? String ?? self?.Aname ?? "",
+                        homeShortName: home?["short_name"] as? String ?? "",
+                        awayName: away?["name"] as? String ?? self?.Bname ?? "",
+                        awayShortName: away?["short_name"] as? String ?? "",
+                        homeLogo: home?["image_path"] as? String ?? self?.Aimg ?? "",
+                        awayLogo: away?["image_path"] as? String ?? self?.Bimg ?? "",
+                        homeScore: scores?["home"] as? Int ?? 0,
+                        awayScore: scores?["away"] as? Int ?? 0,
+                        status: status?["stage"] as? String ?? "",
+                        liveTime: status?["live_time"] as? String ?? "",
+                        referee: json["referee"] as? String ?? "",
+                        venueName: venue?["name"] as? String ?? "",
+                        venueCity: venue?["city"] as? String ?? "",
+                        attendance: venue?["attendance"] as? String ?? "",
+                        capacity: venue?["capacity"] as? String ?? "",
+                        timestamp: json["timestamp"] as? Int ?? 0
+                    )
+                    
+                    DispatchQueue.main.async {
+                        self?.matchDetails = details
+                        
+                        // Update UI with fetched data
+                        self?.lblScore.text = "\(details.homeScore) - \(details.awayScore)"
+                        self?.matchTitleLbl.text = details.leagueName
+                        
+                        if !details.liveTime.isEmpty {
+                            self?.lblComplated.text = "\(details.liveTime)' Completed"
+                        } else if details.status == "Finished" {
+                            self?.lblComplated.text = "Completed"
+                        } else {
+                            self?.lblComplated.text = details.status
+                        }
+                        
+                        // Update team names and images if available
+                        if !details.homeName.isEmpty {
+                            self?.lblA.text = details.homeName
+                        }
+                        if !details.awayName.isEmpty {
+                            self?.lblB.text = details.awayName
+                        }
+                        
+                        if let url = URL(string: details.homeLogo), !details.homeLogo.isEmpty {
+                            self?.imgA.sd_setImage(with: url, placeholderImage: UIImage(named: "DefaultFlag"))
+                        }
+                        if let url = URL(string: details.awayLogo), !details.awayLogo.isEmpty {
+                            self?.imgB.sd_setImage(with: url, placeholderImage: UIImage(named: "DefaultFlag"))
+                        }
+                    }
+                    completion(true)
                 } else {
-                    completion(nil)
+                    completion(false)
                 }
             } catch {
-                print("JSON decoding error:", error)
-                completion(nil)
+                print(error)
+                completion(false)
             }
         }.resume()
+    }
+    
+    func fetchMatchStats(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/stats?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "X-RapidAPI-Host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "X-RapidAPI-Key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data else {
+                completion(false)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let statsArray = json["match"] as? [[String: Any]] {
+                    
+                    var temp: [MatchStatModel] = []
+                    for s in statsArray {
+                        let stat = MatchStatModel(
+                            name: s["name"] as? String ?? "",
+                            home: "\(s["home_team"] ?? "")",
+                            away: "\(s["away_team"] ?? "")"
+                        )
+                        temp.append(stat)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self?.matchStats = temp
+                    }
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch {
+                print(error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchMatchSummary(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/summary?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([MatchSummaryEvent].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.eventsUpdates = result
+                }
+                completion(!result.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchMatchStandings(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/standings?type=overall&match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode([Standing].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self?.standings = result
+                }
+                completion(!result.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchHead2HeadMatches(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/h2h?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                let allMatches = try JSONDecoder().decode([H2HMatch].self, from: data)
+                
+                let team1Name = self?.Aname ?? ""
+                let team2Name = self?.Bname ?? ""
+                
+                let filtered = allMatches.filter {
+                    let home = $0.home_team?.name?.lowercased() ?? ""
+                    let away = $0.away_team?.name?.lowercased() ?? ""
+                    let team1 = team1Name.lowercased()
+                    let team2 = team2Name.lowercased()
+                    
+                    return (home.contains(team1) && away.contains(team2)) ||
+                           (home.contains(team2) && away.contains(team1))
+                }
+                
+                let sorted = filtered.sorted { ($0.timestamp ?? 0) > ($1.timestamp ?? 0) }
+                
+                DispatchQueue.main.async {
+                    self?.h2hMatches = sorted
+                }
+                completion(!sorted.isEmpty)
+            } catch {
+                print("Decode error:", error)
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func fetchLineupData(completion: @escaping (Bool) -> Void) {
+        let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/lineups?match_id=\(m_idMain ?? "")"
+        
+        guard let url = URL(string: urlString) else {
+            completion(false)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
+        request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+            
+            do {
+                if let result = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                    self?.lineupData = result
+                    let hasValidData = result.count >= 2
+                    completion(hasValidData)
+                } else {
+                    self?.lineupData = []
+                    completion(false)
+                }
+            } catch {
+                print("Lineup JSON Error:", error)
+                self?.lineupData = []
+                completion(false)
+            }
+        }.resume()
+    }
+    
+    func updateTitleArrBasedOnAvailableData() {
+        if UpComing == true {
+            // For upcoming matches, keep original tabs
+            topArrray = [String.Squad, String.Info, String.PointTable]
+        } else {
+            var newArrray: [String] = []
+            
+            // Add tabs only if data is available
+            if !eventsUpdates.isEmpty {
+                newArrray.append(String.LiveUpdate)
+                newArrray.append(String.Overview)
+            }
+            
+            // Lineups - check if we have valid lineup data
+            let hasValidLineupData = lineupData.count >= 2
+            if hasValidLineupData {
+                newArrray.append(String.Lineups)
+            }
+            
+            if !matchStats.isEmpty {
+                newArrray.append(String.Stats)
+            }
+            
+            if !h2hMatches.isEmpty {
+                newArrray.append(String.HeadToHead)
+            }
+            
+            if matchDetails != nil {
+                newArrray.append(String.Info)
+            }
+            
+            if !standings.isEmpty {
+                newArrray.append(String.PointTable)
+            }
+            
+            // If no data at all, show default tabs
+            if newArrray.isEmpty {
+                newArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
+            }
+            
+            topArrray = newArrray
+        }
+        
+        DispatchQueue.main.async {
+            self.topCollectionView.reloadData()
+            self.index = 0
+            self.topCollectionView.setNeedsLayout()
+        }
     }
 }
 
@@ -232,96 +562,71 @@ extension ScoreVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColl
         index = indexPath.row
         collectionView.reloadData()
         
-        if topArrray[indexPath.item] == String.LiveUpdate {
-            pagerVc?.moveToPage(index: 0, animated: true)
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            pagerVc?.isMatchLive = self.isMatchLive
-            
-        } else if topArrray[indexPath.item] == String.Overview {
-            pagerVc?.moveToPage(index: 1, animated: true)
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            
-        } else if topArrray[indexPath.item] == String.Lineups {
-            pagerVc?.moveToPage(index: 2, animated: true)
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            
-        } else if topArrray[indexPath.item] == String.Stats {
-            pagerVc?.moveToPage(index: 3, animated: true)
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            
-        } else if topArrray[indexPath.item] == String.Squad {
-            if UpComing == true {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 4, animated: true)
-            }
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            
-        } else if topArrray[indexPath.item] == String.Info {
-            if UpComing == true {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 5, animated: true)
-            }
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-            
-        } else if topArrray[indexPath.item] == String.PointTable {
-            if UpComing == true {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            } else {
-                pagerVc?.moveToPage(index: 6, animated: true)
-            }
-            pagerVc?.m_idMain = self.m_idMain
-            pagerVc?.l_idMain = self.l_idMain
-            pagerVc?.Aname = self.Aname
-            pagerVc?.Bname = self.Bname
-        }
+        let selectedTab = topArrray[indexPath.item]
         
+        // Pass all data to pager
+        pagerVc?.m_idMain = self.m_idMain
+        pagerVc?.l_idMain = self.l_idMain
+        pagerVc?.Aname = self.Aname
+        pagerVc?.Bname = self.Bname
+        pagerVc?.Aimg = self.Aimg
+        pagerVc?.Bimg = self.Bimg
+        pagerVc?.isMatchLive = self.isMatchLive
+        pagerVc?.matchDetails = self.matchDetails
+        pagerVc?.stats = self.matchStats
+        pagerVc?.eventsUpdates = self.eventsUpdates
+        pagerVc?.standings = self.standings
+        pagerVc?.h2hMatches = self.h2hMatches
+        pagerVc?.lineupData = self.lineupData
+        
+        if UpComing == true {
+            if selectedTab == String.Squad {
+                pagerVc?.moveToPage(index: 0, animated: true)
+            } else if selectedTab == String.Info {
+                pagerVc?.moveToPage(index: 1, animated: true)
+            } else if selectedTab == String.PointTable {
+                pagerVc?.moveToPage(index: 2, animated: true)
+            }
+        } else {
+            switch selectedTab {
+            case String.LiveUpdate:
+                pagerVc?.moveToPage(index: 0, animated: true)
+            case String.Overview:
+                pagerVc?.moveToPage(index: 1, animated: true)
+            case String.Lineups:
+                pagerVc?.moveToPage(index: 2, animated: true)
+            case String.Stats:
+                pagerVc?.moveToPage(index: 3, animated: true)
+            case String.HeadToHead:
+                pagerVc?.moveToPage(index: 4, animated: true)
+            case String.Info:
+                pagerVc?.moveToPage(index: 5, animated: true)
+            case String.PointTable:
+                pagerVc?.moveToPage(index: 6, animated: true)
+            default:
+                break
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let cellCount = CGFloat(topArrray.count)
         
-        //If the cell count is zero, there is no point in calculating anything.
         if cellCount > 0 {
             let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
             let cellWidth = flowLayout.itemSize.width + flowLayout.minimumInteritemSpacing
-            
-            //20.00 was just extra spacing I wanted to add to my cell.
             let totalCellWidth = cellWidth*cellCount + 20.00 * (cellCount-1)
             let contentWidth = collectionView.frame.size.width - collectionView.contentInset.left - collectionView.contentInset.right
             
             if (totalCellWidth < contentWidth) {
-                //Calculate the right amount of padding to center the cells.
                 let padding = (contentWidth - totalCellWidth) / 2.0
                 return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
             } else {
                 return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             }
-            
         }
         return UIEdgeInsets.zero
     }
-    
-    
 }
 
 
@@ -335,92 +640,44 @@ extension ScoreVC: ScoreOptionDelegate {
             pagerVc?.l_idMain = self.l_idMain
             pagerVc?.Aname = self.Aname
             pagerVc?.Bname = self.Bname
+            pagerVc?.Aimg = self.Aimg
+            pagerVc?.Bimg = self.Bimg
             pagerVc?.isMatchLive = self.isMatchLive
+            pagerVc?.matchDetails = self.matchDetails
+            pagerVc?.stats = self.matchStats
+            pagerVc?.eventsUpdates = self.eventsUpdates
+            pagerVc?.standings = self.standings
+            pagerVc?.h2hMatches = self.h2hMatches
+            pagerVc?.lineupData = self.lineupData
             pagerVc?.optionDelegate = self
         }
     }
     
     func didUpdateOptionIndex(currentIndex: Int) {
-        
         if UpComing == true {
-            
             if currentIndex == 0 {
                 pagerVc?.moveToPage(index: 0, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 1 {
                 pagerVc?.moveToPage(index: 1, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 2 {
                 pagerVc?.moveToPage(index: 2, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             }
-            
         } else {
-            
             if currentIndex == 0 {
                 pagerVc?.moveToPage(index: 0, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                pagerVc?.isMatchLive = self.isMatchLive
-                
             } else if currentIndex == 1 {
                 pagerVc?.moveToPage(index: 1, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 2 {
                 pagerVc?.moveToPage(index: 2, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 3 {
                 pagerVc?.moveToPage(index: 3, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 4 {
                 pagerVc?.moveToPage(index: 4, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 5 {
                 pagerVc?.moveToPage(index: 5, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             } else if currentIndex == 6 {
                 pagerVc?.moveToPage(index: 6, animated: true)
-                pagerVc?.m_idMain = self.m_idMain
-                pagerVc?.l_idMain = self.l_idMain
-                pagerVc?.Aname = self.Aname
-                pagerVc?.Bname = self.Bname
-                
             }
-            
         }
     }
 }
