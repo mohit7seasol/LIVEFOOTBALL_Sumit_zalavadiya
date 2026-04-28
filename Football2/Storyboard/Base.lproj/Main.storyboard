@@ -3247,11 +3247,11 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qAC-OX-qZj" customClass="CustomView" customModule="Football2" customModuleProvider="target">
-                                <rect key="frame" x="16" y="325" width="361" height="50"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qAC-OX-qZj" customClass="CustomView" customModule="Football2" customModuleProvider="target">
+                                <rect key="frame" x="16" y="325" width="361" height="0.0"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="o27-d0-jtC">
-                                        <rect key="frame" x="10" y="15" width="160" height="20"/>
+                                        <rect key="frame" x="10" y="-10" width="160" height="20"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b50-JG-5cv">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
@@ -3379,7 +3379,7 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CkP-R5-vNO">
-                                        <rect key="frame" x="180" y="15" width="1" height="20"/>
+                                        <rect key="frame" x="180" y="-10" width="1" height="20"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="2lj-2a-0tJ"/>
@@ -3387,7 +3387,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="OzQ-hZ-A8p">
-                                        <rect key="frame" x="191" y="15" width="160" height="20"/>
+                                        <rect key="frame" x="191" y="-10" width="160" height="20"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tef-WF-ACD">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
@@ -3521,7 +3521,7 @@
                                     <constraint firstItem="OzQ-hZ-A8p" firstAttribute="centerY" secondItem="qAC-OX-qZj" secondAttribute="centerY" id="JSk-aI-cAi"/>
                                     <constraint firstAttribute="trailing" secondItem="OzQ-hZ-A8p" secondAttribute="trailing" constant="10" id="KD9-Fj-T1K"/>
                                     <constraint firstItem="o27-d0-jtC" firstAttribute="leading" secondItem="qAC-OX-qZj" secondAttribute="leading" constant="10" id="Q7h-an-ihj"/>
-                                    <constraint firstAttribute="height" constant="50" id="RMt-0Q-jY8"/>
+                                    <constraint firstAttribute="height" id="RMt-0Q-jY8"/>
                                     <constraint firstItem="o27-d0-jtC" firstAttribute="centerY" secondItem="qAC-OX-qZj" secondAttribute="centerY" id="TjZ-J4-ftX"/>
                                     <constraint firstItem="OzQ-hZ-A8p" firstAttribute="leading" secondItem="CkP-R5-vNO" secondAttribute="trailing" constant="10" id="YEm-n7-jKy"/>
                                     <constraint firstItem="CkP-R5-vNO" firstAttribute="leading" secondItem="o27-d0-jtC" secondAttribute="trailing" constant="10" id="rmR-oX-LXl"/>
@@ -3539,7 +3539,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldc-fB-sNZ">
-                                <rect key="frame" x="0.0" y="385" width="393" height="50"/>
+                                <rect key="frame" x="0.0" y="335" width="393" height="50"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Lkn-au-fRB">
                                         <rect key="frame" x="-10" y="0.0" width="403" height="50"/>
@@ -3569,7 +3569,7 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CVj-0f-Iqk">
-                                <rect key="frame" x="0.0" y="435" width="393" height="349"/>
+                                <rect key="frame" x="0.0" y="385" width="393" height="399"/>
                                 <connections>
                                     <segue destination="czc-1C-nin" kind="embed" id="tP7-bZ-sEI"/>
                                 </connections>
