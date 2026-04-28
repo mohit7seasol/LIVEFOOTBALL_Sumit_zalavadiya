@@ -40,9 +40,9 @@ class InfoVC: UIViewController {
         let result = convertTimestamp(details.timestamp)
         
         DispatchQueue.main.async {
-            self.lblMatchName.text = details.leagueName
-            self.lblSeries.text = details.homeName
-            self.lblVenue.text = "\(details.venueName), \(details.venueCity)"
+            self.lblMatchName.text = details.leagueName.isEmpty ? "N/A" : details.leagueName
+            self.lblSeries.text = details.homeName.isEmpty ? "N/A" : details.homeName
+            self.lblVenue.text = "\(details.venueName.isEmpty ? "N/A" : details.venueName), \(details.venueCity)"
             self.lblDate.text = result.formattedDate
             self.lblTime.text = result.formattedTime
         }

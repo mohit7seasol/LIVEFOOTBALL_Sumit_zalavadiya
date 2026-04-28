@@ -466,6 +466,7 @@ extension ScoreVC {
         
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
+                print("Lineup API Error:", error?.localizedDescription ?? "")
                 completion(false)
                 return
             }
@@ -473,7 +474,33 @@ extension ScoreVC {
             do {
                 if let result = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
                     self?.lineupData = result
-                    let hasValidData = result.count >= 2
+                    
+                    // Check if we have valid lineup data - need actual players
+                    var hasValidData = false
+                    
+                    if result.count >= 2 {
+                        let homeTeam = result[0]
+                        let awayTeam = result[1]
+                        
+                        // Check starting lineups
+                        let homeStartingLineups = homeTeam["startingLineups"] as? [[String: Any]] ?? []
+                        let awayStartingLineups = awayTeam["startingLineups"] as? [[String: Any]] ?? []
+                        
+                        // Check predicted lineups
+                        let homePredictedLineups = homeTeam["predictedLineups"] as? [[String: Any]] ?? []
+                        let awayPredictedLineups = awayTeam["predictedLineups"] as? [[String: Any]] ?? []
+                        
+                        // Valid data if either starting lineups OR predicted lineups have players
+                        let homeHasPlayers = !homeStartingLineups.isEmpty || !homePredictedLineups.isEmpty
+                        let awayHasPlayers = !awayStartingLineups.isEmpty || !awayPredictedLineups.isEmpty
+                        
+                        hasValidData = homeHasPlayers && awayHasPlayers
+                        
+                        print("Home players count - Starting: \(homeStartingLineups.count), Predicted: \(homePredictedLineups.count)")
+                        print("Away players count - Starting: \(awayStartingLineups.count), Predicted: \(awayPredictedLineups.count)")
+                        print("Has valid lineup data: \(hasValidData)")
+                    }
+                    
                     completion(hasValidData)
                 } else {
                     self?.lineupData = []
@@ -500,8 +527,28 @@ extension ScoreVC {
                 newArrray.append(String.Overview)
             }
             
-            // Lineups - check if we have valid lineup data
-            let hasValidLineupData = lineupData.count >= 2
+            // Lineups - check if we have valid lineup data with actual players
+            var hasValidLineupData = false
+            
+            if lineupData.count >= 2 {
+                let homeTeam = lineupData[0]
+                let awayTeam = lineupData[1]
+                
+                // Check starting lineups
+                let homeStartingLineups = homeTeam["startingLineups"] as? [[String: Any]] ?? []
+                let awayStartingLineups = awayTeam["startingLineups"] as? [[String: Any]] ?? []
+                
+                // Check predicted lineups
+                let homePredictedLineups = homeTeam["predictedLineups"] as? [[String: Any]] ?? []
+                let awayPredictedLineups = awayTeam["predictedLineups"] as? [[String: Any]] ?? []
+                
+                // Valid data if either starting lineups OR predicted lineups have players
+                let homeHasPlayers = !homeStartingLineups.isEmpty || !homePredictedLineups.isEmpty
+                let awayHasPlayers = !awayStartingLineups.isEmpty || !awayPredictedLineups.isEmpty
+                
+                hasValidLineupData = homeHasPlayers && awayHasPlayers
+            }
+            
             if hasValidLineupData {
                 newArrray.append(String.Lineups)
             }
@@ -528,12 +575,35 @@ extension ScoreVC {
             }
             
             topArrray = newArrray
+            print("Available tabs: \(topArrray)")
         }
         
         DispatchQueue.main.async {
             self.topCollectionView.reloadData()
             self.index = 0
             self.topCollectionView.setNeedsLayout()
+            
+            // Move to first page if pager exists
+            if let firstTab = self.topArrray.first {
+                switch firstTab {
+                case String.LiveUpdate:
+                    self.pagerVc?.moveToPage(index: 0, animated: true)
+                case String.Overview:
+                    self.pagerVc?.moveToPage(index: 1, animated: true)
+                case String.Lineups:
+                    self.pagerVc?.moveToPage(index: 2, animated: true)
+                case String.Stats:
+                    self.pagerVc?.moveToPage(index: 3, animated: true)
+                case String.HeadToHead:
+                    self.pagerVc?.moveToPage(index: 4, animated: true)
+                case String.Info:
+                    self.pagerVc?.moveToPage(index: 5, animated: true)
+                case String.PointTable:
+                    self.pagerVc?.moveToPage(index: 6, animated: true)
+                default:
+                    break
+                }
+            }
         }
     }
 }
