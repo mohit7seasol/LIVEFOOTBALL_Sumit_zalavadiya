@@ -298,9 +298,6 @@ extension ScoreVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        //Where elements_count is the count of all your items in that
-        //Collection view...
         let cellCount = CGFloat(topArrray.count)
         
         //If the cell count is zero, there is no point in calculating anything.
@@ -313,21 +310,11 @@ extension ScoreVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColl
             let contentWidth = collectionView.frame.size.width - collectionView.contentInset.left - collectionView.contentInset.right
             
             if (totalCellWidth < contentWidth) {
-                //If the number of cells that exists take up less room than the
-                //collection view width... then there is an actual point to centering them.
-                
                 //Calculate the right amount of padding to center the cells.
                 let padding = (contentWidth - totalCellWidth) / 2.0
                 return UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding)
             } else {
-                //Pretty much if the number of cells that exist take up
-                //more room than the actual collectionView width, there is no
-                // point in trying to center them. So we leave the default behavior.
-                //                if UpComing == true {
-                //                    return UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 90)
-                //                } else {
                 return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-                //                }
             }
             
         }

