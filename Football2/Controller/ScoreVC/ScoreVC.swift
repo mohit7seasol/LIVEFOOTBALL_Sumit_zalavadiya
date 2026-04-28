@@ -66,16 +66,9 @@ class ScoreVC: BaseVC {
         logAnalyticAction(title: "", status: .MatchDetails)
         self.titleLbl.text = "Match Details"
         
-        // Set initial title array based on match type
-        if UpComing == true {
-            topArrray = [String.Squad, String.Info, String.PointTable]
-            viewForUpcomingScore.isHidden = false
-            viewForOtherScores.isHidden = true
-        } else {
-            topArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
-            viewForUpcomingScore.isHidden = true
-            viewForOtherScores.isHidden = false
-        }
+        topArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
+        viewForUpcomingScore.isHidden = true
+        viewForOtherScores.isHidden = false
         
         self.setData()
         DispatchQueue.main.async {
@@ -517,68 +510,63 @@ extension ScoreVC {
     }
     
     func updateTitleArrBasedOnAvailableData() {
-        if UpComing == true {
-            // For upcoming matches, keep original tabs
-            topArrray = [String.Squad, String.Info, String.PointTable]
-        } else {
-            var newArrray: [String] = []
-            
-            // Add tabs only if data is available
-            if !eventsUpdates.isEmpty {
-                newArrray.append(String.LiveUpdate)
-                newArrray.append(String.Overview)
-            }
-            
-            // Lineups - check if we have valid lineup data with actual players
-            var hasValidLineupData = false
-            
-            if lineupData.count >= 2 {
-                let homeTeam = lineupData[0]
-                let awayTeam = lineupData[1]
-                
-                // Check starting lineups
-                let homeStartingLineups = homeTeam["startingLineups"] as? [[String: Any]] ?? []
-                let awayStartingLineups = awayTeam["startingLineups"] as? [[String: Any]] ?? []
-                
-                // Check predicted lineups
-                let homePredictedLineups = homeTeam["predictedLineups"] as? [[String: Any]] ?? []
-                let awayPredictedLineups = awayTeam["predictedLineups"] as? [[String: Any]] ?? []
-                
-                // Valid data if either starting lineups OR predicted lineups have players
-                let homeHasPlayers = !homeStartingLineups.isEmpty || !homePredictedLineups.isEmpty
-                let awayHasPlayers = !awayStartingLineups.isEmpty || !awayPredictedLineups.isEmpty
-                
-                hasValidLineupData = homeHasPlayers && awayHasPlayers
-            }
-            
-            if hasValidLineupData {
-                newArrray.append(String.Lineups)
-            }
-            
-            if !matchStats.isEmpty {
-                newArrray.append(String.Stats)
-            }
-            
-            if !h2hMatches.isEmpty {
-                newArrray.append(String.HeadToHead)
-            }
-            
-            if matchDetails != nil {
-                newArrray.append(String.Info)
-            }
-            
-            if !standings.isEmpty {
-                newArrray.append(String.PointTable)
-            }
-            
-            // If no data at all, show default tabs
-            if newArrray.isEmpty {
-                newArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
-            }
-            
-            topArrray = newArrray
-            print("Available tabs: \(topArrray)")
+        var newArrray: [String] = []
+        
+        // Add tabs only if data is available
+        if !eventsUpdates.isEmpty {
+            newArrray.append(String.LiveUpdate)
+            newArrray.append(String.Overview)
         }
+        
+        // Lineups - check if we have valid lineup data with actual players
+        var hasValidLineupData = false
+        
+        if lineupData.count >= 2 {
+            let homeTeam = lineupData[0]
+            let awayTeam = lineupData[1]
+            
+            // Check starting lineups
+            let homeStartingLineups = homeTeam["startingLineups"] as? [[String: Any]] ?? []
+            let awayStartingLineups = awayTeam["startingLineups"] as? [[String: Any]] ?? []
+            
+            // Check predicted lineups
+            let homePredictedLineups = homeTeam["predictedLineups"] as? [[String: Any]] ?? []
+            let awayPredictedLineups = awayTeam["predictedLineups"] as? [[String: Any]] ?? []
+            
+            // Valid data if either starting lineups OR predicted lineups have players
+            let homeHasPlayers = !homeStartingLineups.isEmpty || !homePredictedLineups.isEmpty
+            let awayHasPlayers = !awayStartingLineups.isEmpty || !awayPredictedLineups.isEmpty
+            
+            hasValidLineupData = homeHasPlayers && awayHasPlayers
+        }
+        
+        if hasValidLineupData {
+            newArrray.append(String.Lineups)
+        }
+        
+        if !matchStats.isEmpty {
+            newArrray.append(String.Stats)
+        }
+        
+        if !h2hMatches.isEmpty {
+            newArrray.append(String.HeadToHead)
+        }
+        
+        if matchDetails != nil {
+            newArrray.append(String.Info)
+        }
+        
+        if !standings.isEmpty {
+            newArrray.append(String.PointTable)
+        }
+        
+        // If no data at all, show default tabs
+        if newArrray.isEmpty {
+            newArrray = [String.LiveUpdate, String.Overview, String.Lineups, String.Stats, String.HeadToHead, String.Info, String.PointTable]
+        }
+        
+        topArrray = newArrray
+        print("Available tabs: \(topArrray)")
         
         DispatchQueue.main.async {
             self.topCollectionView.reloadData()
@@ -651,33 +639,23 @@ extension ScoreVC : UICollectionViewDelegate, UICollectionViewDataSource, UIColl
         pagerVc?.h2hMatches = self.h2hMatches
         pagerVc?.lineupData = self.lineupData
         
-        if UpComing == true {
-            if selectedTab == String.Squad {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else if selectedTab == String.Info {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else if selectedTab == String.PointTable {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            }
-        } else {
-            switch selectedTab {
-            case String.LiveUpdate:
-                pagerVc?.moveToPage(index: 0, animated: true)
-            case String.Overview:
-                pagerVc?.moveToPage(index: 1, animated: true)
-            case String.Lineups:
-                pagerVc?.moveToPage(index: 2, animated: true)
-            case String.Stats:
-                pagerVc?.moveToPage(index: 3, animated: true)
-            case String.HeadToHead:
-                pagerVc?.moveToPage(index: 4, animated: true)
-            case String.Info:
-                pagerVc?.moveToPage(index: 5, animated: true)
-            case String.PointTable:
-                pagerVc?.moveToPage(index: 6, animated: true)
-            default:
-                break
-            }
+        switch selectedTab {
+        case String.LiveUpdate:
+            pagerVc?.moveToPage(index: 0, animated: true)
+        case String.Overview:
+            pagerVc?.moveToPage(index: 1, animated: true)
+        case String.Lineups:
+            pagerVc?.moveToPage(index: 2, animated: true)
+        case String.Stats:
+            pagerVc?.moveToPage(index: 3, animated: true)
+        case String.HeadToHead:
+            pagerVc?.moveToPage(index: 4, animated: true)
+        case String.Info:
+            pagerVc?.moveToPage(index: 5, animated: true)
+        case String.PointTable:
+            pagerVc?.moveToPage(index: 6, animated: true)
+        default:
+            break
         }
     }
     
@@ -726,30 +704,20 @@ extension ScoreVC: ScoreOptionDelegate {
     }
     
     func didUpdateOptionIndex(currentIndex: Int) {
-        if UpComing == true {
-            if currentIndex == 0 {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else if currentIndex == 1 {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else if currentIndex == 2 {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            }
-        } else {
-            if currentIndex == 0 {
-                pagerVc?.moveToPage(index: 0, animated: true)
-            } else if currentIndex == 1 {
-                pagerVc?.moveToPage(index: 1, animated: true)
-            } else if currentIndex == 2 {
-                pagerVc?.moveToPage(index: 2, animated: true)
-            } else if currentIndex == 3 {
-                pagerVc?.moveToPage(index: 3, animated: true)
-            } else if currentIndex == 4 {
-                pagerVc?.moveToPage(index: 4, animated: true)
-            } else if currentIndex == 5 {
-                pagerVc?.moveToPage(index: 5, animated: true)
-            } else if currentIndex == 6 {
-                pagerVc?.moveToPage(index: 6, animated: true)
-            }
+        if currentIndex == 0 {
+            pagerVc?.moveToPage(index: 0, animated: true)
+        } else if currentIndex == 1 {
+            pagerVc?.moveToPage(index: 1, animated: true)
+        } else if currentIndex == 2 {
+            pagerVc?.moveToPage(index: 2, animated: true)
+        } else if currentIndex == 3 {
+            pagerVc?.moveToPage(index: 3, animated: true)
+        } else if currentIndex == 4 {
+            pagerVc?.moveToPage(index: 4, animated: true)
+        } else if currentIndex == 5 {
+            pagerVc?.moveToPage(index: 5, animated: true)
+        } else if currentIndex == 6 {
+            pagerVc?.moveToPage(index: 6, animated: true)
         }
     }
 }
