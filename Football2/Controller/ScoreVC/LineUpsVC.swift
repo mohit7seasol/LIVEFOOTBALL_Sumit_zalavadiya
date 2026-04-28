@@ -203,21 +203,21 @@ class LineUpsVC: UIViewController {
         }
         
         let goalkeeper = players[0]
-        setData(view: viewGoalA1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: "")
+        setData(view: viewGoalA1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: goalkeeper["number"] as? String ?? "")
         
         let others = Array(players.dropFirst())
         
-        setData(view: viewDiffA1, lbltitle: others[0]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffA2, lbltitle: others[1]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffA3, lbltitle: others[2]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffA4, lbltitle: others[3]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffA5, lbltitle: others[4]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffA1, lbltitle: others[0]["fieldName"] as? String ?? "", count: others[0]["number"] as? String ?? "")
+        setData(view: viewDiffA2, lbltitle: others[1]["fieldName"] as? String ?? "", count: others[1]["number"] as? String ?? "")
+        setData(view: viewDiffA3, lbltitle: others[2]["fieldName"] as? String ?? "", count: others[2]["number"] as? String ?? "")
+        setData(view: viewDiffA4, lbltitle: others[3]["fieldName"] as? String ?? "", count: others[3]["number"] as? String ?? "")
+        setData(view: viewDiffA5, lbltitle: others[4]["fieldName"] as? String ?? "", count: others[4]["number"] as? String ?? "")
         
-        setData(view: viewMidDiffA1, lbltitle: others[5]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffA2, lbltitle: others[6]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffA3, lbltitle: others[7]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffA4, lbltitle: others[8]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffA5, lbltitle: others[9]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffA1, lbltitle: others[5]["fieldName"] as? String ?? "", count: others[5]["number"] as? String ?? "")
+        setData(view: viewMidDiffA2, lbltitle: others[6]["fieldName"] as? String ?? "", count: others[6]["number"] as? String ?? "")
+        setData(view: viewMidDiffA3, lbltitle: others[7]["fieldName"] as? String ?? "", count: others[7]["number"] as? String ?? "")
+        setData(view: viewMidDiffA4, lbltitle: others[8]["fieldName"] as? String ?? "", count: others[8]["number"] as? String ?? "")
+        setData(view: viewMidDiffA5, lbltitle: others[9]["fieldName"] as? String ?? "", count: others[9]["number"] as? String ?? "")
         
         viewGoalA1.isHidden = false
         stackViewA.isHidden = false
@@ -233,21 +233,21 @@ class LineUpsVC: UIViewController {
         }
         
         let goalkeeper = players[0]
-        setData(view: viewGoalB1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: "")
+        setData(view: viewGoalB1, lbltitle: goalkeeper["fieldName"] as? String ?? "", count: goalkeeper["number"] as? String ?? "")
         
         let others = Array(players.dropFirst())
         
-        setData(view: viewDiffB1, lbltitle: others[0]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffB2, lbltitle: others[1]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffB3, lbltitle: others[2]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffB4, lbltitle: others[3]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewDiffB5, lbltitle: others[4]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewDiffB1, lbltitle: others[0]["fieldName"] as? String ?? "", count: others[0]["number"] as? String ?? "")
+        setData(view: viewDiffB2, lbltitle: others[1]["fieldName"] as? String ?? "", count: others[1]["number"] as? String ?? "")
+        setData(view: viewDiffB3, lbltitle: others[2]["fieldName"] as? String ?? "", count: others[2]["number"] as? String ?? "")
+        setData(view: viewDiffB4, lbltitle: others[3]["fieldName"] as? String ?? "", count: others[3]["number"] as? String ?? "")
+        setData(view: viewDiffB5, lbltitle: others[4]["fieldName"] as? String ?? "", count: others[4]["number"] as? String ?? "")
         
-        setData(view: viewMidDiffB1, lbltitle: others[5]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffB2, lbltitle: others[6]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffB3, lbltitle: others[7]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffB4, lbltitle: others[8]["fieldName"] as? String ?? "", count: "")
-        setData(view: viewMidDiffB5, lbltitle: others[9]["fieldName"] as? String ?? "", count: "")
+        setData(view: viewMidDiffB1, lbltitle: others[5]["fieldName"] as? String ?? "", count: others[5]["number"] as? String ?? "")
+        setData(view: viewMidDiffB2, lbltitle: others[6]["fieldName"] as? String ?? "", count: others[6]["number"] as? String ?? "")
+        setData(view: viewMidDiffB3, lbltitle: others[7]["fieldName"] as? String ?? "", count: others[7]["number"] as? String ?? "")
+        setData(view: viewMidDiffB4, lbltitle: others[8]["fieldName"] as? String ?? "", count: others[8]["number"] as? String ?? "")
+        setData(view: viewMidDiffB5, lbltitle: others[9]["fieldName"] as? String ?? "", count: others[9]["number"] as? String ?? "")
         
         viewGoalB1.isHidden = false
         stackViewB.isHidden = false

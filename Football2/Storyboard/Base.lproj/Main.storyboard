@@ -3913,7 +3913,7 @@
                                                         <rect key="frame" x="10" y="10" width="341" height="50"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7a-5F-wDA" customClass="CustomView" customModule="Football2" customModuleProvider="target">
-                                                                <rect key="frame" x="68" y="10" width="30" height="30"/>
+                                                                <rect key="frame" x="124" y="10" width="30" height="30"/>
                                                                 <subviews>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MAy-oA-vOf">
                                                                         <rect key="frame" x="5" y="5" width="20" height="20"/>
@@ -3946,7 +3946,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAW-7E-1Z3" customClass="CustomView" customModule="Football2" customModuleProvider="target">
-                                                                <rect key="frame" x="243" y="10" width="30" height="30"/>
+                                                                <rect key="frame" x="187" y="10" width="30" height="30"/>
                                                                 <subviews>
                                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gfj-xI-e5P">
                                                                         <rect key="frame" x="5" y="5" width="20" height="20"/>
@@ -3979,7 +3979,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f98-6g-Lt8">
-                                                                <rect key="frame" x="12" y="16.666666666666657" width="48" height="17"/>
+                                                                <rect key="frame" x="12" y="16.666666666666657" width="104" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                                 <color key="textColor" name="PrimaryTextColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -3993,25 +3993,25 @@
                                                                 </constraints>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8-8-8-8" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddO-go-kld">
-                                                                <rect key="frame" x="106" y="16.666666666666657" width="56" height="17"/>
+                                                                <rect key="frame" x="162" y="16.666666666666657" width="0.0" height="17"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="56" id="4yP-M4-kFc"/>
+                                                                    <constraint firstAttribute="width" id="4yP-M4-kFc"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <color key="textColor" name="PrimaryTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8-8-8-8" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nxf-sz-QdN">
-                                                                <rect key="frame" x="179" y="16.666666666666657" width="56" height="17"/>
+                                                                <rect key="frame" x="179" y="16.666666666666657" width="0.0" height="17"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="56" id="ZRs-t7-8qi"/>
+                                                                    <constraint firstAttribute="width" id="ZRs-t7-8qi"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <color key="textColor" name="PrimaryTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zFX-AL-3cS">
-                                                                <rect key="frame" x="281" y="16.666666666666657" width="48" height="17"/>
+                                                                <rect key="frame" x="225" y="16.666666666666657" width="104" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                                 <color key="textColor" name="PrimaryTextColor"/>
                                                                 <nil key="highlightedColor"/>

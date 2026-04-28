@@ -372,29 +372,31 @@ extension ScoreVC {
     
     func fetchMatchStandings(completion: @escaping (Bool) -> Void) {
         let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/standings?type=overall&match_id=\(m_idMain ?? "")"
-        
+
         guard let url = URL(string: urlString) else {
             completion(false)
             return
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("flashscore4.p.rapidapi.com", forHTTPHeaderField: "x-rapidapi-host")
         request.setValue(APITOKEN, forHTTPHeaderField: "x-rapidapi-key")
-        
+
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data, error == nil else {
                 completion(false)
                 return
             }
-            
+
             do {
                 let result = try JSONDecoder().decode([Standing].self, from: data)
-                
+
                 DispatchQueue.main.async {
                     self?.standings = result
+                    self?.pagerVc?.standings = result
                 }
+
                 completion(!result.isEmpty)
             } catch {
                 print("Decode error:", error)

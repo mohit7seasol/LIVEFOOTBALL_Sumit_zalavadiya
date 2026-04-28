@@ -108,6 +108,7 @@ class ScorePagerVC: UIPageViewController {
         let vc7 = PointTableVC.instantiate(fromAppStoryboard: .Main)
         vc7.index = index
         vc7.l_id = self.l_idMain
+        vc7.m_id = self.m_idMain
         vc7.standings = self.standings
         arrVc.append(vc7)
     }

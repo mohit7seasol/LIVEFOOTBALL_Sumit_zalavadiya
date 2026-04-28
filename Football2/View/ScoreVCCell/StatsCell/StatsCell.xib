@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,10 +22,10 @@
                         <rect key="frame" x="10" y="5" width="331" height="63"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8nI-SF-X9m" customClass="CustomView" customModule="Football2" customModuleProvider="target">
-                                <rect key="frame" x="10" y="16.666666666666668" width="30" height="30.000000000000004"/>
+                                <rect key="frame" x="10" y="10.666666666666664" width="42" height="42"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZ1-VU-xLi">
-                                        <rect key="frame" x="1" y="1" width="28" height="28"/>
+                                        <rect key="frame" x="1" y="1" width="40" height="40"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -34,8 +34,8 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="hZ1-VU-xLi" firstAttribute="top" secondItem="8nI-SF-X9m" secondAttribute="top" constant="1" id="2V2-Pn-lJ5"/>
-                                    <constraint firstAttribute="width" constant="30" id="4xP-jT-oP3"/>
-                                    <constraint firstAttribute="height" constant="30" id="HQc-rF-lFg"/>
+                                    <constraint firstAttribute="width" constant="42" id="4xP-jT-oP3"/>
+                                    <constraint firstAttribute="height" constant="42" id="HQc-rF-lFg"/>
                                     <constraint firstItem="hZ1-VU-xLi" firstAttribute="leading" secondItem="8nI-SF-X9m" secondAttribute="leading" constant="1" id="WML-Kx-ct1"/>
                                     <constraint firstAttribute="trailing" secondItem="hZ1-VU-xLi" secondAttribute="trailing" constant="1" id="Zd3-wE-uRc"/>
                                     <constraint firstAttribute="bottom" secondItem="hZ1-VU-xLi" secondAttribute="bottom" constant="1" id="tkj-9o-1Zw"/>
@@ -56,10 +56,10 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mzm-x3-D9X" customClass="CustomView" customModule="Football2" customModuleProvider="target">
-                                <rect key="frame" x="291" y="16.666666666666668" width="30" height="30.000000000000004"/>
+                                <rect key="frame" x="279" y="10.666666666666664" width="42" height="42.000000000000007"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="88" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNt-AU-JhO">
-                                        <rect key="frame" x="1" y="1" width="28" height="28"/>
+                                        <rect key="frame" x="1" y="1" width="40" height="40"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -67,12 +67,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="Hi2-RW-jjD"/>
+                                    <constraint firstAttribute="width" constant="42" id="Hi2-RW-jjD"/>
                                     <constraint firstItem="VNt-AU-JhO" firstAttribute="leading" secondItem="mzm-x3-D9X" secondAttribute="leading" constant="1" id="Hzr-pZ-x65"/>
                                     <constraint firstAttribute="bottom" secondItem="VNt-AU-JhO" secondAttribute="bottom" constant="1" id="RsU-jR-N5y"/>
                                     <constraint firstAttribute="trailing" secondItem="VNt-AU-JhO" secondAttribute="trailing" constant="1" id="Xve-fl-fYq"/>
                                     <constraint firstItem="VNt-AU-JhO" firstAttribute="top" secondItem="mzm-x3-D9X" secondAttribute="top" constant="1" id="gK2-nx-1Nj"/>
-                                    <constraint firstAttribute="height" constant="30" id="uRs-Pi-qlB"/>
+                                    <constraint firstAttribute="height" constant="42" id="uRs-Pi-qlB"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
