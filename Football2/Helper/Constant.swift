@@ -39,6 +39,8 @@ var APP_ID = "6745331768"
 var instaAPI = ""
 var addButtonColor = ""
 
+let AppStoreLink = "https://apps.apple.com/app/id\(APP_ID)"
+
 var bannerId = "" //"ca-app-pub-3940256099942544/2934735716"
 var nativeId = ""//"ca-app-pub-3940256099942544/3986624511"
 var interstialId = ""//"ca-app-pub-3940256099942544/4411468910"
