@@ -5180,7 +5180,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="FX4-uZ-oHQ">
-                                <rect key="frame" x="0.0" y="223" width="393" height="629"/>
+                                <rect key="frame" x="0.0" y="208" width="393" height="644"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="za0-pT-j5G">
                                     <size key="itemSize" width="128" height="128"/>
@@ -5194,13 +5194,13 @@
                                 <rect key="frame" x="133.66666666666666" y="397.66666666666669" width="125.99999999999997" height="107"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="NIz-58-Qiz">
-                                <rect key="frame" x="0.0" y="118" width="393" height="100"/>
+                                <rect key="frame" x="0.0" y="118" width="393" height="85"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KG0-fO-Dpt" customClass="View" customModule="Football2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="85"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="VNt-t1-CbA"/>
+                                            <constraint firstAttribute="height" constant="85" id="VNt-t1-CbA"/>
                                         </constraints>
                                     </view>
                                 </subviews>

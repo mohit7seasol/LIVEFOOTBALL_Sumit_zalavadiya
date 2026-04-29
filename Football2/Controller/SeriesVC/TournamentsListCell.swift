@@ -35,12 +35,13 @@ class TournamentsListCell: UICollectionViewCell {
         CATransaction.commit()
     }
     
-    func applyGradient(colors: [CGColor]) {
-        gradientLayer.colors = colors
+    func applyGradient(color: UIColor) {
+        gradientLayer.colors = [
+            color.withAlphaComponent(1.0).cgColor,
+            color.withAlphaComponent(0.65).cgColor
+        ]
         
-        DispatchQueue.main.async {
-            self.gradientLayer.frame = self.mainView.bounds
-        }
+        gradientLayer.frame = mainView.bounds
     }
     
     override func prepareForReuse() {

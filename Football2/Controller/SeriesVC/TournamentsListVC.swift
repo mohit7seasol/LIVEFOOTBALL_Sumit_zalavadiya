@@ -17,6 +17,7 @@ class TournamentsListVC: UIViewController {
     var currentCountryId: Int = 0
     var tournaments: [Tournament] = []
     
+    var gradientColorSets = [ #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1), #colorLiteral(red: 0.003921568627, green: 0.7411764706, blue: 0.8039215686, alpha: 1), #colorLiteral(red: 0.3058823529, green: 0.6274509804, blue: 0.9137254902, alpha: 1), #colorLiteral(red: 0.4431372549, green: 0.4156862745, blue: 0.8470588235, alpha: 1) ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,12 +155,8 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         cell.tournamentNameLabel.text = tournament.name
         
         // Apply random gradient color
-//        let gradientIndex = indexPath.row % gradientColorSets.count
-//        cell.applyGradient(colors: gradientColorSets[gradientIndex])
-        
-        // Apply random gradient color without repeating sequence
-//        let randomIndex = Int.random(in: 0..<gradientColorSets.count)
-//        cell.applyGradient(colors: gradientColorSets[randomIndex])
+        let gradientIndex = indexPath.row % gradientColorSets.count
+        cell.applyGradient(color: gradientColorSets[gradientIndex])
         
         return cell
     }

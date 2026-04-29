@@ -49,7 +49,8 @@ class TournamentsMatchesListVC: UIViewController {
     func convertTimestamp(_ ts: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(ts))
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM • hh:mm a"
+        formatter.dateFormat = "dd MMM yyyy, hh:mm a"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         return formatter.string(from: date)
     }
     
