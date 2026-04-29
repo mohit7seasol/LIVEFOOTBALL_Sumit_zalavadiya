@@ -490,7 +490,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == datepickerCollection {
-            return CGSize(width: 72, height: 64)
+            return CGSize(width: 60, height: 64)
         } else {
             // Fixed width with 10pt left and right spacing
             let width = collectionView.frame.width - 20
@@ -563,7 +563,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if collectionView == datepickerCollection {
-            let totalCellWidth = 72 * CGFloat(dates.count)
+            let totalCellWidth = 60 * CGFloat(dates.count)
             let totalSpacingWidth = 12 * CGFloat(dates.count - 1)
             let totalWidth = totalCellWidth + totalSpacingWidth
             let horizontalInset = (collectionView.frame.width - totalWidth) / 2
