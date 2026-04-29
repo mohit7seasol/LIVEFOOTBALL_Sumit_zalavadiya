@@ -97,7 +97,7 @@ class BigNativeVC1: UIViewController {
     }
     
     func showSkeletonView() {
-        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView6", owner: self, options: nil)?.first as? SkeletonCustomView8 {
+        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView8", owner: self, options: nil)?.first as? SkeletonCustomView8 {
             // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             

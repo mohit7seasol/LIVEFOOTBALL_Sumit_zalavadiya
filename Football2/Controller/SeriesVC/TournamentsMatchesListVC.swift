@@ -204,7 +204,7 @@ class TournamentsMatchesListVC: UIViewController {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.hideSkeleton()
-                    self.googleNativeAds.showAdsView3(nativeAd: nativeAdsTemp, view: self.nativeAdView)
+                    self.googleNativeAds.showAdsView6(nativeAd: nativeAdsTemp, view: self.nativeAdView)
                 }
             }
             self.googleNativeAds.failAds(self) { fail in

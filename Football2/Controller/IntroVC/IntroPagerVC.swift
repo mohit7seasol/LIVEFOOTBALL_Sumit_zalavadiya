@@ -43,6 +43,25 @@ class IntroPagerVC: UIPageViewController {
         var index = 0
         if NativeFaild == false {
           
+//            let vc1 = IntroVC1.instantiate(fromAppStoryboard: .Main)
+//            vc1.index = index
+//            arrVc.append(vc1)
+//            
+//            index += 1
+//            let vc2 = IntroVC2.instantiate(fromAppStoryboard: .Main)
+//            vc2.index = index
+//            arrVc.append(vc2)
+//            
+//            index += 1
+//            let vc3 = BigNativeVC1.instantiate(fromAppStoryboard: .Main)
+//            vc3.index = index
+//            arrVc.append(vc3)
+//            
+//            index += 1
+//            let vc4 = IntroVC3.instantiate(fromAppStoryboard: .Main)
+//            vc4.index = index
+//            arrVc.append(vc4)
+            
             let vc1 = IntroVC1.instantiate(fromAppStoryboard: .Main)
             vc1.index = index
             arrVc.append(vc1)
@@ -53,14 +72,9 @@ class IntroPagerVC: UIPageViewController {
             arrVc.append(vc2)
             
             index += 1
-            let vc3 = BigNativeVC1.instantiate(fromAppStoryboard: .Main)
+            let vc3 = IntroVC3.instantiate(fromAppStoryboard: .Main)
             vc3.index = index
             arrVc.append(vc3)
-            
-            index += 1
-            let vc4 = IntroVC3.instantiate(fromAppStoryboard: .Main)
-            vc4.index = index
-            arrVc.append(vc4)
             
             
         } else {

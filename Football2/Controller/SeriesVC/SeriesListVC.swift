@@ -99,7 +99,7 @@ class SeriesListVC: UIViewController {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.hideSkeleton()
-                    self.googleNativeAds.showAdsView3(nativeAd: nativeAdsTemp, view: self.nativeAdView)
+                    self.googleNativeAds.showAdsView6(nativeAd: nativeAdsTemp, view: self.nativeAdView)
                 }
             }
             self.googleNativeAds.failAds(self) { fail in
@@ -166,7 +166,7 @@ extension SeriesListVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 30 // 15 left + 15 right
-        let height: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 70 : 56
+        let height: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 70 : 60
         return CGSize(width: width, height: height)
     }
     

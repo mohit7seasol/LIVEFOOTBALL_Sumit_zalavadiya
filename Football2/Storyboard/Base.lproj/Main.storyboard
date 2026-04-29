@@ -5283,20 +5283,20 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="N3M-zM-Uvm">
-                                <rect key="frame" x="0.0" y="153" width="393" height="100"/>
+                                <rect key="frame" x="0.0" y="153" width="393" height="85"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hw0-UU-2mc" customClass="View" customModule="Football2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="85"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="gjL-MD-kG0"/>
+                                            <constraint firstAttribute="height" constant="85" id="gjL-MD-kG0"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" name="ADSBG"/>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="aRc-Z6-QbM">
-                                <rect key="frame" x="0.0" y="253" width="393" height="599"/>
+                                <rect key="frame" x="0.0" y="238" width="393" height="614"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gAH-lL-wbL">
                                     <size key="itemSize" width="128" height="128"/>
@@ -5349,20 +5349,20 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Nuh-6Q-1op">
-                                <rect key="frame" x="0.0" y="153" width="393" height="100"/>
+                                <rect key="frame" x="0.0" y="153" width="393" height="85"/>
                                 <subviews>
                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IQa-MC-Xn3" customClass="View" customModule="Football2" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="85"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="Rxs-zL-NzR"/>
+                                            <constraint firstAttribute="height" constant="85" id="Rxs-zL-NzR"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" name="ADSBG"/>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="G1t-oF-qic">
-                                <rect key="frame" x="0.0" y="253" width="393" height="599"/>
+                                <rect key="frame" x="0.0" y="238" width="393" height="614"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Z0e-6A-0uc">
                                     <size key="itemSize" width="128" height="128"/>
@@ -5470,7 +5470,7 @@
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="emptyNews" width="121" height="98"/>
         <namedColor name="ADSBG">
-            <color red="0.59600001573562622" green="0.68199998140335083" blue="0.70200002193450928" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.047058823529411764" green="0.16078431372549018" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="PrimaryTextColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
