@@ -9,14 +9,14 @@ import UIKit
 import SVProgressHUD
 
 class TournamentsListVC: UIViewController {
-    
-    @IBOutlet weak var tournamentLbl: UILabel!
     @IBOutlet weak var nativeAdView: View!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tournamentLabel: UILabel!
     
     var googleNativeAds = GoogleNativeAds()
     var currentCountryId: Int = 0
     var tournaments: [Tournament] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -167,7 +167,7 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        showInterAd()
         let tournament = tournaments[indexPath.row]
-        let vc = storyboard?.instantiateViewController(withIdentifier: "TournamentsMatchListVC") as! TournamentsMatchListVC
+        let vc = storyboard?.instantiateViewController(withIdentifier: "TournamentsMatchesListVC") as! TournamentsMatchesListVC
         vc.tournamentURL = tournament.url
         vc.titleName = tournament.name
         vc.hidesBottomBarWhenPushed = true
@@ -190,11 +190,12 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         
         return CGSize(width: width, height: isPad ? 140 : 120)
     }
+    
 }
 
 // MARK: - Button Actions
 extension TournamentsListVC {
-    @IBAction func clickOnBack(_ sender: Any) {
+    @IBAction func backButtonTap(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
 }

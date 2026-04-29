@@ -59,7 +59,7 @@
                                                 <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="20"/>
+                                                <integer key="value" value="22"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                                                 <real key="value" value="1"/>
@@ -67,12 +67,12 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8R-Be-4J1" customClass="MarqueeLabel" customModule="MarqueeLabel">
-                                        <rect key="frame" x="22.333333333333329" y="82" width="117.99999999999999" height="17"/>
+                                        <rect key="frame" x="28.333333333333329" y="82" width="105.99999999999999" height="17"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubW-i7-VzU">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubW-i7-VzU" customClass="CustomView" customModule="Football2" customModuleProvider="target">
                                         <rect key="frame" x="303.66666666666669" y="30" width="44" height="44"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Cd-Ae-7Vh">
@@ -90,15 +90,29 @@
                                             <constraint firstItem="7Cd-Ae-7Vh" firstAttribute="centerY" secondItem="ubW-i7-VzU" secondAttribute="centerY" id="Rc8-iV-i7E"/>
                                             <constraint firstItem="7Cd-Ae-7Vh" firstAttribute="centerX" secondItem="ubW-i7-VzU" secondAttribute="centerX" id="TAD-Rt-IOV"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.19215686269999999" green="0.30196078430000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                                <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="22"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="USA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lnH-y0-Kki" customClass="MarqueeLabel" customModule="MarqueeLabel">
-                                        <rect key="frame" x="266.66666666666669" y="82" width="118" height="17"/>
+                                        <rect key="frame" x="272.66666666666669" y="82" width="106" height="17"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 Jun • 06:30 PM" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wC7-u0-cAq">
-                                        <rect key="frame" x="148.33333333333334" y="82" width="110.33333333333334" height="17"/>
+                                        <rect key="frame" x="142.33333333333334" y="82" width="122.33333333333334" height="17"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -114,11 +128,11 @@
                                     <constraint firstItem="wC7-u0-cAq" firstAttribute="centerX" secondItem="gVg-kc-qmJ" secondAttribute="centerX" id="FF0-Od-LPC"/>
                                     <constraint firstItem="wC7-u0-cAq" firstAttribute="leading" secondItem="V8R-Be-4J1" secondAttribute="trailing" constant="8" id="M4s-8v-6A0"/>
                                     <constraint firstItem="lnH-y0-Kki" firstAttribute="centerX" secondItem="ubW-i7-VzU" secondAttribute="centerX" id="MC6-Aa-0rc"/>
-                                    <constraint firstItem="lnH-y0-Kki" firstAttribute="width" secondItem="bu5-pv-fD0" secondAttribute="width" multiplier="0.29" id="TCS-xn-Ea5"/>
+                                    <constraint firstItem="lnH-y0-Kki" firstAttribute="width" secondItem="bu5-pv-fD0" secondAttribute="width" multiplier="0.26" id="TCS-xn-Ea5"/>
                                     <constraint firstItem="ubW-i7-VzU" firstAttribute="centerY" secondItem="bu5-pv-fD0" secondAttribute="centerY" multiplier="0.8" id="UKG-b8-gzc"/>
                                     <constraint firstItem="V8R-Be-4J1" firstAttribute="centerX" secondItem="Wk2-JV-Jzc" secondAttribute="centerX" id="Vi2-02-hUF"/>
                                     <constraint firstItem="ubW-i7-VzU" firstAttribute="leading" secondItem="gVg-kc-qmJ" secondAttribute="trailing" constant="10" id="Vjo-dr-xJK"/>
-                                    <constraint firstItem="V8R-Be-4J1" firstAttribute="width" secondItem="bu5-pv-fD0" secondAttribute="width" multiplier="0.29" id="WO3-ST-jtq"/>
+                                    <constraint firstItem="V8R-Be-4J1" firstAttribute="width" secondItem="bu5-pv-fD0" secondAttribute="width" multiplier="0.26" id="WO3-ST-jtq"/>
                                     <constraint firstItem="lnH-y0-Kki" firstAttribute="top" secondItem="ubW-i7-VzU" secondAttribute="bottom" constant="8" id="XiQ-b2-9Bf"/>
                                     <constraint firstItem="lnH-y0-Kki" firstAttribute="leading" secondItem="wC7-u0-cAq" secondAttribute="trailing" constant="8" id="b7q-5o-zlr"/>
                                     <constraint firstItem="wC7-u0-cAq" firstAttribute="top" secondItem="Wk2-JV-Jzc" secondAttribute="bottom" constant="8" symbolic="YES" id="cWf-Mr-iC3"/>

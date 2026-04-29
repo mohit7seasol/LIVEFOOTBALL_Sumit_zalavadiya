@@ -20,7 +20,8 @@ class SeriesCountryListCell: UICollectionViewCell {
         // Configure cell appearance
         contentView.layer.cornerRadius = 16
         contentView.layer.masksToBounds = true
-        contentView.layer.borderColor = #colorLiteral(red: 0.7568627451, green: 0.8352941176, blue: 0.9176470588, alpha: 1)
+        contentView.layer.borderColor = #colorLiteral(red: 0.1294117647, green: 0.2117647059, blue: 0.2509803922, alpha: 1)
+        contentView.layer.backgroundColor = #colorLiteral(red: 0.1294117647, green: 0.2117647059, blue: 0.2509803922, alpha: 1)
         contentView.layer.borderWidth = 1
     }
 

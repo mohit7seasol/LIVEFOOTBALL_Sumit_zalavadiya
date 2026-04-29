@@ -1,5 +1,5 @@
 //
-//  TournamentsMatchListVC.swift
+//  TournamentsMatchesListVC.swift
 //  Football2
 //
 //  Created by Mohit Kanpara on 28/04/26.
@@ -8,11 +8,11 @@
 import UIKit
 import SVProgressHUD
 
-class TournamentsMatchListVC: UIViewController {
-
-    @IBOutlet weak var tournamentLbl: UILabel!
+class TournamentsMatchesListVC: UIViewController {
+    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var nativeAdView: View!
+    @IBOutlet weak var tournamentLabel: UILabel!
     
     var googleNativeAds = GoogleNativeAds()
     var tournamentURL: String = ""
@@ -27,8 +27,8 @@ class TournamentsMatchListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         logAnalyticAction(title: "", status: AnalyticEvent.Series)
+        tournamentLabel.text = titleName ?? "Tournaments"
         setupCollectionView()
-//        tournamentLbl.text = titleName ?? "Tournaments Matches"
         fetchTournamentIDs()
         self.showAd()
     }
@@ -245,7 +245,7 @@ class TournamentsMatchListVC: UIViewController {
 }
 
 // MARK: - CollectionView Delegate & DataSource
-extension TournamentsMatchListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension TournamentsMatchesListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return matches.count
@@ -278,26 +278,21 @@ extension TournamentsMatchListVC: UICollectionViewDelegate, UICollectionViewData
         } else {
             cell.teamBFlagImageView.sd_setImage(with: URL(string: match.awayLogo), placeholderImage: UIImage(named: "ic_EmptyFlag"))
         }
-        
-        // Configure date view with border and corner radius
-        cell.dateView.layer.borderColor = #colorLiteral(red: 0.7568627451, green: 0.8352941176, blue: 0.9176470588, alpha: 1)
-        cell.dateView.layer.borderWidth = 1
-        cell.dateView.layer.cornerRadius = cell.dateView.frame.height / 2
-        
+    
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 30 // 15 left + 15 right
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let height: CGFloat = isPad ? 180 : 160
+        let height: CGFloat = isPad ? 160 : 130
         
         return CGSize(width: width, height: height)
     }
 }
 
 // MARK: - Button Actions
-extension TournamentsMatchListVC {
+extension TournamentsMatchesListVC {
     @IBAction func clickOnBack(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
