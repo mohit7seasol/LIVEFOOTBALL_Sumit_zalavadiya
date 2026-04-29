@@ -73,6 +73,10 @@ class HomeVC: UIViewController {
         updateStackViewHeight()
         // Initially hide no data image
         noDataAvilableImageView.isHidden = true
+        todayButton.setTitle("Today".localized(), for: .normal)
+        liveButton.setTitle("Live Updates".localized(), for: .normal)
+        upcomingButton.setTitle("Upcoming".localized(), for: .normal)
+        finishedButton.setTitle("Finished".localized(), for: .normal)
     }
     
     // MARK: - Update StackView Height Based on Selected Date
@@ -443,7 +447,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     private func configureLiveCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#DF1F1F")
-        cell.statusLabel.text = "Live"
+        cell.statusLabel.text = "Live".localized()
         cell.scorLabel.isHidden = false
         // Display score for live match
         if let homeScore = match.homeScore, let awayScore = match.awayScore {
@@ -455,14 +459,14 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     
     private func configureUpcomingCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#1650BC")
-        cell.statusLabel.text = "Upcoming"
+        cell.statusLabel.text = "Upcoming".localized()
         cell.scorLabel.isHidden = true
         cell.scorLabel.text = ""
     }
     
     private func configureFinishedCell(cell: MatchListCell, match: Match) {
         cell.statusView.backgroundColor = UIColor(hex: "#04C057")
-        cell.statusLabel.text = "Finished"
+        cell.statusLabel.text = "Finished".localized()
         cell.scorLabel.isHidden = false
         // Display score for finished match
         if let homeScore = match.homeScore, let awayScore = match.awayScore {
