@@ -773,7 +773,7 @@
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fjc-pB-D5g">
                                                 <rect key="frame" x="0.0" y="261" width="393" height="473"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="It0-ZX-Vkt">
+                                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="It0-ZX-Vkt">
                                                     <size key="itemSize" width="128" height="128"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -781,17 +781,22 @@
                                                 </collectionViewFlowLayout>
                                                 <cells/>
                                             </collectionView>
+                                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EmptyMatch" translatesAutoresizingMaskIntoConstraints="NO" id="0c8-ck-IPw">
+                                                <rect key="frame" x="133" y="425.66666666666663" width="127" height="104"/>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="fjc-pB-D5g" secondAttribute="bottom" id="2ji-Wa-TKh"/>
                                             <constraint firstItem="dNh-yn-huK" firstAttribute="top" secondItem="bH1-Us-qGp" secondAttribute="bottom" constant="4" id="9S2-r0-C49"/>
                                             <constraint firstItem="fjc-pB-D5g" firstAttribute="top" secondItem="dNh-yn-huK" secondAttribute="bottom" id="9jy-rq-Uaz"/>
+                                            <constraint firstItem="0c8-ck-IPw" firstAttribute="centerX" secondItem="fjc-pB-D5g" secondAttribute="centerX" id="AUk-7H-qlM"/>
                                             <constraint firstItem="bH1-Us-qGp" firstAttribute="top" secondItem="56x-CK-IaT" secondAttribute="bottom" constant="8" id="Bkd-Sj-NSC"/>
                                             <constraint firstAttribute="trailing" secondItem="HTa-Db-tPc" secondAttribute="trailing" id="EbY-VG-q1b"/>
                                             <constraint firstAttribute="trailing" secondItem="dNh-yn-huK" secondAttribute="trailing" id="Gju-mq-aZS"/>
                                             <constraint firstItem="56x-CK-IaT" firstAttribute="top" secondItem="HTa-Db-tPc" secondAttribute="bottom" constant="15" id="HA8-IL-9cO"/>
                                             <constraint firstItem="fjc-pB-D5g" firstAttribute="leading" secondItem="o3g-l6-M7t" secondAttribute="leading" id="V5F-GL-vYo"/>
+                                            <constraint firstItem="0c8-ck-IPw" firstAttribute="centerY" secondItem="fjc-pB-D5g" secondAttribute="centerY" constant="-20" id="VGa-gE-SEQ"/>
                                             <constraint firstItem="56x-CK-IaT" firstAttribute="leading" secondItem="BCw-7d-Xpe" secondAttribute="trailing" constant="15" id="afM-9h-Z3w"/>
                                             <constraint firstItem="HTa-Db-tPc" firstAttribute="top" secondItem="o3g-l6-M7t" secondAttribute="top" id="dHz-Jp-zCt"/>
                                             <constraint firstAttribute="trailing" secondItem="bH1-Us-qGp" secondAttribute="trailing" id="h3n-bv-A0O"/>
@@ -830,6 +835,7 @@
                         <outlet property="finishedButton" destination="IvE-eW-nO2" id="joc-y9-Dhs"/>
                         <outlet property="liveButton" destination="nAh-ki-zXZ" id="0uS-pH-CVU"/>
                         <outlet property="matchListCollection" destination="fjc-pB-D5g" id="Uyb-MI-OEA"/>
+                        <outlet property="noDataAvilableImageView" destination="0c8-ck-IPw" id="WnL-BI-8z3"/>
                         <outlet property="stackHeightConstant" destination="eAi-2I-MjI" id="Rbq-eV-ygY"/>
                         <outlet property="stackViewMatchTypes" destination="9dP-10-6h9" id="hdR-GB-gbZ"/>
                         <outlet property="todayButton" destination="56x-CK-IaT" id="XdQ-JO-bZU"/>

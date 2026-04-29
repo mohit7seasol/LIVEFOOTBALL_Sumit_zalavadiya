@@ -22,6 +22,7 @@ class HomeVC: UIViewController {
     @IBOutlet weak var datepickerCollection: UICollectionView!
     @IBOutlet weak var stackHeightConstant: NSLayoutConstraint!
     @IBOutlet weak var stackViewMatchTypes: UIStackView!
+    @IBOutlet weak var noDataAvilableImageView: UIImageView!
     
     var index = -1
     var isAscending: Bool = true
@@ -69,7 +70,9 @@ class HomeVC: UIViewController {
     private func setupUI() {
         updateButtonStates(selected: .live)
         updateMonthLabel()
-        updateStackViewHeight() // Add this line
+        updateStackViewHeight()
+        // Initially hide no data image
+        noDataAvilableImageView.isHidden = true
     }
     
     // MARK: - Update StackView Height Based on Selected Date
@@ -173,7 +176,7 @@ class HomeVC: UIViewController {
         
         if let layout = datepickerCollection.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-            layout.minimumLineSpacing = 12 // Increased spacing between date cells
+            layout.minimumLineSpacing = 12
             layout.minimumInteritemSpacing = 0
         }
         
@@ -205,6 +208,10 @@ class HomeVC: UIViewController {
     private func fetchMatches(for date: Date) {
         SVProgressHUD.show()
         
+        // Show no data image initially
+        noDataAvilableImageView.isHidden = true
+        matchListCollection.isHidden = false
+        
         FootballAPIService.shared.fetchMatches(for: date) { [weak self] matches in
             guard let self = self else {
                 SVProgressHUD.dismiss()
@@ -215,6 +222,7 @@ class HomeVC: UIViewController {
                 SVProgressHUD.dismiss()
                 self.allMatches = matches
                 self.applyFilter()
+                self.updateNoDataVisibility()
             }
         }
     }
@@ -244,6 +252,22 @@ class HomeVC: UIViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.matchListCollection.reloadData()
+            self.updateNoDataVisibility()
+        }
+    }
+    
+    // MARK: - Update No Data Visibility
+    private func updateNoDataVisibility() {
+        let hasMatches = !matchesFiltered.isEmpty
+        
+        if hasMatches {
+            // Show collection view, hide no data image
+            matchListCollection.isHidden = false
+            noDataAvilableImageView.isHidden = true
+        } else {
+            // Hide collection view, show no data image
+            matchListCollection.isHidden = true
+            noDataAvilableImageView.isHidden = false
         }
     }
     
@@ -385,7 +409,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             let match = matchesFiltered[indexPath.item]
             
             // Configure match name
-            cell.matchName.text = "\(match.homeName) vs \(match.awayName)"
+            cell.matchName.text = "\(match.homeName) VS \(match.awayName)"
             
             // Configure date and time from API
             cell.dateTimeLabel.text = match.formattedDateTime
@@ -477,7 +501,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
                 case .live:
                     height = 210
                 case .scheduled:
-                    height = 166
+                    height = 190
                 case .completed:
                     height = 210
                 }
@@ -485,7 +509,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
                 if selectedDate < Date() {
                     height = 210
                 } else {
-                    height = 166
+                    height = 190
                 }
             }
             
