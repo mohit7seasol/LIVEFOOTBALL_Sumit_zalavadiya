@@ -25,6 +25,7 @@ enum AnalyticEvent: String {
     case Language
     case PrivacyPolicy
     case TermsOfService
+    case Series
 }
 
 func logAnalyticView(title: String, Screen: String) {

