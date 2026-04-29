@@ -28,7 +28,7 @@ class TournamentsMatchListVC: UIViewController {
         super.viewDidLoad()
         logAnalyticAction(title: "", status: AnalyticEvent.Series)
         setupCollectionView()
-        tournamentLbl.text = titleName ?? "Tournaments Matches"
+//        tournamentLbl.text = titleName ?? "Tournaments Matches"
         fetchTournamentIDs()
         self.showAd()
     }

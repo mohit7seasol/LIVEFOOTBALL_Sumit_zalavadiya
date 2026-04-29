@@ -16,6 +16,7 @@ class SeriesListVC: UIViewController {
     
     var googleNativeAds = GoogleNativeAds()
     var countries: [SeriesCountry] = []
+    var index = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
