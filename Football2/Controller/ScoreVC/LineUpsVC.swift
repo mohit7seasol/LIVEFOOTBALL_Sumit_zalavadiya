@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class LineUpsVC: UIViewController {
     
-    @IBOutlet weak var lblTeamA: UILabel!
+    @IBOutlet weak var lblTeamA: MarqueeLabel!
     @IBOutlet weak var imgTeamA: UIImageView!
     @IBOutlet weak var lblScoreA: UILabel!
     
-    @IBOutlet weak var lblTeamB: UILabel!
+    @IBOutlet weak var lblTeamB: MarqueeLabel!
     @IBOutlet weak var imgTeamB: UIImageView!
     @IBOutlet weak var lblScoreB: UILabel!
     

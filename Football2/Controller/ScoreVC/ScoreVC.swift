@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class ScoreVC: BaseVC {
     
@@ -15,9 +16,9 @@ class ScoreVC: BaseVC {
     @IBOutlet weak var viewForOtherScores: UIView!
     
     @IBOutlet weak var imgA: UIImageView!
-    @IBOutlet weak var lblA: UILabel!
+    @IBOutlet weak var lblA: MarqueeLabel!
     @IBOutlet weak var imgB: UIImageView!
-    @IBOutlet weak var lblB: UILabel!
+    @IBOutlet weak var lblB: MarqueeLabel!
     
     @IBOutlet weak var lblScore: UILabel!
     @IBOutlet weak var lblComplated: UILabel!
