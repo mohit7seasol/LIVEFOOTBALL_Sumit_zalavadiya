@@ -159,7 +159,7 @@ class PointTableVC: UIViewController {
     func subscribe() {
         showSkeletonView()
         if Subscribe.get() == false {
-            self.googleNativeAds.loadInlineNativeAds(self) { nativeAdsTemp in
+            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
                 print(" Home...Load Native ....")
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {

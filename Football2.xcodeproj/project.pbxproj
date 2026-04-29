@@ -92,8 +92,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C5A3CA7C2DBF6137000E6AB7 /* Build configuration list for PBXNativeTarget "Football2" */;
 			buildPhases = (
-				59D2E8122DB941CC8F99F71F /* Provision Library Executable */,
 				3C0727A783B8BF4BAEB3373B /* [CP] Check Pods Manifest.lock */,
+				59D2E8122DB941CC8F99F71F /* Provision Library Executable */,
 				C5A3CA652DBF6135000E6AB7 /* Sources */,
 				C5A3CA662DBF6135000E6AB7 /* Frameworks */,
 				C5A3CA672DBF6135000E6AB7 /* Resources */,
@@ -215,13 +215,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Football2/Pods-Football2-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Football2/Pods-Football2-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -236,13 +232,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Football2/Pods-Football2-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Football2/Pods-Football2-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

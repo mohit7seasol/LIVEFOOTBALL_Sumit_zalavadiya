@@ -12,12 +12,12 @@ import AdSupport
 import GoogleMobileAds
 import StoreKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate , GADFullScreenContentDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate , FullScreenContentDelegate {
     
     var window: UIWindow?
     private(set) static var shared: SceneDelegate?
     
-    var appOpenAd: GADAppOpenAd?
+    var appOpenAd: AppOpenAd?
     var loadTime = Date()
     var bgApp:Bool = false
     var appStarts:Bool = false
@@ -96,8 +96,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate , GADFullScreenContentDe
         
         if Subscribe.get() == false {
             // if UIApplication.isFirstLaunch() {
-            let request = GADRequest()
-            GADAppOpenAd.load(withAdUnitID: appopenId,
+            let request = Request()
+            AppOpenAd.load(with: appopenId,
                               request: request,
                               completionHandler: { (appOpenAdIn, _) in
                 self.appOpenAd = appOpenAdIn
@@ -113,19 +113,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate , GADFullScreenContentDe
     
     func tryToPresentAd() {
         if let gOpenAd = self.appOpenAd, let rwc = UIApplication.shared.windows.last?.rootViewController {
-            gOpenAd.present(fromRootViewController: rwc)
+            gOpenAd.present(from: rwc)
         } else {
             self.requestAppOpenAd()
         }
     }
     
-    func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+    func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         if Subscribe.get() == false {
             self.requestAppOpenAd()
         }
     }
     
-    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+    func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
         if Subscribe.get() == false {
             self.requestAppOpenAd()
             NotificationCenter.default.post(name: .splashOpenClose, object: nil)

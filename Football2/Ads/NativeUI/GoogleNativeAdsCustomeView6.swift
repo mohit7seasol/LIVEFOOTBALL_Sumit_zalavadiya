@@ -1,8 +1,8 @@
 //
 //  GoogleNativeAdsCustomeView3.swift
-//  Video Player
+//  Demo
 //
-//  Created by 7SEASOL-6 on 30/07/24.
+//  Created by Sagar Lukhi on 06/01/23.
 //
 import UIKit
 import GoogleMobileAds
@@ -10,14 +10,14 @@ import GoogleMobileAds
 class GoogleNativeAdsCustomeView6: UIView {
     
     // OUTLET
-    @IBOutlet var adUIView: GADNativeAdView!
+    @IBOutlet var adUIView: NativeAdView!
     @IBOutlet weak var nativeAdsWidth: NSLayoutConstraint!
     
     @IBOutlet weak var tagAd: UIView!
     
     @IBOutlet weak var btnopen: UIButton!
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     var blackColor:Bool = false
     
     class func instanceFromNib() -> UIView {
@@ -34,7 +34,7 @@ class GoogleNativeAdsCustomeView6: UIView {
     
     // MARK: - Methods
     func setup() {
-//        tagAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 10)
+        tagAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 10)
         let adView = self.adUIView
         adView?.nativeAd = nativeAd
         adView?.mediaView?.mediaContent = nativeAd.mediaContent
@@ -42,12 +42,12 @@ class GoogleNativeAdsCustomeView6: UIView {
         (adView?.headlineView as? UILabel)?.text = nativeAd.headline
         (adView?.bodyView as? UILabel)?.text = "\(nativeAd.body ?? "")"
         (adView?.iconView as? UIImageView)?.clipsToBounds = true
-        (adView?.iconView as? UIImageView)?.layer.cornerRadius = 5
+        (adView?.iconView as? UIImageView)?.layer.cornerRadius = 8
         (adView?.iconView as? UIImageView)?.image = nativeAd.icon?.image
         (adView?.callToActionView as? UIButton)?.isUserInteractionEnabled = false
         (adView?.callToActionView as? UIButton)?.setTitle(nativeAd.callToAction, for: .normal)
         (adView?.callToActionView as? UIButton)?.layer.cornerRadius = 4
-//        (adView!.callToActionView as? UIButton)?.backgroundColor = Common().hexStringToUIColor(hex: Application.addButtonColor)
+//        (adView!.callToActionView as? UIButton)?.backgroundColor = Common().hexStringToUIColor(hex: addButtonColor)
         self.btnopen.backgroundColor = Common().hexStringToUIColor(hex: addButtonColor)
 //        if blackColor == true {
 //            (adView?.headlineView as? UILabel)?.textColor = .black

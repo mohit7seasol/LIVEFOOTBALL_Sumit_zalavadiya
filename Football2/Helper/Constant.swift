@@ -46,10 +46,12 @@ var appopenId = ""//"ca-app-pub-3940256099942544/5662855259"
 var rewardId = ""
 var fullScreenNativeId = ""
 var inlineNativeBannerId = ""
-var fullNativeAdsTemp: GADNativeAd?
+var fullNativeAdsTemp: NativeAd?
 var gamesURL = ""
-
+var interFaild:Bool = false
 var NativeFaild = false
+var small_native = ""
+var nativeId2 = ""
 var NativeFailedToLoad = false
 var fromScreen1:Bool = false
 
@@ -136,6 +138,7 @@ var isFromPlaylistVC = false
 var isFromEditingVC = false
 var isShownRateDialog = false
 var TYPE_STRING = ""
+var closeInter:Bool = false
 
 var InterFailed = false
 var PremiumClose = false
@@ -186,6 +189,8 @@ extension Notification.Name {
     static let step5Next = Notification.Name("step5Next")
     static let step6Next = Notification.Name("step6Next")
     
+    static let interstitialAdDidFail = Notification.Name("interstitialAdDidFail")
+    static let interstitialAdDidDismiss = Notification.Name("interstitialAdDidDismiss")
 }
 
 enum HttpResponseStatusCode: Int {

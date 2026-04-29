@@ -264,7 +264,7 @@ extension UpcomingVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
         let match = matchesUpcoming[indexPath.row]
         if match.l_id == "NativeAD" {
         } else {
-            AdsManager.shared.ShowInterstitialAD {}
+            AdsManager.shared.showInterstitialAd()
             UpComing = true
             let match = matchesUpcoming[indexPath.row]
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC

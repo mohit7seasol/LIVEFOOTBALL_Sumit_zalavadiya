@@ -120,7 +120,7 @@ class IntroVC4: UIViewController {
     }
     
     @IBAction func nextTapped(_ sender: UIButton) {
-        AdsManager.shared.ShowInterstitialAD {}
+        AdsManager.shared.showInterstitialAd()
         setGetStared(status: true)
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeMainVC") as! HomeMainVC
         self.navigationController?.pushViewController(vc, animated: false)

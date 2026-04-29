@@ -1288,7 +1288,7 @@ PODS:
     - nanopb (~> 3.30910.0)
     - PromisesSwift (~> 2.1)
   - FirebaseSharedSwift (11.5.0)
-  - Google-Mobile-Ads-SDK (11.12.0):
+  - Google-Mobile-Ads-SDK (12.14.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleAppMeasurement (11.5.0):
     - GoogleAppMeasurement/AdIdSupport (= 11.5.0)
@@ -1313,7 +1313,7 @@ PODS:
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - GoogleUserMessagingPlatform (2.7.0)
+  - GoogleUserMessagingPlatform (3.1.0)
   - GoogleUtilities/AppDelegateSwizzler (8.0.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -1470,7 +1470,7 @@ DEPENDENCIES:
   - Firebase/Messaging
   - Firebase/Performance
   - FirebaseAnalytics
-  - Google-Mobile-Ads-SDK
+  - Google-Mobile-Ads-SDK (~> 12.14.0)
   - IQKeyboardManagerSwift (~> 7.0.3)
   - lottie-ios
   - MarqueeLabel
@@ -1567,10 +1567,10 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 7a7aebb9342d53913a5c890efa88e289d9e5c1bc
   FirebaseSessions: b252b3f91a51186188882ea8e7e1730fc1eee391
   FirebaseSharedSwift: 302ac5967857ad7e7388b15382d705b8c8d892aa
-  Google-Mobile-Ads-SDK: 3a76704456669fbed2057efc8bdb99050ad0e3fb
+  Google-Mobile-Ads-SDK: 4534fd2dfcd3f705c5485a6633c5188d03d4eed2
   GoogleAppMeasurement: ee5c2d2242816773fbf79e5b0563f5355ef1c315
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
-  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
+  GoogleUserMessagingPlatform: befe603da6501006420c206222acd449bba45a9c
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   "gRPC-C++": 2fa52b3141e7789a28a737f251e0c45b4cb20a87
   gRPC-Core: a27c294d6149e1c39a7d173527119cfbc3375ce4
@@ -1593,6 +1593,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 7a03a532afe3a560d4044bc7c237e2864d295173
   UPCarouselFlowLayout: 4c7d2c43a10ebb1597bde502a53699d378341dad
 
-PODFILE CHECKSUM: 7bb08d735b656eae614dd4224348e0d7fec08b4d
+PODFILE CHECKSUM: 00802cd3e0a6367307b0a0d999be37c58886f504
 
 COCOAPODS: 1.16.2

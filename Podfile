@@ -12,7 +12,7 @@ target 'Football2' do
   pod 'MBProgressHUD'
   pod 'IQKeyboardManagerSwift', '~> 7.0.3'
   pod 'SDWebImage'
-  pod 'Google-Mobile-Ads-SDK'
+  pod 'Google-Mobile-Ads-SDK', '~> 12.14.0'
   pod 'FirebaseAnalytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'

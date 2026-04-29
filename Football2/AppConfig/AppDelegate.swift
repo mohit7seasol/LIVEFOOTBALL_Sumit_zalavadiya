@@ -20,7 +20,7 @@ import FirebasePerformance
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    private var appOpenAd: GADAppOpenAd?
+    private var appOpenAd: AppOpenAd?
     private var isShowingAppOpenAd = false
     var myOrientation: UIInterfaceOrientationMask = .portrait
     

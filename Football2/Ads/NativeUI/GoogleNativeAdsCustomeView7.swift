@@ -2,21 +2,21 @@
 //  GoogleNativeAdsCustomeView7.swift
 //  HDVideoPlayer
 //
-//  Created by Parthiv Akbari on 15/04/25.
+//  Created by Jay 7Seasol on 12/04/25.
 //
 
 import UIKit
 import GoogleMobileAds
 
 class GoogleNativeAdsCustomeView7: UIView {
-    
-    @IBOutlet var adUIView: GADNativeAdView!
+
+    @IBOutlet var adUIView: NativeAdView!
     @IBOutlet weak var imgIconWidthConstant:
     NSLayoutConstraint!
     @IBOutlet weak var viewAd: UIView!
-    
+
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "GoogleNativeAdsCustomeView7", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -35,7 +35,7 @@ class GoogleNativeAdsCustomeView7: UIView {
         viewAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 8)
         // Get the ad view from the Cell. The view hierarchy for this cell is defined in
         // UnifiedNativeAdCell.xib.
-        let adView : GADNativeAdView = adUIView
+        let adView : NativeAdView = adUIView
         
         // Associate the ad view with the ad object.
         // This is required to make the ad clickable.
@@ -53,9 +53,9 @@ class GoogleNativeAdsCustomeView7: UIView {
         (adView.callToActionView as! UIButton).addCornerRadius(20)
         (adView.callToActionView as! UIButton).setTitle(nativeAd.callToAction, for: UIControl.State.normal)
         (adView.callToActionView as! UIButton).backgroundColor = Common().hexStringToUIColor(hex: addButtonColor)
-        
+
         (adView.callToActionView as? UIButton)?.layer.cornerRadius = 20
-        
+       
         
         adView.backgroundColor = UIColor.clear
         let data = (adView.iconView as? UIImageView)?.image?.pngData()

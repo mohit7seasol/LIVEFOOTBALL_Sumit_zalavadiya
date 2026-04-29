@@ -76,7 +76,7 @@ class BigNativeVC1: UIViewController {
     func subscribe() {
         showSkeletonView()
         if Subscribe.get() == false {
-            self.googleNativeAds.loadFullNativeAds(self) { nativeAdsTemp in
+            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
                 print(" Home...Load Native ....")
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
@@ -85,7 +85,7 @@ class BigNativeVC1: UIViewController {
                 }
             }
             
-            self.googleNativeAds.failFullNativeAds(self) { fail in
+            self.googleNativeAds.loadAds(self) { fail in
                 print(" Home...Native fail....")
                 self.viewForNative.isHidden = true
             }
@@ -97,7 +97,7 @@ class BigNativeVC1: UIViewController {
     }
     
     func showSkeletonView() {
-        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView6", owner: self, options: nil)?.first as? SkeletonCustomView6 {
+        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView6", owner: self, options: nil)?.first as? SkeletonCustomView8 {
             // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             
@@ -120,7 +120,7 @@ class BigNativeVC1: UIViewController {
     
     func hideSkeletonView() {
         for subview in self.viewForNative.subviews {
-            if let adView = subview as? SkeletonCustomView6 {
+            if let adView = subview as? SkeletonCustomView8 {
                 adView.removeFromSuperview()
             }
         }

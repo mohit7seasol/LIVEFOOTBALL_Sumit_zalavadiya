@@ -1,21 +1,21 @@
 //
 //  GoogleNativeAdsCustomeView5.swift
-//  Video Player
+//  NewGB
 //
-//  Created by 7SEASOL-6 on 30/07/24.
+//  Created by Piyush on 06/08/23.
 //
 
 import UIKit
 import GoogleMobileAds
 
 class GoogleNativeAdsCustomeView5: UIView {
-
-    @IBOutlet weak var adUIView: GADNativeAdView!
+    
+    @IBOutlet weak var adUIView: NativeAdView!
     @IBOutlet weak var imgIconWidthConstant: NSLayoutConstraint!
     
     
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "GoogleNativeAdsCustomeView5", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -34,7 +34,7 @@ class GoogleNativeAdsCustomeView5: UIView {
         
         // Get the ad view from the Cell. The view hierarchy for this cell is defined in
         // UnifiedNativeAdCell.xib.
-        let adView : GADNativeAdView = adUIView
+        let adView : NativeAdView = adUIView
         
         // Associate the ad view with the ad object.
         // This is required to make the ad clickable.

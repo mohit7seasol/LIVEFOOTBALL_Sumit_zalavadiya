@@ -1,8 +1,8 @@
 //
 //  GoogleBannerNativeCustomAdsView.swift
-//  Video Player
+//  NewGB
 //
-//  Created by 7SEASOL-6 on 30/07/24.
+//  Created by Piyush on 06/08/23.
 //
 
 import UIKit
@@ -11,11 +11,11 @@ import GoogleMobileAds
 class GoogleNativeAdsCustomeView3: UIView {
     
     // OUTLET
-    @IBOutlet var adUIView: GADNativeAdView!
+    @IBOutlet var adUIView: NativeAdView!
     @IBOutlet weak var nativeAdsWidth: NSLayoutConstraint!
     
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "GoogleNativeAdsCustomeView3", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView

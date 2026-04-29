@@ -23,7 +23,7 @@ class LanguageVC: UIViewController {
         }
     }
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var viewBanner: GADBannerView!
+    @IBOutlet weak var viewBanner: BannerView!
     @IBOutlet weak var scrollBottom: NSLayoutConstraint!
     
     var isSelectedIndex = 0
@@ -102,7 +102,7 @@ class LanguageVC: UIViewController {
            ])
            
            // Load an ad
-           let request = GADRequest()
+        let request = Request()
            viewBanner.load(request)
        }
     
@@ -132,7 +132,7 @@ class LanguageVC: UIViewController {
                         setIsLanguage(status: true)
                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                             setLanguage(status: true)
-                            AdsManager.shared.ShowInterstitialAD { }
+                            AdsManager.shared.showInterstitialAd()
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeMainVC") as! HomeMainVC
                             self.navigationController?.pushViewController(vc, animated: false)
                         }
@@ -143,7 +143,7 @@ class LanguageVC: UIViewController {
                     setIsLanguage(status: true)
                     DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                         setLanguage(status: true)
-                        AdsManager.shared.ShowInterstitialAD { }
+                        AdsManager.shared.showInterstitialAd()
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeMainVC") as! HomeMainVC
                         self.navigationController?.pushViewController(vc, animated: false)
                     }
@@ -188,9 +188,9 @@ extension LanguageVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-extension LanguageVC : GADBannerViewDelegate {
+extension LanguageVC : BannerViewDelegate {
     
-    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+    func bannerViewDidReceiveAd(_ bannerView: BannerView) {
         print("Banner loaded successfully")
         UIView.animate(withDuration: 0.5) {
             self.viewBanner.isHidden = false
@@ -198,7 +198,7 @@ extension LanguageVC : GADBannerViewDelegate {
         }
     }
     
-    func bannerView(_ bannerView: GADBannerView,
+    func bannerView(_ bannerView: BannerView,
                     didFailToReceiveAdWithError error: Error) {
         print("Failed to load banner ad: \(error.localizedDescription)")
         UIView.animate(withDuration: 0.5) {

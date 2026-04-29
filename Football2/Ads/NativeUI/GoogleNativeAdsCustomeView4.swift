@@ -1,23 +1,23 @@
 //
 //  GoogleNativeAdsCustomeView4.swift
-//  Video Player
+//  NewGB
 //
-//  Created by 7SEASOL-6 on 30/07/24.
+//  Created by Piyush on 06/08/23.
 //
 
 import UIKit
 import GoogleMobileAds
 
 class GoogleNativeAdsCustomeView4: UIView {
-
+    
     // OUTLET
-    @IBOutlet var adUIView: GADNativeAdView!
+    @IBOutlet var adUIView: NativeAdView!
     @IBOutlet weak var imgIconWidthConstant: NSLayoutConstraint!
     
     @IBOutlet weak var viewAd: UIView!
     
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "GoogleNativeAdsCustomeView4", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -33,11 +33,11 @@ class GoogleNativeAdsCustomeView4: UIView {
     
     // MARK: - Methods
     func setup() {
-//        viewAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 10)
+        viewAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 10)
         
         // Get the ad view from the Cell. The view hierarchy for this cell is defined in
         // UnifiedNativeAdCell.xib.
-        let adView : GADNativeAdView = adUIView
+        let adView : NativeAdView = adUIView
         
         // Associate the ad view with the ad object.
         // This is required to make the ad clickable.
@@ -47,7 +47,7 @@ class GoogleNativeAdsCustomeView4: UIView {
         (adView.iconView as? UIImageView)?.image = nativeAd.icon?.image
         (adView.headlineView as! UILabel).text = nativeAd.headline
         adView.mediaView?.mediaContent = nativeAd.mediaContent
-        (adView.bodyView as! UILabel).text = "\t\(nativeAd.body ?? "")"
+        (adView.bodyView as! UILabel).text = (nativeAd.body ?? "")
         
         // The SDK automatically turns off user interaction for assets that are part of the ad, but
         // it is still good to be explicit.

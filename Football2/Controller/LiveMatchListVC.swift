@@ -394,7 +394,7 @@ extension LiveMatchListVC: UICollectionViewDelegate, UICollectionViewDataSource,
             let match = matchesUpcoming[indexPath.row]
             if match.l_id == "NativeAD" {
             } else {
-                AdsManager.shared.ShowInterstitialAD {}
+                AdsManager.shared.showInterstitialAd()
                 UpComing = true
                 let match = matchesUpcoming[indexPath.row]
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC
@@ -412,7 +412,7 @@ extension LiveMatchListVC: UICollectionViewDelegate, UICollectionViewDataSource,
             let match = matcheslive[indexPath.row]
             if match.l_id == "NativeAD" {
             } else {
-                AdsManager.shared.ShowInterstitialAD {}
+                AdsManager.shared.showInterstitialAd()
                 UpComing = false
                 let match = matcheslive[indexPath.row]
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC

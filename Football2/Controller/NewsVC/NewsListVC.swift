@@ -51,7 +51,7 @@ class NewsListVC: UIViewController {
     func subscribe() {
         showSkeletonView()
         if Subscribe.get() == false {
-            self.googleNativeAds.loadInlineNativeAds(self) { nativeAdsTemp in
+            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
                 print(" Home...Load Native ....")
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
@@ -187,7 +187,7 @@ extension NewsListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
             newsListTableView.reloadData()
             newsCategoryCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         } else {
-            AdsManager.shared.ShowInterstitialAD {}
+            AdsManager.shared.showInterstitialAd()
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailVC
             vc.selectedNews = topNewsPosts[indexPath.row]
             vc.currentCategory = newsResults[self.selectedCategoryIndex].title
@@ -258,7 +258,7 @@ extension NewsListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AdsManager.shared.ShowInterstitialAD {}
+        AdsManager.shared.showInterstitialAd()
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailVC
         vc.selectedNews = self.selectedPosts[indexPath.row]
         vc.currentCategory = self.newsResults[self.selectedCategoryIndex].title

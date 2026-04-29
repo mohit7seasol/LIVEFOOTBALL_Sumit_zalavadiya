@@ -109,7 +109,7 @@ class SeriesVC: UIViewController {
     func subscribe() {
         showSkeletonView()
         if Subscribe.get() == false {
-            self.googleNativeAds.loadInlineNativeAds(self) { nativeAdsTemp in
+            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
                 print(" Home...Load Native ....")
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
@@ -287,7 +287,7 @@ extension SeriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AdsManager.shared.ShowInterstitialAD {}
+        AdsManager.shared.showInterstitialAd()
         let league = matchesData[indexPath.section].leagues[indexPath.row]
 //        DispatchQueue.main.async {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "SeriesMatchVC") as! SeriesMatchVC

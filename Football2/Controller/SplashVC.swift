@@ -20,7 +20,7 @@ class SplashVC: UIViewController {
     @IBOutlet weak var appNameLbl: UILabel!
     private var loaderView: LottieAnimationView?
     
-    var appOpenAd: GADAppOpenAd?
+    var appOpenAd: AppOpenAd?
     var googleNativeAds = GoogleNativeAds()
     var oneTime:Bool = false
     
@@ -212,18 +212,6 @@ extension SplashVC {
                         self.googleNativeAds.failAds(self) { fail in
                             print(" Home...Native fail....")
                             NativeFailedToLoad = true
-                        }
-                        
-                        self.googleNativeAds.loadFullNativeAds(self) { nativeAdsTemp in
-                            print(" Home...Load Full Native ....")
-                            NativeFaild = false
-                            fullNativeAdsTemp = nativeAdsTemp
-                        }
-                        
-                        self.googleNativeAds.failFullNativeAds(self) { fail in
-                            print(" Home...Full Native fail....")
-                            NativeFaild = true
-                            fullNativeAdsTemp = nil
                         }
                         
                         Task {

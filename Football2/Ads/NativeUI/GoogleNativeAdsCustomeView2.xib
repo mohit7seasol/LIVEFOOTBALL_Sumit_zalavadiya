@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
         <array key="Rubik-VariableFont_wght.ttf">
             <string>RubikRoman-Regular</string>
         </array>
@@ -16,7 +19,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="ESS-rJ-i7K" customClass="GoogleNativeAdsCustomeView2" customModule="Football2" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="ESS-rJ-i7K" customClass="GoogleNativeAdsCustomeView2" customModule="Device_Cleanup" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="459" height="125"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -34,8 +37,8 @@
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Headline" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4ue-Zo-6YZ">
                                                     <rect key="frame" x="0.0" y="0.0" width="283" height="34.5"/>
-                                                    <fontDescription key="fontDescription" name="RubikRoman-Regular" family="Rubik" pointSize="16"/>
-                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto Medium" pointSize="16"/>
+                                                    <color key="textColor" name="Color_recentFont"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="626-0X-rF3">
@@ -45,23 +48,23 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="283" height="30.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <fontDescription key="fontDescription" name="RubikRoman-Regular" family="Rubik" pointSize="13"/>
-                                                            <color key="textColor" name="PrimaryTextColor"/>
+                                                            <color key="textColor" name="Color_8F918C"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Cw-CB-eSU" customClass="View" customModule="Football2" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="15"/>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Cw-CB-eSU" customClass="View" customModule="Device_Cleanup" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="22" height="20"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text=" Ad " textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iw4-P3-11l">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="22" height="15"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="22" height="20"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <fontDescription key="fontDescription" name="RubikRoman-Regular" family="Rubik" pointSize="12"/>
-                                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="textColor" name="Color_recentFont"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
-                                                            <color key="backgroundColor" red="0.99607843137254903" green="0.80392156862745101" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" systemColor="systemGray5Color"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="15" id="1uY-CW-4ha"/>
+                                                                <constraint firstAttribute="height" constant="20" id="1uY-CW-4ha"/>
                                                                 <constraint firstItem="iw4-P3-11l" firstAttribute="top" secondItem="3Cw-CB-eSU" secondAttribute="top" id="4L7-LG-FmY"/>
                                                                 <constraint firstItem="iw4-P3-11l" firstAttribute="leading" secondItem="3Cw-CB-eSU" secondAttribute="leading" id="EkC-fZ-8GE"/>
                                                                 <constraint firstAttribute="bottom" secondItem="iw4-P3-11l" secondAttribute="bottom" id="JXh-qB-EJg"/>
@@ -116,12 +119,13 @@
                         </stackView>
                         <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="zpC-oU-MEa" customClass="GADMediaView">
                             <rect key="frame" x="5" y="5" width="150" height="115"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="150" id="nhl-bA-dHh"/>
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="Color_TabBar"/>
                     <constraints>
                         <constraint firstItem="zpC-oU-MEa" firstAttribute="top" secondItem="GPK-lL-8fQ" secondAttribute="top" constant="5" id="I1P-zT-51J"/>
                         <constraint firstItem="zpC-oU-MEa" firstAttribute="leading" secondItem="GPK-lL-8fQ" secondAttribute="leading" constant="5" id="Mtj-zL-Dxj"/>
@@ -157,11 +161,20 @@
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="PrimaryTextColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="Color_8F918C">
+            <color red="0.56099998950958252" green="0.5690000057220459" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color_TabBar">
+            <color red="0.99999994039535522" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Color_recentFont">
+            <color red="0.094117647058823528" green="0.094117647058823528" blue="0.094117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemGray4Color">
-            <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

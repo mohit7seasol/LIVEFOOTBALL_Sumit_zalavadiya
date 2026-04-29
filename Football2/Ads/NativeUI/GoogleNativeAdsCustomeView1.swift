@@ -1,23 +1,23 @@
 //
 //  GoogleNativeAdsCustomeView3.swift
-//  Video Player
+//  NewGB
 //
-//  Created by 7SEASOL-6 on 30/07/24.
+//  Created by Piyush on 06/08/23.
 //
 
 import UIKit
 import GoogleMobileAds
 
 class GoogleNativeAdsCustomeView1: UIView {
-
+    
     // OUTLET
-    @IBOutlet var adUIView: GADNativeAdView!
+    @IBOutlet var adUIView: NativeAdView!
     @IBOutlet weak var imgIconWidthConstant: NSLayoutConstraint!
     
     @IBOutlet weak var viewAd: UIView!
     
     // VARIABLE
-    var nativeAd: GADNativeAd = GADNativeAd()
+    var nativeAd: NativeAd = NativeAd()
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "GoogleNativeAdsCustomeView1", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -33,10 +33,10 @@ class GoogleNativeAdsCustomeView1: UIView {
     
     // MARK: - Methods
     func setup() {
-//        viewAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 8)
+        viewAd.roundCorners(corners: [.topLeft, .bottomRight], radius: 8)
         // Get the ad view from the Cell. The view hierarchy for this cell is defined in
         // UnifiedNativeAdCell.xib.
-        let adView : GADNativeAdView = adUIView
+        let adView : NativeAdView = adUIView
         
         // Associate the ad view with the ad object.
         // This is required to make the ad clickable.
@@ -56,6 +56,7 @@ class GoogleNativeAdsCustomeView1: UIView {
         (adView.callToActionView as! UIButton).backgroundColor = Common().hexStringToUIColor(hex: addButtonColor)
 
         (adView.callToActionView as? UIButton)?.layer.cornerRadius = 20
+       
         
         adView.backgroundColor = UIColor.clear
         let data = (adView.iconView as? UIImageView)?.image?.pngData()
