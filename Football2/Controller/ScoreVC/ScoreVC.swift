@@ -21,7 +21,7 @@ class ScoreVC: BaseVC {
     @IBOutlet weak var lblB: MarqueeLabel!
     
     @IBOutlet weak var lblScore: UILabel!
-    @IBOutlet weak var lblComplated: UILabel!
+    @IBOutlet weak var lblComplated: MarqueeLabel!
     
     @IBOutlet weak var lblT1Goal: UILabel!
     @IBOutlet weak var lblT1Rflag: UILabel!

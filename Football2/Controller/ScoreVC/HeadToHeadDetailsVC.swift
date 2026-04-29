@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import MarqueeLabel
 
 class HeadToHeadDetailsVC: UIViewController {
     
@@ -16,8 +17,8 @@ class HeadToHeadDetailsVC: UIViewController {
         }
     }
     
-    @IBOutlet weak var team1Lbl: UILabel!
-    @IBOutlet weak var team2Lbl: UILabel!
+    @IBOutlet weak var team1Lbl: MarqueeLabel!
+    @IBOutlet weak var team2Lbl: MarqueeLabel!
     
     var index = -1
     var m_id:String?
