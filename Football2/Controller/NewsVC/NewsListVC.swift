@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class NewsListVC: UIViewController {
+class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/api/fresh-news
     
     @IBOutlet weak var topNewsCollectionView: UICollectionView! {
         didSet {
