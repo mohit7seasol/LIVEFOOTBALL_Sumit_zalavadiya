@@ -24,10 +24,12 @@ class StatsVC: UIViewController {
     var index = -1
     var m_id: String?
     var l_id: String?
+    var matchDetails: MatchDetails?  // Add this to receive team names
     var refreshTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTeamNames()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +47,18 @@ class StatsVC: UIViewController {
         super.viewWillDisappear(animated)
         refreshTimer?.invalidate()
         refreshTimer = nil
+    }
+    
+    func setupTeamNames() {
+        // Set team names from matchDetails (passed from ScoreVC)
+        if let details = matchDetails {
+            teamALbl.text = details.homeName
+            teamBLbl.text = details.awayName
+        } else {
+            // Fallback to placeholder names
+            teamALbl.text = "Home Team"
+            teamBLbl.text = "Away Team"
+        }
     }
     
     func startAutoRefresh() {
@@ -69,7 +83,7 @@ class StatsVC: UIViewController {
         }
     }
     
-    // MARK: - Updated API from Reference Code
+    // MARK: - API Method
     func fetchMatchStats() {
         let urlString = "https://flashscore4.p.rapidapi.com/api/flashscore/v2/matches/match/stats?match_id=\(m_id ?? "")"
         
@@ -83,9 +97,24 @@ class StatsVC: UIViewController {
         URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let data = data else { return }
             
+            // Debug: Print the response to understand structure
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Stats API Response: \(jsonString)")
+            }
+            
             do {
-                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let statsArray = json["match"] as? [[String: Any]] {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    
+                    // The stats are inside "match" key for full match stats
+                    var statsArray: [[String: Any]] = []
+                    
+                    if let matchStats = json["match"] as? [[String: Any]] {
+                        statsArray = matchStats
+                    } else if let matchStats = json["1st-half"] as? [[String: Any]] {
+                        statsArray = matchStats
+                    } else if let matchStats = json["2nd-half"] as? [[String: Any]] {
+                        statsArray = matchStats
+                    }
                     
                     var temp: [MatchStatModel] = []
                     for s in statsArray {
@@ -103,7 +132,7 @@ class StatsVC: UIViewController {
                     }
                 }
             } catch {
-                print(error)
+                print("Error parsing stats:", error)
             }
         }.resume()
     }
@@ -123,19 +152,6 @@ extension StatsVC : UITableViewDelegate, UITableViewDataSource {
         cell.lblActions.text = stat.name
         cell.lblTeam1.text = stat.home
         cell.lblTeam2.text = stat.away
-        
-        let homeValue = Float(stat.home) ?? 0
-        let awayValue = Float(stat.away) ?? 0
-        let total = homeValue + awayValue
-        
-        if total > 0 {
-//            cell.progressViewTeam1.progress = homeValue / total
-//            cell.progressViewTeam2.progress = awayValue / total
-        } else {
-//            cell.progressViewTeam1.progress = 0.5
-//            cell.progressViewTeam2.progress = 0.5
-        }
-        
         return cell
     }
     

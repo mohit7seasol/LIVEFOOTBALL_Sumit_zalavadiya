@@ -82,6 +82,7 @@ class ScorePagerVC: UIPageViewController {
         vc4.m_id = self.m_idMain
         vc4.l_id = self.l_idMain
         vc4.stats = self.stats
+        vc4.matchDetails = self.matchDetails
         arrVc.append(vc4)
         
         index += 1
