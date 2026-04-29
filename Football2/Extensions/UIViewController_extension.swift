@@ -160,7 +160,31 @@ extension UIViewController {
 
 }
 
-
+extension UIViewController {
+    func showInterAd() {
+        if isUserSubscribe() == false {
+            // Ensure afterClick is set to 2
+            guard afterClick > 0 else {
+                // Set default to 2 if afterClick is 0 or not set
+                afterClick = 2
+                return
+            }
+            
+            adsPlus = adsPlus + 1
+            if adsPlus % afterClick == 0 {
+                AdsManager.shared.presentInterstitialAd1(vc: self)
+            }
+        }
+    }
+    
+    func showInterAdSession() {
+        DispatchQueue.main.async {
+            if isUserSubscribe() == false {
+                AdsManager.shared.presentInterstitialAd1(vc: self)
+            }
+        }
+    }
+}
 
 extension Date {
     var isToday: Bool {

@@ -525,6 +525,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if collectionView == datepickerCollection {
             handleDateSelection(at: indexPath.item)
         } else {
+            showInterAd()
             let match = matchesFiltered[indexPath.item]
             
             // Navigate to ScoreVC

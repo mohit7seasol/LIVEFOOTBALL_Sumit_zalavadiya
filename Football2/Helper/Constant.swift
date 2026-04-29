@@ -68,6 +68,7 @@ var loadint = 0
 var sessionId = ""
 var appopenClose:Bool = false
 var firstTime:Bool = false
+var afterClick = 2
 
 let PhotoUrl : String = "https://models.testingjunction.tech/public/uploads/"
 //
