@@ -11,10 +11,10 @@ class NewsDetailVC: UIViewController {
     
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var newsImg: UIImageView!
-    @IBOutlet weak var newsDateLbl: UILabel!
     @IBOutlet weak var newsTitleLbl: UILabel!
-    @IBOutlet weak var newsDescTextView: UITextView!
     @IBOutlet weak var viewForNative: UIView!
+    @IBOutlet weak var detailLbl: UILabel!
+    @IBOutlet weak var newsArticleLbl: UILabel!
     
     var googleNativeAds = GoogleNativeAds()
     var isShowNativeAds = false
@@ -32,15 +32,13 @@ class NewsDetailVC: UIViewController {
         // Set news data
         if let news = selectedNews {
             self.newsTitleLbl.text = news.title
-            self.newsDescTextView.text = news.article.isEmpty ? news.subDesc : news.article
+            self.detailLbl.text = news.subDesc
+            self.newsArticleLbl.text = news.article.replacingOccurrences(of: "\n+", with: "\n\n", options: .regularExpression)
             
             // Load image
             if let imageURL = URL(string: news.imageUrl) {
                 self.newsImg.sd_setImage(with: imageURL, placeholderImage: UIImage(named: "DefaultNews2"))
             }
-            
-            // Date is not available in API response, hide date label
-            self.newsDateLbl.isHidden = true
         }
         
         subscribe()
@@ -54,7 +52,7 @@ class NewsDetailVC: UIViewController {
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.hideSkeletonView()
-                    self.googleNativeAds.showAdsView6(nativeAd: nativeAdsTemp, view: self.viewForNative)
+                    self.googleNativeAds.showAdsView8(nativeAd: nativeAdsTemp, view: self.viewForNative)
                 }
             }
             
