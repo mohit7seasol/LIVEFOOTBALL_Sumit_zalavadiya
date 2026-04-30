@@ -11,7 +11,7 @@ import SwiftyJSON
 import SDWebImage
 import SVProgressHUD
 
-class HomeVC: UIViewController {
+class HomeVC: UIViewController, UIGestureRecognizerDelegate {
     // Removed viewForNative outlet
     @IBOutlet weak var matchListCollection: UICollectionView!
     @IBOutlet weak var liveButton: UIButton!
@@ -72,6 +72,11 @@ class HomeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchMatches(for: selectedDate)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     // MARK: - Setup Methods

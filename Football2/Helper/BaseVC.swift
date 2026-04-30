@@ -41,8 +41,9 @@ class BaseVC: UIViewController, UIGestureRecognizerDelegate {
         if handleDisablingPopGesture == true {
             
         }
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if handleDisablingPopGesture == true {
@@ -90,4 +91,10 @@ class BaseVC: UIViewController, UIGestureRecognizerDelegate {
         return (formattedDate, formattedTime, formattedDifference)
     }
     
+    
+}
+extension UIViewController {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
