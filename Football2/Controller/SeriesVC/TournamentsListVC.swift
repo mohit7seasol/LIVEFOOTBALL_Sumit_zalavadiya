@@ -17,7 +17,7 @@ class TournamentsListVC: UIViewController {
     var currentCountryId: Int = 0
     var tournaments: [Tournament] = []
     
-    var gradientColorSets = [ #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1), #colorLiteral(red: 0.003921568627, green: 0.7411764706, blue: 0.8039215686, alpha: 1), #colorLiteral(red: 0.3058823529, green: 0.6274509804, blue: 0.9137254902, alpha: 1), #colorLiteral(red: 0.4431372549, green: 0.4156862745, blue: 0.8470588235, alpha: 1) ]
+    var gradientColorSets = [ #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1), #colorLiteral(red: 0.003921568627, green: 0.7411764706, blue: 0.8039215686, alpha: 1), #colorLiteral(red: 0.3058823529, green: 0.6274509804, blue: 0.9137254902, alpha: 1), #colorLiteral(red: 0.4431372549, green: 0.4156862745, blue: 0.8470588235, alpha: 1), #colorLiteral(red: 0.5738074183, green: 0.5655357838, blue: 0, alpha: 1) ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,17 +27,23 @@ class TournamentsListVC: UIViewController {
         self.showAd()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Invalidate layout when bounds change (rotation)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     func setupCollectionView() {
         collectionView.register(UINib(nibName: "TournamentsListCell", bundle: nil), forCellWithReuseIdentifier: "TournamentsListCell")
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
         
+        // Create custom layout
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
-        layout.minimumInteritemSpacing = 12
         collectionView.collectionViewLayout = layout
-        collectionView.contentInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
     }
     
     // MARK: - API Call for Tournaments
@@ -154,7 +160,7 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         let tournament = tournaments[indexPath.row]
         cell.tournamentNameLabel.text = tournament.name
         
-        // Apply random gradient color
+        // Apply gradient color based on index
         let gradientIndex = indexPath.row % gradientColorSets.count
         cell.applyGradient(color: gradientColorSets[gradientIndex])
         
@@ -175,19 +181,46 @@ extension TournamentsListVC: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
         
-        let spacing: CGFloat = 12
-        let inset = collectionView.contentInset.left + collectionView.contentInset.right
+        // iPad: 4 columns, iPhone: 2 columns
+        let columns: CGFloat = isPad ? 4 : 2
         
-        let itemsPerRow: CGFloat = isPad ? 4 : 2
+        // Spacing values
+        let spacing: CGFloat = 16
+        let leftInset: CGFloat = 16
+        let rightInset: CGFloat = 16
         
-        let totalSpacing = (itemsPerRow - 1) * spacing
-        let availableWidth = collectionView.bounds.width - inset - totalSpacing
+        // Calculate total horizontal insets
+        let totalHorizontalInsets = leftInset + rightInset
         
-        let width = floor(availableWidth / itemsPerRow)
+        // Calculate total spacing between items
+        let totalSpacing = (columns - 1) * spacing
         
-        return CGSize(width: width, height: isPad ? 140 : 120)
+        // Calculate available width for items
+        let availableWidth = collectionView.bounds.width - totalHorizontalInsets - totalSpacing
+        
+        // Calculate item width
+        let itemWidth = availableWidth / columns
+        
+        // Item height
+        let itemHeight: CGFloat = isPad ? 120 : 100
+        
+        return CGSize(width: itemWidth, height: itemHeight)
     }
     
+    // Set insets for section
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    }
+    
+    // Set minimum line spacing
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
+    
+    // Set minimum interitem spacing
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 16
+    }
 }
 
 // MARK: - Button Actions

@@ -286,7 +286,7 @@ extension TournamentsMatchesListVC: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 30 // 15 left + 15 right
         let isPad = UIDevice.current.userInterfaceIdiom == .pad
-        let height: CGFloat = isPad ? 160 : 130
+        let height: CGFloat = isPad ? 230 : 130
         
         return CGSize(width: width, height: height)
     }
