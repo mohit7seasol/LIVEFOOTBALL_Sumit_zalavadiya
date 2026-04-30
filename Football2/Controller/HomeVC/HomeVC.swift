@@ -301,7 +301,7 @@ class HomeVC: UIViewController {
                 self.viewForNative.isHidden = false
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
                     self.hideSkeletonView()
-                    self.googleNativeAds.showAdsView6(nativeAd: nativeAdsTemp, view: self.viewForNative)
+                    self.googleNativeAds.showAdsView8(nativeAd: nativeAdsTemp, view: self.viewForNative)
                 }
             }
             
