@@ -240,7 +240,6 @@ extension NewsListVC {
             switch response.result {
             case .success(let data):
                 do {
-                    // Parse JSON manually to see the structure
                     if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
                         print("📦 Response JSON: \(json)")
                         
@@ -274,8 +273,15 @@ extension NewsListVC {
                             // Set top 5 news for banner
                             self.topNewsPosts = Array(newsItems.prefix(5))
                             
-                            // Set all news for table view
-                            self.allNews = newsItems
+                            // Set all news for table view - EXCLUDING top 5 to avoid repetition
+                            if newsItems.count > 5 {
+                                self.allNews = Array(newsItems.dropFirst(5))
+                            } else {
+                                self.allNews = []
+                            }
+                            
+                            print("Top News Count: \(self.topNewsPosts.count)")
+                            print("Table News Count: \(self.allNews.count)")
                             
                             // Update UI
                             DispatchQueue.main.async {
