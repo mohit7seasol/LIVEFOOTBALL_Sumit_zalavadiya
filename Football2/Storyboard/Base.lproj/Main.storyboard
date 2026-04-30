@@ -3029,11 +3029,16 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tp0-tN-fcZ">
                                         <rect key="frame" x="16" y="10" width="329" height="17"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="17" id="QJm-MG-iGS"/>
+                                            <constraint firstAttribute="height" constant="20" id="QJm-MG-iGS">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="17"/>
+                                            </constraint>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" name="PrimaryTextColor"/>
                                         <nil key="highlightedColor"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        </variation>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DashedLine" translatesAutoresizingMaskIntoConstraints="NO" id="mzf-EA-HZb">
                                         <rect key="frame" x="10" y="37" width="341" height="1"/>
@@ -3128,17 +3133,25 @@
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UOl-Pb-PVP">
                                                                 <rect key="frame" x="8.0000000000000071" y="8" width="24" height="24"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="24" id="22K-e0-Mfs"/>
-                                                                    <constraint firstAttribute="width" constant="24" id="o7s-SR-jAs"/>
+                                                                    <constraint firstAttribute="height" constant="48" id="22K-e0-Mfs">
+                                                                        <variation key="heightClass=regular-widthClass=compact" constant="24"/>
+                                                                    </constraint>
+                                                                    <constraint firstAttribute="width" constant="48" id="o7s-SR-jAs">
+                                                                        <variation key="heightClass=regular-widthClass=compact" constant="24"/>
+                                                                    </constraint>
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="LLF-6e-c9b"/>
+                                                            <constraint firstAttribute="height" constant="80" id="LLF-6e-c9b">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                                                            </constraint>
                                                             <constraint firstItem="UOl-Pb-PVP" firstAttribute="centerX" secondItem="s4F-Re-ik3" secondAttribute="centerX" id="nWL-aE-PCO"/>
                                                             <constraint firstItem="UOl-Pb-PVP" firstAttribute="centerY" secondItem="s4F-Re-ik3" secondAttribute="centerY" id="qkg-gR-Cg3"/>
-                                                            <constraint firstAttribute="width" constant="40" id="rZz-ku-wPK"/>
+                                                            <constraint firstAttribute="width" constant="80" id="rZz-ku-wPK">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                                                            </constraint>
                                                         </constraints>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
@@ -3158,11 +3171,16 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sx6-I6-SvF" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                                         <rect key="frame" x="0.0" y="50.000000000000028" width="103" height="17"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="17" id="XV2-Nc-j93"/>
+                                                            <constraint firstAttribute="height" constant="20" id="XV2-Nc-j93">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="17"/>
+                                                            </constraint>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <color key="textColor" name="PrimaryTextColor"/>
                                                         <nil key="highlightedColor"/>
+                                                        <variation key="heightClass=regular-widthClass=compact">
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        </variation>
                                                     </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3184,17 +3202,25 @@
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yIn-QM-AgG">
                                                                 <rect key="frame" x="8" y="8" width="24" height="24"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="24" id="IwO-4y-RKi"/>
-                                                                    <constraint firstAttribute="width" constant="24" id="P9T-fp-YK8"/>
+                                                                    <constraint firstAttribute="height" constant="48" id="IwO-4y-RKi">
+                                                                        <variation key="heightClass=regular-widthClass=compact" constant="24"/>
+                                                                    </constraint>
+                                                                    <constraint firstAttribute="width" constant="48" id="P9T-fp-YK8">
+                                                                        <variation key="heightClass=regular-widthClass=compact" constant="24"/>
+                                                                    </constraint>
                                                                 </constraints>
                                                             </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" red="0.043137254899999998" green="0.074509803920000006" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="40" id="0II-da-2hh"/>
+                                                            <constraint firstAttribute="width" constant="80" id="0II-da-2hh">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                                                            </constraint>
                                                             <constraint firstItem="yIn-QM-AgG" firstAttribute="centerY" secondItem="p7c-kf-vTE" secondAttribute="centerY" id="Li2-s5-cLc"/>
                                                             <constraint firstItem="yIn-QM-AgG" firstAttribute="centerX" secondItem="p7c-kf-vTE" secondAttribute="centerX" id="OkW-Vc-bb1"/>
-                                                            <constraint firstAttribute="height" constant="40" id="he1-V3-MQA"/>
+                                                            <constraint firstAttribute="height" constant="80" id="he1-V3-MQA">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="40"/>
+                                                            </constraint>
                                                         </constraints>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
@@ -3214,11 +3240,16 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZY0-Hm-xsK" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                                         <rect key="frame" x="0.0" y="50.000000000000028" width="103" height="17"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="17" id="ran-pS-8Xz"/>
+                                                            <constraint firstAttribute="height" constant="20" id="ran-pS-8Xz">
+                                                                <variation key="heightClass=regular-widthClass=compact" constant="17"/>
+                                                            </constraint>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                         <color key="textColor" name="PrimaryTextColor"/>
                                                         <nil key="highlightedColor"/>
+                                                        <variation key="heightClass=regular-widthClass=compact">
+                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        </variation>
                                                     </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3239,7 +3270,9 @@
                                             <constraint firstItem="miP-DF-DAZ" firstAttribute="leading" secondItem="2Bf-67-pkp" secondAttribute="leading" id="Q9c-IP-kOj"/>
                                             <constraint firstItem="j9Q-mY-dU0" firstAttribute="leading" secondItem="miP-DF-DAZ" secondAttribute="trailing" constant="10" id="TXZ-SK-E4f"/>
                                             <constraint firstAttribute="trailing" secondItem="LWL-1R-3DZ" secondAttribute="trailing" id="Wj2-x5-ygi"/>
-                                            <constraint firstAttribute="height" constant="90" id="bWB-jH-4nS"/>
+                                            <constraint firstAttribute="height" constant="140" id="bWB-jH-4nS">
+                                                <variation key="heightClass=regular-widthClass=compact" constant="90"/>
+                                            </constraint>
                                             <constraint firstItem="miP-DF-DAZ" firstAttribute="centerY" secondItem="2Bf-67-pkp" secondAttribute="centerY" id="gxY-0v-c3d"/>
                                             <constraint firstItem="8Zl-VH-Y9P" firstAttribute="centerY" secondItem="2Bf-67-pkp" secondAttribute="centerY" id="lQ0-XA-DFZ"/>
                                             <constraint firstItem="j9Q-mY-dU0" firstAttribute="centerX" secondItem="2Bf-67-pkp" secondAttribute="centerX" id="oRR-ao-bB6"/>
@@ -3653,7 +3686,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ibR-ek-HYo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4523" y="1401"/>
+            <point key="canvasLocation" x="4522.900763358778" y="1400.7042253521126"/>
         </scene>
         <!--Score PagerVC-->
         <scene sceneID="1bj-38-nQC">
