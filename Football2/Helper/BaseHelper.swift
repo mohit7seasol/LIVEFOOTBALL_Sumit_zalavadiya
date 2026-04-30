@@ -74,7 +74,14 @@ struct Post: Codable {
     let updatedAt, publishedAt: Int
     let media: Media
 }
-
+struct NewsItem {
+    let id: String
+    let title: String
+    let category: String
+    let imageUrl: String
+    let subDesc: String
+    let article: String
+}
 // MARK: - Media
 struct Media: Codable {
     let alternativeText, title: String

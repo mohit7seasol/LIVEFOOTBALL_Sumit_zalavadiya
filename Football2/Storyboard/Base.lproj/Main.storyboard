@@ -2121,10 +2121,10 @@
                                 <color key="currentPageIndicatorTintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.34509803919999998" alpha="1" colorSpace="calibratedRGB"/>
                             </pageControl>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="iod-7f-PJE">
-                                <rect key="frame" x="0.0" y="430" width="393" height="50"/>
+                                <rect key="frame" x="0.0" y="430" width="393" height="0.0"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="JRc-CA-vQT"/>
+                                    <constraint firstAttribute="height" id="JRc-CA-vQT"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="mwB-mX-q2W">
                                     <size key="itemSize" width="128" height="40"/>
@@ -2139,7 +2139,7 @@
                                 </connections>
                             </collectionView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6zh-FQ-MpC">
-                                <rect key="frame" x="0.0" y="485" width="393" height="299"/>
+                                <rect key="frame" x="0.0" y="435" width="393" height="349"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bEE-We-sMD">
                                         <rect key="frame" x="0.0" y="5" width="393" height="232"/>
@@ -5470,7 +5470,7 @@
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="emptyNews" width="121" height="98"/>
         <namedColor name="ADSBG">
-            <color red="0.047058823529411764" green="0.16078431372549018" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.046999998390674591" green="0.16099999845027924" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="PrimaryTextColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

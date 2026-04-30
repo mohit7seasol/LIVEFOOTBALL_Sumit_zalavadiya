@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 
-class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/api/fresh-news
+class NewsListVC: UIViewController {
     
     @IBOutlet weak var topNewsCollectionView: UICollectionView! {
         didSet {
@@ -34,16 +34,18 @@ class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/a
     var googleNativeAds = GoogleNativeAds()
     var isShowNativeAds = false
     
-    var topNewsPosts: [Post] = [] // First post of each category
-    var newsData: News?
-    var newsResults: [Result] = []
-    var selectedPosts: [Post] = []
+    var topNewsPosts: [NewsItem] = [] // Top 5 news for banner
+    var allNews: [NewsItem] = [] // All news for table view
     var selectedCategoryIndex = 0
     var index = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         logAnalyticAction(title: "", status: .News)
+        
+        // Hide category collection view (as requested)
+        newsCategoryCollectionView.isHidden = true
+        
         callNewsAPI()
         subscribe()
     }
@@ -73,10 +75,8 @@ class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/a
     
     func showSkeletonView() {
         if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            // Add the custom UIView to the adContainerView
             self.viewForNative.addSubview(adView)
             
-            // Set constraints to make sure the adView fills the adContainerView
             adView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
@@ -89,7 +89,6 @@ class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/a
             adView.view3.showAnimatedGradientSkeleton()
             adView.view4.showAnimatedGradientSkeleton()
             adView.view5.showAnimatedGradientSkeleton()
-            
         }
     }
     
@@ -104,23 +103,11 @@ class NewsListVC: UIViewController { // new api : https://api-story.7seasol.in/a
     @IBAction func backTapped(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
-    
 }
 
 extension NewsListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == newsCategoryCollectionView {
-            if newsResults.count < 1 {
-                self.newsCategoryCollectionView.isHidden = true
-                self.pageControl.isHidden = true
-                self.emptyImg.isHidden = false
-            } else {
-                self.newsCategoryCollectionView.isHidden = false
-                self.pageControl.isHidden = false
-                self.emptyImg.isHidden = true
-            }
-            return newsResults.count
-        } else if collectionView == topNewsCollectionView {
+        if collectionView == topNewsCollectionView {
             if topNewsPosts.count < 1 {
                 self.topNewsCollectionView.isHidden = true
                 self.pageControl.isHidden = true
@@ -131,79 +118,48 @@ extension NewsListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
                 self.emptyImg.isHidden = true
             }
             return topNewsPosts.count
-        } else {
-            return 0
         }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == newsCategoryCollectionView {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NewsCategoryCell", for: indexPath) as! NewsCategoryCell
-            let category = newsResults[indexPath.row]
-            cell.categoryLbl.text = category.title
-            if selectedCategoryIndex == indexPath.row{
-                cell.customView.backgroundColor = #colorLiteral(red: 0.003921568627, green: 0.8235294118, blue: 0.3450980392, alpha: 1)
-                cell.customView.applyBorder(0, borderColor: .clear)
-            } else {
-                cell.customView.backgroundColor = .clear
-                cell.customView.applyBorder(1, borderColor: UIColor(hex: "#314D5B")!)
-            }
-            
-            return cell
-        } else if collectionView == topNewsCollectionView {
+        if collectionView == topNewsCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopNewsCell", for: indexPath) as! TopNewsCell
-            let post = topNewsPosts[indexPath.row]
+            let news = topNewsPosts[indexPath.row]
             
-            cell.titleLbl.text = post.title
+            cell.titleLbl.text = news.title
             
-            if let imageURL = URL(string: post.media.thumbSrc) {
+            if let imageURL = URL(string: news.imageUrl) {
                 cell.iconImg.sd_setImage(with: imageURL, placeholderImage: UIImage(named: "DefaultNews2"))
             }
             
-            let timestampString = String(post.updatedAt)
-            if let date = convertTimestampToDate(timestampString: timestampString) {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "d'\(daySuffix(for: date))' MMM yyyy, h:mm a"
-                let formattedDate = dateFormatter.string(from: date)
-                cell.dateLbl.text = formattedDate
-                print("Formatted Date: \(formattedDate)")
-            } else {
-                cell.dateLbl.text = timestampString
-                print("Invalid timestamp format")
-            }
+            cell.dateLbl.text = ""
             
             return cell
-        } else {
-            return UICollectionViewCell()
         }
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == newsCategoryCollectionView {
-            selectedCategoryIndex = indexPath.row
-            let posts = newsResults[indexPath.row].posts
-            selectedPosts = posts.count > 1 ? Array(posts.dropFirst()) : []
-            newsCategoryCollectionView.reloadData()
-            newsListTableView.reloadData()
-            newsCategoryCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        } else {
+        if collectionView == topNewsCollectionView {
             AdsManager.shared.showInterstitialAd()
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailVC
-            vc.selectedNews = topNewsPosts[indexPath.row]
-            vc.currentCategory = newsResults[self.selectedCategoryIndex].title
+            let selectedNews = topNewsPosts[indexPath.row]
+            
+            // Pass data to NewsDetailVC
+            vc.selectedNews = selectedNews
+            vc.currentCategory = "Football"
             vc.hidesBottomBarWhenPushed = true
+            
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == newsCategoryCollectionView {
-            return CGSize(width: 150, height: 40)
-        } else if collectionView == topNewsCollectionView {
+        if collectionView == topNewsCollectionView {
             return CGSize(width: collectionView.frame.size.width - 10, height: 286)
-        } else {
-            return CGSize(width: 0, height: 0)
         }
+        return CGSize(width: 0, height: 0)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -216,36 +172,25 @@ extension NewsListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
 
 extension NewsListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if selectedPosts.count < 1 {
+        if allNews.count < 1 {
             self.newsListTableView.isHidden = true
             self.emptyImg.isHidden = false
         } else {
             self.newsListTableView.isHidden = false
             self.emptyImg.isHidden = true
         }
-        return selectedPosts.count
+        return allNews.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsCell
-        let post = selectedPosts[indexPath.row]
+        let news = allNews[indexPath.row]
         
-        cell.titleLbl.text = post.title
+        cell.titleLbl.text = news.title
+        cell.descLbl.text = news.subDesc
         
-        if let imageURL = URL(string: post.media.thumbSrc) {
+        if let imageURL = URL(string: news.imageUrl) {
             cell.iconImg.sd_setImage(with: imageURL, placeholderImage: UIImage(named: "DefaultNews1"))
-        }
-        
-        let timestampString = String(post.updatedAt)
-        if let date = convertTimestampToDate(timestampString: timestampString) {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "d'\(daySuffix(for: date))' MMM yyyy, h:mm a"
-            let formattedDate = dateFormatter.string(from: date)
-            cell.dateLbl.text = formattedDate
-            print("Formatted Date: \(formattedDate)")
-        } else {
-            cell.dateLbl.text = timestampString
-            print("Invalid timestamp format")
         }
         
         DispatchQueue.main.async {
@@ -258,62 +203,99 @@ extension NewsListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AdsManager.shared.showInterstitialAd()
+//        AdsManager.shared.showInterstitialAd()
+        showInterAd()
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "NewsDetailVC") as! NewsDetailVC
-        vc.selectedNews = self.selectedPosts[indexPath.row]
-        vc.currentCategory = self.newsResults[self.selectedCategoryIndex].title
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        let selectedNews = allNews[indexPath.row]
         
+        // Pass data to NewsDetailVC
+        vc.selectedNews = selectedNews
+        vc.currentCategory = "Football"
+        vc.hidesBottomBarWhenPushed = true
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 120
     }
-    
 }
 
-//MARK: - News API Call
-extension NewsListVC
-{
+// MARK: - News API Call
+extension NewsListVC {
     func callNewsAPI() {
-        let url = "https://apis.sportstiger.com/Prod/news-home-category-posts"
-        let parameters: [String: Any] = [
-            "page": 1,
-            "limit": 5,
-            "postLimit": 15
+        let params: [String: Any] = [
+            "category": ["Football"]
         ]
         
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .validate()
-            .responseDecodable(of: News.self) { response in
-                switch response.result {
-                case .success(let apiResponse):
-                    print("✅ API Call Success")
-                    self.newsData = apiResponse
-                    self.newsResults = apiResponse.result
-                    self.updateUI()
-                    WebServices().ProgressViewHide(uiView: self.view ?? UIView())
-                case .failure(let error):
-                    print("❌ API Call Failed: \(error.localizedDescription)")
-                    WebServices().ProgressViewHide(uiView: self.view ?? UIView())
+        AF.request("https://api-story.7seasol.in/api/fresh-news",
+                   method: .post,
+                   parameters: params,
+                   encoding: JSONEncoding.default,
+                   headers: ["Content-Type": "application/json"])
+        .validate(statusCode: 200..<300)
+        .responseData { [weak self] response in
+            guard let self = self else { return }
+            
+            switch response.result {
+            case .success(let data):
+                do {
+                    // Parse JSON manually to see the structure
+                    if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        print("📦 Response JSON: \(json)")
+                        
+                        if let dataArray = json["data"] as? [[String: Any]] {
+                            var newsItems: [NewsItem] = []
+                            
+                            for item in dataArray {
+                                let id = item["id"] as? String ?? ""
+                                let title = item["title"] as? String ?? ""
+                                let category = item["category"] as? String ?? ""
+                                let imageUrl = item["imageUrl"] as? String ?? ""
+                                let subDesc = item["subDesc"] as? String ?? ""
+                                let article = item["article"] as? String ?? ""
+                                
+                                // Only include Football category news
+                                if category.lowercased() == "football" {
+                                    let newsItem = NewsItem(
+                                        id: id,
+                                        title: title,
+                                        category: category,
+                                        imageUrl: imageUrl,
+                                        subDesc: subDesc,
+                                        article: article
+                                    )
+                                    newsItems.append(newsItem)
+                                }
+                            }
+                            
+                            print("✅ Found \(newsItems.count) football news items")
+                            
+                            // Set top 5 news for banner
+                            self.topNewsPosts = Array(newsItems.prefix(5))
+                            
+                            // Set all news for table view
+                            self.allNews = newsItems
+                            
+                            // Update UI
+                            DispatchQueue.main.async {
+                                self.pageControl.numberOfPages = self.topNewsPosts.count
+                                self.pageControl.currentPage = 0
+                                
+                                self.topNewsCollectionView.reloadData()
+                                self.newsListTableView.reloadData()
+                            }
+                        } else {
+                            print("❌ No data array found in response")
+                        }
+                    }
+                } catch {
+                    print("❌ JSON parsing error: \(error.localizedDescription)")
                 }
+                
+            case .failure(let error):
+                print("❌ API Call Failed: \(error.localizedDescription)")
             }
-    }
-    
-    func updateUI() {
-        topNewsPosts = newsResults.compactMap { $0.posts.first }
-        
-        if !newsResults.isEmpty {
-            selectedPosts = Array(newsResults[selectedCategoryIndex].posts.dropFirst())
         }
-        
-        
-        pageControl.numberOfPages = topNewsPosts.count
-        pageControl.currentPage = 0
-        
-        topNewsCollectionView.reloadData()
-        newsCategoryCollectionView.reloadData()
-        newsListTableView.reloadData()
     }
 }
