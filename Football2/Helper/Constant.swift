@@ -73,12 +73,12 @@ var afterClick = 2
 let PhotoUrl : String = "https://models.testingjunction.tech/public/uploads/"
 //
 //MARK: - live json
-//     let getJSON  : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-yvir-xvpx.json"
+     let getJSON  : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-yvir-xvpx.json"
 //MARK: - Also Change the Ad Id in the Splash for Full Native and Inlinne Native Banneer
 ////
 
 //MARK: - test json
-let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json" // "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
+// let getJSON : String = "https://7seasol-application.s3.amazonaws.com/admin_prod/pbz-grfgvat-arj.json" // "https://7seasol-application.s3.amazonaws.com/admin_prod/grfg.json"
 
 //MARK: - Football APIs
 
