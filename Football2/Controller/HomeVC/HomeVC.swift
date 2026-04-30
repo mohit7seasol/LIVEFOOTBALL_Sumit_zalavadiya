@@ -12,7 +12,7 @@ import SDWebImage
 import SVProgressHUD
 
 class HomeVC: UIViewController {
-    @IBOutlet weak var viewForNative: UIView!
+    // Removed viewForNative outlet
     @IBOutlet weak var matchListCollection: UICollectionView!
     @IBOutlet weak var liveButton: UIButton!
     @IBOutlet weak var upcomingButton: UIButton!
@@ -49,6 +49,14 @@ class HomeVC: UIViewController {
     var currentFilter: MatchFilter = .live
     var matchesFiltered: [Match] = []
     
+    // MARK: - Ad Properties
+    private var isAdLoaded = false
+    private var adContainerView: UIView?
+    private var adSkeletonView: SkeletonCustomView3?
+    private var shouldShowAd: Bool {
+        return !isUserSubscribe() && isAdLoaded
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +65,8 @@ class HomeVC: UIViewController {
         setupCalendar()
         setupCollectionViews()
         setupButtons()
-        subscribe()
         setupSVProgressHUD()
+        loadNativeAd()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,7 +79,6 @@ class HomeVC: UIViewController {
         updateButtonStates(selected: .live)
         updateMonthLabel()
         updateStackViewHeight()
-        // Initially hide no data image
         noDataAvilableImageView.isHidden = true
         todayButton.setTitle("Today".localized(), for: .normal)
         liveButton.setTitle("Live Updates".localized(), for: .normal)
@@ -79,19 +86,15 @@ class HomeVC: UIViewController {
         finishedButton.setTitle("Finished".localized(), for: .normal)
     }
     
-    // MARK: - Update StackView Height Based on Selected Date
     private func updateStackViewHeight() {
         if calendar.isDateInToday(selectedDate) {
-            // Today date - show stack view (height 49)
             stackHeightConstant.constant = 49
             stackViewMatchTypes.isHidden = false
         } else {
-            // Other dates - hide stack view (height 0)
             stackHeightConstant.constant = 0
             stackViewMatchTypes.isHidden = true
         }
         
-        // Animate the change
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
@@ -143,7 +146,6 @@ class HomeVC: UIViewController {
             selectedDate = dates[0]
         }
         
-        // Update stack view height when calendar is set up
         updateStackViewHeight()
         
         DispatchQueue.main.async {
@@ -184,8 +186,9 @@ class HomeVC: UIViewController {
             layout.minimumInteritemSpacing = 0
         }
         
-        // Match List Collection View
+        // Match List Collection View - Register Ad Cell
         matchListCollection.register(UINib(nibName: "MatchListCell", bundle: nil), forCellWithReuseIdentifier: "MatchListCell")
+        matchListCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "AdCell")
         matchListCollection.delegate = self
         matchListCollection.dataSource = self
         matchListCollection.backgroundColor = .clear
@@ -195,6 +198,9 @@ class HomeVC: UIViewController {
             layout.scrollDirection = .vertical
             layout.minimumLineSpacing = 12
         }
+        
+        // Set content inset to match MatchListCell spacing
+        matchListCollection.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 12, right: 10)
     }
     
     private func setupButtons() {
@@ -208,11 +214,75 @@ class HomeVC: UIViewController {
         todayButton.layer.borderColor = UIColor(hex: "#16C924")?.cgColor
     }
     
+    // MARK: - Native Ad Loading
+    private func loadNativeAd() {
+        guard !isUserSubscribe() else { return }
+        
+        showAdSkeleton()
+        
+        self.googleNativeAds.loadAds(self) { [weak self] nativeAdsTemp in
+            DispatchQueue.main.async {
+                self?.isAdLoaded = true
+                self?.hideAdSkeleton()
+                self?.matchListCollection.reloadData()
+                
+                // Create ad container and show ad
+                if let adView = self?.createAdContainer() {
+                    self?.googleNativeAds.showAdsView5(nativeAd: nativeAdsTemp, view: adView)
+                }
+            }
+        }
+        
+        self.googleNativeAds.failAds(self) { [weak self] fail in
+            DispatchQueue.main.async {
+                self?.isAdLoaded = false
+                self?.hideAdSkeleton()
+                self?.matchListCollection.reloadData()
+            }
+        }
+    }
+    
+    private func createAdContainer() -> UIView {
+        // Calculate width with same padding as MatchListCell (left 10, right 10)
+        let adWidth = matchListCollection.frame.width - 20 // 10 left + 10 right padding
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: adWidth, height: 200))
+        container.backgroundColor = UIColor(named: "ADSBG") ?? UIColor(hex: "#F5F5F5")
+        container.layer.cornerRadius = 12
+        container.clipsToBounds = true
+        adContainerView = container
+        return container
+    }
+    
+    private func showAdSkeleton() {
+        if let skeletonView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
+            adSkeletonView = skeletonView
+            skeletonView.translatesAutoresizingMaskIntoConstraints = false
+            
+            // Set skeleton frame with proper width
+            let adWidth = matchListCollection.frame.width - 20
+            skeletonView.frame = CGRect(x: 0, y: 0, width: adWidth, height: 200)
+            
+            skeletonView.view1.showAnimatedGradientSkeleton()
+            skeletonView.view2.showAnimatedGradientSkeleton()
+            skeletonView.view3.showAnimatedGradientSkeleton()
+            skeletonView.view4.showAnimatedGradientSkeleton()
+            skeletonView.view5.showAnimatedGradientSkeleton()
+        }
+    }
+    
+    private func hideAdSkeleton() {
+        adSkeletonView?.view1.hideSkeleton()
+        adSkeletonView?.view2.hideSkeleton()
+        adSkeletonView?.view3.hideSkeleton()
+        adSkeletonView?.view4.hideSkeleton()
+        adSkeletonView?.view5.hideSkeleton()
+        adSkeletonView = nil
+    }
+    
     // MARK: - Match Fetching
     private func fetchMatches(for date: Date) {
         SVProgressHUD.show()
         
-        // Show no data image initially
         noDataAvilableImageView.isHidden = true
         matchListCollection.isHidden = false
         
@@ -260,16 +330,13 @@ class HomeVC: UIViewController {
         }
     }
     
-    // MARK: - Update No Data Visibility
     private func updateNoDataVisibility() {
         let hasMatches = !matchesFiltered.isEmpty
         
         if hasMatches {
-            // Show collection view, hide no data image
             matchListCollection.isHidden = false
             noDataAvilableImageView.isHidden = true
         } else {
-            // Hide collection view, show no data image
             matchListCollection.isHidden = true
             noDataAvilableImageView.isHidden = false
         }
@@ -281,65 +348,13 @@ class HomeVC: UIViewController {
         self.selectedDateIndex = index
         self.selectedDate = dates[index]
         
-        // Update stack view height when date changes
         updateStackViewHeight()
-        
         self.fetchMatches(for: selectedDate)
         
         DispatchQueue.main.async {
             self.datepickerCollection.reloadData()
             self.datepickerCollection.scrollToItem(at: IndexPath(item: self.selectedDateIndex, section: 0), at: .centeredHorizontally, animated: true)
             self.matchListCollection.setContentOffset(.zero, animated: false)
-        }
-    }
-    
-    func subscribe() {
-        showSkeletonView()
-        if Subscribe.get() == false {
-            self.googleNativeAds.loadAds(self) { nativeAdsTemp in
-                print(" Home...Load Native ....")
-                self.viewForNative.isHidden = false
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                    self.hideSkeletonView()
-                    self.googleNativeAds.showAdsView8(nativeAd: nativeAdsTemp, view: self.viewForNative)
-                }
-            }
-            
-            self.googleNativeAds.failAds(self) { fail in
-                print(" Home...Native fail....")
-                self.viewForNative.isHidden = true
-            }
-            
-        } else {
-            self.hideSkeletonView()
-            viewForNative.isHidden = true
-        }
-    }
-    
-    func showSkeletonView() {
-        if let adView = Bundle.main.loadNibNamed("SkeletonCustomView3", owner: self, options: nil)?.first as? SkeletonCustomView3 {
-            self.viewForNative.addSubview(adView)
-            
-            adView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                adView.topAnchor.constraint(equalTo: self.viewForNative.topAnchor),
-                adView.leadingAnchor.constraint(equalTo: self.viewForNative.leadingAnchor),
-                adView.trailingAnchor.constraint(equalTo: self.viewForNative.trailingAnchor),
-                adView.bottomAnchor.constraint(equalTo: self.viewForNative.bottomAnchor)
-            ])
-            adView.view1.showAnimatedGradientSkeleton()
-            adView.view2.showAnimatedGradientSkeleton()
-            adView.view3.showAnimatedGradientSkeleton()
-            adView.view4.showAnimatedGradientSkeleton()
-            adView.view5.showAnimatedGradientSkeleton()
-        }
-    }
-    
-    func hideSkeletonView() {
-        for subview in self.viewForNative.subviews {
-            if let adView = subview as? SkeletonCustomView3 {
-                adView.removeFromSuperview()
-            }
         }
     }
 }
@@ -376,7 +391,9 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if collectionView == datepickerCollection {
             return dates.count
         } else {
-            return matchesFiltered.count
+            // Add 1 for ad cell if should show
+            let matchCount = matchesFiltered.count
+            return shouldShowAd ? matchCount + 1 : matchCount
         }
     }
     
@@ -396,7 +413,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             cell.dateLabel.text = dateFormatter.string(from: date)
             cell.mainView.layer.cornerRadius = 10
             
-            // Configure cell appearance
             if isSelected {
                 cell.mainView.backgroundColor = UIColor(hex: "#16C924")
                 cell.dayNameLabel.textColor = .white
@@ -409,21 +425,47 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             
             return cell
         } else {
+            // Check if this is the ad cell (first cell when ad should show)
+            if shouldShowAd && indexPath.item == 0 {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AdCell", for: indexPath)
+                
+                // Clear existing subviews
+                cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+                
+                // Calculate ad width with same padding as match cells
+                let adWidth = collectionView.frame.width - 20 // 10 left + 10 right
+                
+                // Add ad container or skeleton
+                if let adContainer = adContainerView {
+                    adContainer.frame = CGRect(x: 0, y: 0, width: adWidth, height: 200)
+                    cell.contentView.addSubview(adContainer)
+                } else if let skeletonView = adSkeletonView {
+                    skeletonView.frame = CGRect(x: 0, y: 0, width: adWidth, height: 200)
+                    cell.contentView.addSubview(skeletonView)
+                } else {
+                    // Create temporary skeleton if needed
+                    let tempSkeleton = UIView(frame: CGRect(x: 0, y: 0, width: adWidth, height: 200))
+                    tempSkeleton.backgroundColor = UIColor(named: "ADSBG") ?? UIColor(hex: "#F5F5F5")
+                    tempSkeleton.layer.cornerRadius = 12
+                    cell.contentView.addSubview(tempSkeleton)
+                }
+                
+                cell.contentView.backgroundColor = .clear
+                return cell
+            }
+            
+            // Regular match cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MatchListCell", for: indexPath) as! MatchListCell
-            let match = matchesFiltered[indexPath.item]
+            let matchIndex = shouldShowAd ? indexPath.item - 1 : indexPath.item
+            let match = matchesFiltered[matchIndex]
             
-            // Configure match name
             cell.matchName.text = "\(match.homeName) VS \(match.awayName)"
-            
-            // Configure date and time from API
             cell.dateTimeLabel.text = match.formattedDateTime
             
-            // Configure team flags and names
             loadTeamImages(homeLogo: match.homeLogo, awayLogo: match.awayLogo, cell: cell)
             cell.teamANameLabel.text = match.homeName
             cell.teamBNameLabel.text = match.awayName
             
-            // Configure based on match status for current filter
             if calendar.isDateInToday(selectedDate) {
                 switch currentFilter {
                 case .live:
@@ -449,7 +491,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         cell.statusView.backgroundColor = UIColor(hex: "#DF1F1F")
         cell.statusLabel.text = "Live".localized()
         cell.scorLabel.isHidden = false
-        // Display score for live match
         if let homeScore = match.homeScore, let awayScore = match.awayScore {
             cell.scorLabel.text = "\(homeScore) - \(awayScore)"
         } else {
@@ -468,7 +509,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         cell.statusView.backgroundColor = UIColor(hex: "#04C057")
         cell.statusLabel.text = "Finished".localized()
         cell.scorLabel.isHidden = false
-        // Display score for finished match
         if let homeScore = match.homeScore, let awayScore = match.awayScore {
             cell.scorLabel.text = "\(homeScore) - \(awayScore)"
         } else {
@@ -496,8 +536,14 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if collectionView == datepickerCollection {
             return CGSize(width: 60, height: 64)
         } else {
-            // Fixed width with 10pt left and right spacing
-            let width = collectionView.frame.width - 20
+            // Use same width calculation for both ad and match cells
+            let width = collectionView.frame.width - 20 // 10 left + 10 right
+            
+            // Check if this is the ad cell
+            if shouldShowAd && indexPath.item == 0 {
+                return CGSize(width: width, height: 200)
+            }
+            
             let height: CGFloat
             
             if calendar.isDateInToday(selectedDate) {
@@ -525,14 +571,18 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         if collectionView == datepickerCollection {
             handleDateSelection(at: indexPath.item)
         } else {
-            showInterAd()
-            let match = matchesFiltered[indexPath.item]
+            // Skip if ad cell is tapped
+            if shouldShowAd && indexPath.item == 0 {
+                return
+            }
             
-            // Navigate to ScoreVC
+            showInterAd()
+            let matchIndex = shouldShowAd ? indexPath.item - 1 : indexPath.item
+            let match = matchesFiltered[matchIndex]
+            
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let scoreVC = storyboard.instantiateViewController(withIdentifier: "ScoreVC") as! ScoreVC
             
-            // Pass match data to ScoreVC
             scoreVC.m_idMain = match.matchId
             scoreVC.l_idMain = match.tournamentId
             scoreVC.m_name = match.leagueName
@@ -541,7 +591,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             scoreVC.Aimg = match.homeLogo
             scoreVC.Bimg = match.awayLogo
             
-            // Determine if match is live, upcoming, or completed
             if match.isInProgress {
                 scoreVC.isMatchLive = true
                 UpComing = false
@@ -549,7 +598,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
                 scoreVC.isMatchLive = false
                 UpComing = false
             } else {
-                // Upcoming match
                 UpComing = true
                 scoreVC.isMatchLive = false
             }
@@ -579,7 +627,8 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
                 return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
             }
         } else {
-            return UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
+            // Remove inset here since we handle spacing in sizeForItemAt and contentInset
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
     }
 }

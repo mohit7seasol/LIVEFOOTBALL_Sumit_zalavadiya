@@ -758,7 +758,7 @@
                                                 </constraints>
                                             </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fjc-pB-D5g">
-                                                <rect key="frame" x="0.0" y="171" width="393" height="363"/>
+                                                <rect key="frame" x="0.0" y="171" width="393" height="563"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="It0-ZX-Vkt">
                                                     <size key="itemSize" width="128" height="128"/>
@@ -769,37 +769,21 @@
                                                 <cells/>
                                             </collectionView>
                                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="EmptyMatch" translatesAutoresizingMaskIntoConstraints="NO" id="0c8-ck-IPw">
-                                                <rect key="frame" x="133" y="280.33333333333331" width="127" height="104"/>
+                                                <rect key="frame" x="133" y="380.33333333333331" width="127" height="104"/>
                                             </imageView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="HTa-Db-tPc">
-                                                <rect key="frame" x="0.0" y="534" width="393" height="200"/>
-                                                <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MK5-y6-Q2D">
-                                                        <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="200" id="ro5-ex-SPz"/>
-                                                        </constraints>
-                                                    </view>
-                                                </subviews>
-                                                <color key="backgroundColor" name="ADSBG"/>
-                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="HTa-Db-tPc" firstAttribute="top" secondItem="fjc-pB-D5g" secondAttribute="bottom" id="6Ow-oO-Pg4"/>
-                                            <constraint firstAttribute="bottom" secondItem="HTa-Db-tPc" secondAttribute="bottom" id="71s-OZ-kBo"/>
+                                            <constraint firstAttribute="bottom" secondItem="fjc-pB-D5g" secondAttribute="bottom" id="55y-N0-gNW"/>
                                             <constraint firstItem="dNh-yn-huK" firstAttribute="top" secondItem="bH1-Us-qGp" secondAttribute="bottom" constant="4" id="9S2-r0-C49"/>
                                             <constraint firstItem="fjc-pB-D5g" firstAttribute="top" secondItem="dNh-yn-huK" secondAttribute="bottom" id="9jy-rq-Uaz"/>
                                             <constraint firstItem="0c8-ck-IPw" firstAttribute="centerX" secondItem="fjc-pB-D5g" secondAttribute="centerX" id="AUk-7H-qlM"/>
                                             <constraint firstItem="bH1-Us-qGp" firstAttribute="top" secondItem="56x-CK-IaT" secondAttribute="bottom" constant="8" id="Bkd-Sj-NSC"/>
-                                            <constraint firstAttribute="trailing" secondItem="HTa-Db-tPc" secondAttribute="trailing" id="EbY-VG-q1b"/>
                                             <constraint firstAttribute="trailing" secondItem="dNh-yn-huK" secondAttribute="trailing" id="Gju-mq-aZS"/>
                                             <constraint firstItem="fjc-pB-D5g" firstAttribute="leading" secondItem="o3g-l6-M7t" secondAttribute="leading" id="V5F-GL-vYo"/>
                                             <constraint firstItem="0c8-ck-IPw" firstAttribute="centerY" secondItem="fjc-pB-D5g" secondAttribute="centerY" constant="-20" id="VGa-gE-SEQ"/>
                                             <constraint firstItem="56x-CK-IaT" firstAttribute="leading" secondItem="BCw-7d-Xpe" secondAttribute="trailing" constant="15" id="afM-9h-Z3w"/>
                                             <constraint firstAttribute="trailing" secondItem="bH1-Us-qGp" secondAttribute="trailing" id="h3n-bv-A0O"/>
-                                            <constraint firstItem="HTa-Db-tPc" firstAttribute="leading" secondItem="o3g-l6-M7t" secondAttribute="leading" id="kEX-GX-lss"/>
                                             <constraint firstAttribute="trailing" secondItem="fjc-pB-D5g" secondAttribute="trailing" id="mCj-Dl-pp6"/>
                                             <constraint firstItem="dNh-yn-huK" firstAttribute="leading" secondItem="o3g-l6-M7t" secondAttribute="leading" id="mJx-Lz-7cx"/>
                                             <constraint firstItem="BCw-7d-Xpe" firstAttribute="centerY" secondItem="56x-CK-IaT" secondAttribute="centerY" id="qbu-6K-hFk"/>
@@ -840,7 +824,6 @@
                         <outlet property="stackViewMatchTypes" destination="9dP-10-6h9" id="hdR-GB-gbZ"/>
                         <outlet property="todayButton" destination="56x-CK-IaT" id="XdQ-JO-bZU"/>
                         <outlet property="upcomingButton" destination="7Qn-ff-ZvG" id="Cco-Ih-gs6"/>
-                        <outlet property="viewForNative" destination="MK5-y6-Q2D" id="anS-Xy-2BW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QMd-97-x79" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
