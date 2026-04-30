@@ -196,6 +196,71 @@ extension Notification.Name {
     static let interstitialAdDidDismiss = Notification.Name("interstitialAdDidDismiss")
 }
 
+struct Device {
+    static var topSafeArea: CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }?
+            .safeAreaInsets.top ?? 0
+    }
+    
+    static var bottomSafeArea: CGFloat {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }?
+            .safeAreaInsets.bottom ?? 0
+    }
+    
+    private static var nativeScale: CGFloat {
+        UIScreen.main.nativeScale
+    }
+    
+    static var portraitWidth: CGFloat {
+        let screen = UIScreen.main
+        return screen.nativeBounds.width / nativeScale
+    }
+    
+    static var portraitHeight: CGFloat {
+        let screen = UIScreen.main
+        return screen.nativeBounds.height / nativeScale
+    }
+    
+    static var width: CGFloat {
+        currentSize.width
+    }
+    
+    static var height: CGFloat {
+        currentSize.height
+    }
+    
+    static var isIpad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+    
+    static var isPortrait: Bool {
+        let orientation = UIDevice.current.orientation
+        return orientation == .portrait || orientation == .portraitUpsideDown
+    }
+    
+    static var isLandscape: Bool {
+        let orientation = UIDevice.current.orientation
+        return orientation == .landscapeLeft || orientation == .landscapeRight
+    }
+    
+    static var currentSize: CGSize {
+        let portraitW = portraitWidth
+        let portraitH = portraitHeight
+        let isLandscape = UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight
+        if isIpad && isLandscape {
+            return CGSize(width: portraitH, height: portraitW)
+        } else {
+            return CGSize(width: portraitW, height: portraitH)
+        }
+    }
+}
+
 enum HttpResponseStatusCode: Int {
     case ok = 200
     case badRequest = 400

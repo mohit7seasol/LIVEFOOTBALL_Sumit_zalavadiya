@@ -503,17 +503,17 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
             if calendar.isDateInToday(selectedDate) {
                 switch currentFilter {
                 case .live:
-                    height = 210
+                    height = Device.isIpad ? 330 : 210
                 case .scheduled:
-                    height = 190
+                    height = Device.isIpad ? 280 : 190
                 case .completed:
-                    height = 210
+                    height = Device.isIpad ? 330 : 210
                 }
             } else {
                 if selectedDate < Date() {
-                    height = 210
+                    height = Device.isIpad ? 330 : 210
                 } else {
-                    height = 190
+                    height = Device.isIpad ? 280 : 190
                 }
             }
             
