@@ -157,7 +157,7 @@ extension NewsListVC: UICollectionViewDelegate, UICollectionViewDataSource, UICo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == topNewsCollectionView {
-            return CGSize(width: collectionView.frame.size.width - 10, height: 286)
+            return CGSize(width: collectionView.frame.size.width - 10, height: Device.isIpad ? 360 : 300)
         }
         return CGSize(width: 0, height: 0)
     }
@@ -217,7 +217,7 @@ extension NewsListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return Device.isIpad ? 150 : 120
     }
 }
 

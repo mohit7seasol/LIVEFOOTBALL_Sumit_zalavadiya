@@ -1817,7 +1817,9 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultNews2" translatesAutoresizingMaskIntoConstraints="NO" id="MJP-KS-Tdd">
                                 <rect key="frame" x="0.0" y="165" width="393" height="260"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="260" id="rT6-gB-OvF"/>
+                                    <constraint firstAttribute="height" constant="360" id="rT6-gB-OvF">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="260"/>
+                                    </constraint>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NewsDetailsBG" translatesAutoresizingMaskIntoConstraints="NO" id="T5J-YN-oaB">
@@ -1894,7 +1896,9 @@
                         <constraints>
                             <constraint firstItem="iRJ-YF-Y7X" firstAttribute="trailing" secondItem="RLz-pq-pPU" secondAttribute="trailing" id="0m8-JZ-ybP"/>
                             <constraint firstItem="iRJ-YF-Y7X" firstAttribute="trailing" secondItem="T5J-YN-oaB" secondAttribute="trailing" id="HAj-yv-CDe"/>
-                            <constraint firstItem="T5J-YN-oaB" firstAttribute="top" secondItem="MJP-KS-Tdd" secondAttribute="bottom" constant="-35" id="HWV-tS-4cV"/>
+                            <constraint firstItem="T5J-YN-oaB" firstAttribute="top" secondItem="MJP-KS-Tdd" secondAttribute="bottom" constant="-65" id="HWV-tS-4cV">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-35"/>
+                            </constraint>
                             <constraint firstItem="iRJ-YF-Y7X" firstAttribute="bottom" secondItem="T5J-YN-oaB" secondAttribute="bottom" id="Kza-lF-X8f"/>
                             <constraint firstAttribute="trailing" secondItem="1A2-bD-lT3" secondAttribute="trailing" id="L1E-ct-L88"/>
                             <constraint firstItem="iRJ-YF-Y7X" firstAttribute="bottom" secondItem="1A2-bD-lT3" secondAttribute="bottom" id="M3L-UX-Cut"/>
@@ -1908,7 +1912,9 @@
                             <constraint firstItem="MJP-KS-Tdd" firstAttribute="top" secondItem="RLz-pq-pPU" secondAttribute="bottom" constant="12" id="gk7-dP-Gia"/>
                             <constraint firstItem="MJP-KS-Tdd" firstAttribute="leading" secondItem="iRJ-YF-Y7X" secondAttribute="leading" id="ibM-kG-5n9"/>
                             <constraint firstItem="clE-LY-8rp" firstAttribute="leading" secondItem="iRJ-YF-Y7X" secondAttribute="leading" id="owF-xE-TVq"/>
-                            <constraint firstItem="1A2-bD-lT3" firstAttribute="top" secondItem="T5J-YN-oaB" secondAttribute="top" constant="32" id="uKB-gt-c8a"/>
+                            <constraint firstItem="1A2-bD-lT3" firstAttribute="top" secondItem="T5J-YN-oaB" secondAttribute="top" constant="65" id="uKB-gt-c8a">
+                                <variation key="heightClass=regular-widthClass=compact" constant="32"/>
+                            </constraint>
                             <constraint firstItem="clE-LY-8rp" firstAttribute="top" secondItem="c4o-kZ-S4i" secondAttribute="top" id="zUt-j1-T4G"/>
                         </constraints>
                     </view>
@@ -2120,7 +2126,9 @@
                                 <rect key="frame" x="12" y="118" width="369" height="286"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="286" id="3TW-td-pCJ"/>
+                                    <constraint firstAttribute="height" constant="386" id="3TW-td-pCJ">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="286"/>
+                                    </constraint>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="PWw-01-sk7">
                                     <size key="itemSize" width="128" height="128"/>

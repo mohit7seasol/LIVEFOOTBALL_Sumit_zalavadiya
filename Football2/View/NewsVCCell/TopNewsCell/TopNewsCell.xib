@@ -24,7 +24,9 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DefaultNews2" translatesAutoresizingMaskIntoConstraints="NO" id="kp3-fX-LbZ" customClass="ImageView" customModule="Football2" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="343" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="nEu-qE-6vq"/>
+                                    <constraint firstAttribute="height" constant="500" id="nEu-qE-6vq">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="200"/>
+                                    </constraint>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
